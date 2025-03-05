@@ -13,10 +13,14 @@ Working with a study partner or group can provide increased understanding, accou
 - **Role:** 
 - **Assigned issues:** 
 
-### Julie Farber
+### Julia Farber
 - **Role:** 
 - **Assigned issues:** 
 
 ### Anastasia Isakov
 - **Role:** 
 - **Assigned issues:** 
+
+### Ashley Kang
+- **Role:** 
+- **Assigned issues:**
