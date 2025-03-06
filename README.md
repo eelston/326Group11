@@ -21,8 +21,8 @@ Working with a study partner or group can provide increased understanding, accou
 
 ## Team
 ### Erika Elston
-- **Role:** 
-- **Assigned issues:** 
+- **Role:** Project Manager
+- **Assigned issues:** User Profile Screen ([#6](https://github.com/eelston/326Group11/issues/6)), Team Role: Project Manager ([#8](https://github.com/eelston/326Group11/issues/8)), Location and Crowding Information Data Structure ([#9](https://github.com/eelston/326Group11/issues/9)), Location Browsing and Crowding Score Reporting Screen ([#12](https://github.com/eelston/326Group11/issues/12))
 
 ### Julia Farber
 - **Role:** Time Keeper 
