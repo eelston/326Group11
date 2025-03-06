@@ -29,8 +29,8 @@ Working with a study partner or group can provide increased understanding, accou
 - **Assigned issues:** Team Role: Time Keeper ([#7](https://github.com/eelston/326Group11/issues/7)), Post Browsing and Search Screen ([#10](https://github.com/eelston/326Group11/issues/10)), Post Data Structure ([#11](https://github.com/eelston/326Group11/issues/11)).
 
 ### Anastasia Isakov
-- **Role:** 
-- **Assigned issues:** 
+- **Role:** Project Organizer
+- **Assigned issues:**  Team Role: Project Organizer ([#14](https://github.com/eelston/326Group11/issues/14))
 
 ### Ashley Kang
 - **Role:** Quality Control
