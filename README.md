@@ -3,6 +3,12 @@
 
 Working with a study partner or group can provide increased understanding, accountability, routine, camaraderie, and productivity. However, finding an effective one can be difficult to students for a multitude of reasons: large classes, social anxiety, mismatched goals, unclear expectations, and lacking a method of contact. **We propose a web application that offers a platform to help students more easily connect and organize study groups.**
 
+## Problem 
+- Add details here.
+
+## Solution 
+- Add details here.
+
 ## Proposed Key Features
 - **Study group posting:** Students can post open invites for study groups, along with their goals, preferences, and location. Users can browse and filter for groups that match their needs.
 - **Private messaging:** Users can chat to discuss meeting details and coordinate plans.
@@ -20,7 +26,7 @@ Working with a study partner or group can provide increased understanding, accou
 
 ### Julia Farber
 - **Role:** Time Keeper 
-- **Assigned issues:** Team Role: Time Keeper ([#8](https://github.com/eelston/326Group11/issues/7)), Post Browsing and Search Screen ([#10](https://github.com/eelston/326Group11/issues/10)), Post Data Structure ([#11](https://github.com/eelston/326Group11/issues/11)).
+- **Assigned issues:** Team Role: Time Keeper ([#7](https://github.com/eelston/326Group11/issues/7)), Post Browsing and Search Screen ([#10](https://github.com/eelston/326Group11/issues/10)), Post Data Structure ([#11](https://github.com/eelston/326Group11/issues/11)).
 
 ### Anastasia Isakov
 - **Role:** 
