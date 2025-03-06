@@ -1,7 +1,7 @@
 # Study on Campus
 > CS 326 Group 11
 
-Working with a study partner or group can provide increased understanding, accountability, routine, camaraderie, and productivity. However, finding an effective one can be difficult to students for a multitude of reasons: large classes, social anxiety, mismatched goals, unclear expectations, and lacking a method of contact. **We propose a web application that offers a platform to help students more easily connect and organize study groups.**
+Working with a study partner or group can provide increased understanding, accountability, routine, camaraderie, and productivity. However, finding an effective one can be difficult to students for a multitude of reasons: large classes, social anxiety, mismatched goals, unclear expectations, and lacking a method of contact. **We propose a web application that offers a platform that solves this issue by helping students organize study groups and more easily connect with each other.**
 
 ## Problem 
 - Add details here.
