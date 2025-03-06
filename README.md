@@ -14,8 +14,8 @@ Working with a study partner or group can provide increased understanding, accou
 - **Assigned issues:** 
 
 ### Julia Farber
-- **Role:** 
-- **Assigned issues:** 
+- **Role:** Time Keeper 
+- **Assigned issues:** Team Role: Time Keeper (#8), Post Browsing and Search Screen (#10), Post Data Structure (#11).
 
 ### Anastasia Isakov
 - **Role:** 
