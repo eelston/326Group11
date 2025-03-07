@@ -4,9 +4,9 @@
 ## Project Proposal
 Working with a study partner or group can provide increased understanding, accountability, routine, camaraderie, and productivity. However, finding an effective one can be difficult to students for a multitude of reasons: large classes, social anxiety, mismatched goals, unclear expectations, and lacking a method of contact. As a solution, **we propose a web application that offers a platform to help students more easily connect with each other, find study locations that promote productivity, and organize or find study groups.**
 
-## Planned Key Features
+## Proposed Key Features
 - **Study group posting:** Students can post open invites for study groups, along with their goals, preferences, and location. Users can browse and filter for groups that match their needs.
-- **Private messaging:** Users can chat to discuss meeting details and coordinate plans.
+- **Communication between users:** Users can discuss meeting details and coordinate study group plans through public comments on invite posts and/or private messages.
 - **User-reported location crowding score:** Users can rate how crowded popular study spots are to help others make more informed decisions.
 
 ## Team
