@@ -30,7 +30,7 @@ Working with a study partner or group can provide increased understanding, accou
 
 ### Anastasia Isakov
 - **Role:** Project Organizer
-- **Assigned issues:**  Team Role: Project Organizer ([#14](https://github.com/eelston/326Group11/issues/14)), User Profile Data Structure ([#17](https://github.com/eelston/326Group11/issues/17))
+- **Assigned issues:**  Team Role: Project Organizer ([#14](https://github.com/eelston/326Group11/issues/14)), User Profile Data Structure ([#17](https://github.com/eelston/326Group11/issues/17)), Post Creation Screen([#19](https://github.com/eelston/326Group11/issues/19))
 
 ### Ashley Kang
 - **Role:** Quality Control
