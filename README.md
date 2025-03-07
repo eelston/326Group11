@@ -34,4 +34,4 @@ Working with a study partner or group can provide increased understanding, accou
 
 ### Ashley Kang
 - **Role:** Quality Control
-- **Assigned issues:** Team Role: Quality Control (https://github.com/eelston/326Group11/issues/16)
+- **Assigned issues:** Team Role: Quality Control (https://github.com/eelston/326Group11/issues/16), Settings Screen (https://github.com/eelston/326Group11/issues/18)
