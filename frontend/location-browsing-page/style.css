@@ -1,0 +1,201 @@
+:root {
+    /* defining variables */
+    --crowding-bar-height: 1.25rem;
+    --crowding-bar-width: 18rem;
+
+    /* crowding bar colors */
+    --level1: #66d575;
+    --level2: #5ad8cc;
+    --level3: #ffc943;
+    --level4: #ff9e42; 
+    --level5: #f24822;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+body {
+    background: #fefefe;
+
+}
+
+/******************************
+*********** HEADER ************
+******************************/
+header {
+    background: #dcccff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#app-logo {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#app-logo:hover {
+    cursor: pointer;
+    color: #602dcf;
+}
+
+.user-icon {
+    background: var(--level2);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    box-sizing: border-box; 
+
+    display: flex;
+    justify-content: center;
+}
+
+.icon-content {
+    height: fit-content;
+    font-size: 2rem;
+}
+
+.user-icon:hover {
+    cursor: pointer;
+    background: white;
+    box-shadow: 3px 3px #602dcf;
+}
+
+/******************************
+************ MAIN *************
+******************************/
+main {
+    margin: 0 5vw; /* only left/right margin */
+    min-width: auto;
+
+}
+
+/********* SORT OPTIONS *********/
+#search-option-container {
+    margin: 1rem 0; /* only top/bottom margin */
+    display: flex;
+    justify-content: space-between;
+}
+
+#search-container {
+    /* background: #e0e0e0; */
+    justify-self: center;
+}
+
+/*********** CONTENT ***********/
+#location-browsing-container {
+    margin: 1rem 0;
+    display: flex;
+    flex-flow: row wrap;
+    height: fit-content;
+    gap: 1rem; /* minimum row and column gap */
+}
+
+/*********** CARDS /***********/
+.location-card-container {
+    background: #f2f2f2;
+    height: fit-content;
+    padding: 1em;
+    border-radius: 10px;
+    max-width: var(--crowding-bar-width);
+}
+
+.location-card-container:hover {
+    background: #e4e4e4;
+    cursor: pointer;
+}
+
+.location-card-container:hover .location-name {
+    text-decoration: underline;
+}
+
+.location-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.location-name {
+    width: fit-content;
+    font-size: 1.15rem;
+    flex-grow: 1;
+}
+
+.crowding-score-hint {
+    margin-left: auto;
+    width: fit-content;
+}
+
+.floor-name {
+    text-align: left;
+    display: inline-block;
+    width: fit-content;
+}
+
+.crowding-score-updated-time {
+    font-size: 0.7rem;
+    color: #757575;
+    text-align: right;
+}
+
+/* .expand-post {
+    text-decoration: underline;
+    font-size: 0.8rem;
+    color: #757575;
+    width: fit-content;
+}
+
+.expand-post:hover {
+    cursor: pointer;
+} */
+
+/******* "LOADING BARS" *******/
+.crowding-score-bar-container {
+    margin: 0.4rem 0;
+    height: var(--crowding-bar-height);
+    border: black solid 3px;
+    background: white;
+    border-radius: 1rem;
+
+    width: var(--crowding-bar-width);
+}
+
+.crowding-score-bar {
+    height: var(--crowding-bar-height);
+    border-radius: 1rem;
+}
+
+#level1 {
+    /* background: var(--level1); */
+    background: linear-gradient(to right, #15a36d, var(--level1));
+    width: calc(var(--crowding-bar-width)/5);
+}
+
+#level2 {
+    /* background: var(--level2); */
+    background: linear-gradient(to right, #5591df, var(--level2));
+
+    width: calc(2*var(--crowding-bar-width)/5);
+}
+
+#level3 {
+    /* background: var(--level3); */
+    background: linear-gradient(to right, #e69926, var(--level3));
+    width: calc(3*var(--crowding-bar-width)/5);;
+}
+
+#level4 {
+    /* background: var(--level4); */
+    background: linear-gradient(to right, #e66326, var(--level4));
+    width: calc(4*var(--crowding-bar-width)/5);;
+}
+
+#level5 {
+    /* background: var(--level5); */
+    background: linear-gradient(to right, #a80a67, var(--level5));
+    width: calc(5*var(--crowding-bar-width)/5);;
+}
+
