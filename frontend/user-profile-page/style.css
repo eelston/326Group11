@@ -1,0 +1,176 @@
+:root {
+    /* crowding bar colors */
+    --level1: #66d575;
+    --level2: #5ad8cc;
+    --level3: #ffc943;
+    --level4: #ff9e42; 
+    --level5: #f24822;
+
+    /* greys */
+    --lightgrey: #f2f2f2;
+    --mediumgrey: #d9d9d9;
+    --darkgrey: #757575;
+}
+* {
+    margin: 0;
+    padding: 0;
+    
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+body {
+    background: #fefefe;
+}
+
+/******************************
+*********** HEADER ************
+******************************/
+header {
+    background: #dcccff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#app-logo {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#app-logo:hover {
+    cursor: pointer;
+    color: #602dcf;
+}
+
+.user-icon {
+    background: var(--level2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-content {
+
+}
+
+.user-icon.can-click:hover {
+    cursor: pointer;
+    background: white;
+    box-shadow: 3px 3px #602dcf;
+}
+
+/******************************
+************ MAIN *************
+******************************/
+main {
+    margin: 0 5vw; /* only left/right margin */
+    min-width: auto;
+}
+
+#profile-container {
+    margin: 1rem 0; /* only top/bottom margin */
+    background: var(--lightgrey);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+/******* PROFILE HEADER ********/
+.profile-header {
+    font-size: 1.75rem;
+    box-sizing: border-box;
+
+    width: 100%;
+
+    display: flex;
+    padding: 1rem;
+}
+
+#profile-icon {
+    min-width: 70px;
+    min-height: 70px;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.header-text-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+
+    margin-left: 0.8rem;
+}
+
+.user-pronouns {
+    color: var(--darkgrey);
+    background: var(--mediumgrey);
+    
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    height: fit-content;
+    width: fit-content;
+
+    font-size: 1.1rem;
+}
+
+.header-text-container .user-id {
+    font-size: 1.2rem;
+    color: var(--darkgrey);
+}
+
+
+/****** PROFILE CONTENT *******/
+.profile-content-container {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1rem;
+
+    min-height: 60vh;
+}
+
+.profile-content-container a {
+    color: black;
+    text-decoration: none;
+}
+
+.profile-content a:visited {
+    color: black;
+}
+
+.profile-subsection {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: var(--mediumgrey);
+    font-size: 1.2rem;
+}
+
+.user-info-container {
+    /* background: lightblue; */
+    grid-row: 1 / 3;
+}
+
+.user-info-container li {
+    list-style: none;
+}
+
+.course-list-container {
+    /* background: lightgreen; */
+    grid-row: 3 / 3;
+}
+
+.blurb-container {
+    /* background: lightcoral; */
+    text-align: center;
+}
+
+.recent-post-container {
+    /* background: yellow; */
+    grid-row: 2 / -1;
+}
