@@ -28,7 +28,7 @@
 
 .user-icon:hover {
     cursor: pointer;
-    background: white;
+    background: #fefefe;
     box-shadow: 3px 3px #602dcf;
 }
 
@@ -88,7 +88,7 @@ nav {
     background: #dcccff;
     border-radius: 3px;
     box-shadow: 2px 2px 7px #af9bda;
-    padding: 5px;
+    padding: 10px;
     overflow: hidden;
 
     display: flex;
@@ -113,11 +113,16 @@ nav {
 }
 
 .title {
+    display: block;
+    width: 100%;
     text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-top: 5px;
     align-self: center;
+    white-space: nowrap;
 }
 
 .tag-container {
