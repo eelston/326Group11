@@ -1,0 +1,165 @@
+:root {
+    /* crowding bar colors */
+    --level1: #66d575;
+    --level2: #5ad8cc;
+    --level3: #ffc943;
+    --level4: #ff9e42; 
+    --level5: #f24822;
+
+    /* greys */
+    --lightgrey: #f2f2f2;
+    --mediumgrey: #d9d9d9;
+    --darkgrey: #757575;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    height: 100vh;
+}
+
+body {
+    background: #E8E1FD;
+    height: 100vh;
+}
+
+/******************************
+*********** HEADER ************
+******************************/
+header {
+    background: #dcccff;
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#app-logo {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-left: 1rem;
+}
+
+#app-logo:hover {
+    cursor: pointer;
+    color: #602dcf;
+}
+
+.user-icon {
+    background: var(--level2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.user-icon.can-click:hover {
+    cursor: pointer;
+    background: white;
+    box-shadow: 3px 3px #602dcf;
+}
+
+/******************************
+************ MAIN *************
+******************************/
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 11vh);
+}
+
+.entry-container{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    block-size: fit-content;
+}
+
+/****** LOG-IN/SIG-UP BOXES *******/
+
+.entry-heading{
+    padding: 2vw;
+    font-size: 2.25rem;
+    text-align: center;
+}
+
+.entry-box{
+    display: flex;
+    flex-direction: column;
+    block-size: fit-content;
+    margin: 1vw;
+    background-color: white;
+    border-radius: 1rem;
+}
+
+.email, .password {
+    display: flex;
+    flex-direction: column;
+    margin: 2vw;
+}
+
+.email input, .password input {
+    padding: 0.5vw;
+    border-radius: 0.5rem;
+    border-color: #e4e4e4;
+
+}
+
+.email input, .email label, .password input, .password label{
+    margin: 0.5vw;
+    font-size: 1.5rem;
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    margin: 2vw;
+    block-size: fit-content;
+    align-items: center;
+    cursor: pointer;
+}
+
+.new-user, #sign-up-submit, #log-in-submit{
+    width: fit-content;
+    padding: 0.5vw;
+    border-radius: 0.5rem;
+    font-size: 1.5rem; 
+}
+
+.new-user, #log-in-submit{
+    margin: 0.5vw;
+}
+
+#log-in-submit, #sign-up-submit {
+    background-color:#e5dcfd;
+    border-color: #e5dcfd;
+}
+
+#log-in-submit:hover, #sign-up-submit:hover {
+    background-color: #874fff;
+    border-color: #874fff;
+    color: #ffffff;
+}
+
+.new-user {
+    background-color: #d5f5f2;
+    border-color: #d5f5f2;
+}
+
+.new-user:hover {
+    background-color: #5ad8cc;
+    border-color: #5ad8cc;
+    color: #ffffff;
+}
