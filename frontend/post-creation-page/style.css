@@ -76,6 +76,7 @@ main {
     flex-direction: column;
     justify-content: center;
     height: calc(100vh - 11vh);
+    overflow: hidden;
 }
 
 .post-container{
