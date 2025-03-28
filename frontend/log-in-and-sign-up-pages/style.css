@@ -25,6 +25,8 @@ html {
 body {
     background: #E8E1FD;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /******************************
@@ -78,6 +80,7 @@ main {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 11vh);
+    overflow: hidden;
 }
 
 .entry-container{
