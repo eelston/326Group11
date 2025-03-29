@@ -76,7 +76,8 @@ header {
 
 .user-icon:hover {
     cursor: pointer;
-    background: #40a198;
+    background: white;
+    box-shadow: 3px 3px #602dcf;
 }
 
 /******************************
@@ -117,7 +118,8 @@ main {
 
 #profile-icon:hover {
     cursor: pointer;
-    background: ;
+    background: #40a198;
+    box-shadow: none;
 }
 
 #profile-icon .icon-content {
