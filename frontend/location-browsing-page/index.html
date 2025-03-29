@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Locations | Study on Campus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div id="app-logo">Study on Campus</div>
+        <div class="user-icon"><span class="icon-content">:3</span></div>
+    </header>
+
+    <main>
+        <!-- SORT OPTIONS -->
+        <div id="search-option-container">
+            <div id="search-bar-container">
+                <input type="text" id="search-bar" placeholder="Enter keywords...">
+                <input type="button" id="search-button" value="Search"/>
+            </div>
+
+            <div id="sort-by-container">
+                <label for="sort-by-select">Sort by</label>
+                <select id="sort-by-select">
+                    <option>Recently Updated</option>
+                    <option>Ascending Crowd Score</option>
+                    <option>Descending Crowd Score</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- LOCATION CARDS -->
+        <div id="location-browsing-container">
+
+            <div class="location-card-container">
+                <div class="location-name"><span>Science & Engineering Library</span></div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 2</strong></div>
+                        <div class="crowding-score-hint">Not too busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level2" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 3</strong></div>
+                        <div class="crowding-score-hint">Busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level3" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>CEI Hub</span></div>
+                    <!-- <div class="floor-name"><strong>Floor 2</strong></div> -->
+                    <div class="crowding-score-hint">Mostly empty</div>
+                </div>
+                
+                <div class="crowding-score-bar-container">
+                    <div id="level1" class="crowding-score-bar"></div>
+                </div>
+                <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>Courtside Cafe</span></div>
+                    <!-- <div class="floor-name"><strong>Floor 2</strong></div> -->
+                    <div class="crowding-score-hint">Busy</div>
+                </div>
+                
+                <div class="crowding-score-bar-container">
+                    <div id="level3" class="crowding-score-bar"></div>
+                </div>
+                <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-name"><span>Student Union</span></div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 1</strong></div>
+                        <div class="crowding-score-hint">Not many seats</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level4" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+                
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 2</strong></div>
+                        <div class="crowding-score-hint">Not too busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level2" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+                
+                
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 3</strong></div>
+                        <div class="crowding-score-hint">Mostly empty</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level1" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-name"><span>Integrated Learning Center</span></div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 1</strong></div>
+                        <div class="crowding-score-hint">Mostly empty</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level1" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 2</strong></div>
+                        <div class="crowding-score-hint">Packed</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level5" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 3</strong></div>
+                        <div class="crowding-score-hint">Busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level3" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+            </div>
+
+            
+
+
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>DuBois Quiet Study</span></div>
+                </div>
+                
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 2</strong></div>
+                        <div class="crowding-score-hint">Busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level3" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 5</strong></div>
+                        <div class="crowding-score-hint">Not many seats</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level4" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 8</strong></div>
+                        <div class="crowding-score-hint">Mostly empty</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level1" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 11</strong></div>
+                        <div class="crowding-score-hint">Busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level3" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 14</strong></div>
+                        <div class="crowding-score-hint">Not too busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level2" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 17</strong></div>
+                        <div class="crowding-score-hint">Mostly empty</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level1" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 20</strong></div>
+                        <div class="crowding-score-hint">Not too busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level2" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>Integrated Sciences Building</span></div>
+                </div>
+                
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 1</strong></div>
+                        <div class="crowding-score-hint">Packed</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level5" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 2</strong></div>
+                        <div class="crowding-score-hint">Not many seats</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level4" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 3</strong></div>
+                        <div class="crowding-score-hint">Busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level3" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 4</strong></div>
+                        <div class="crowding-score-hint">Not many seats</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level4" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>DuBois Group Study</span></div>
+                </div>
+                
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor LL</strong></div>
+                        <div class="crowding-score-hint">Not many seats</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level4" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 9</strong></div>
+                        <div class="crowding-score-hint">Packed</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level5" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 15</strong></div>
+                        <div class="crowding-score-hint">Mostly empty</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level1" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 18</strong></div>
+                        <div class="crowding-score-hint">Busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level3" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 21</strong></div>
+                        <div class="crowding-score-hint">Not too busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level2" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 22</strong></div>
+                        <div class="crowding-score-hint">Busy</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level3" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+
+                <div class="floor-info-container">
+                    <div class="location-info">
+                        <div class="floor-name"><strong>Floor 23</strong></div>
+                        <div class="crowding-score-hint">Not many seats</div>
+                    </div>
+                    
+                    <div class="crowding-score-bar-container">
+                        <div id="level4" class="crowding-score-bar"></div>
+                    </div>
+                    <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+                </div>
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>Worcester First Floor</span></div>
+                    <!-- <div class="floor-name"><strong>Floor 2</strong></div> -->
+                    <div class="crowding-score-hint">Busy</div>
+                </div>
+                
+                <div class="crowding-score-bar-container">
+                    <div id="level3" class="crowding-score-bar"></div>
+                </div>
+                <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+            </div>
+
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>Isenberg Hub</span></div>
+                    <!-- <div class="floor-name"><strong>Floor 2</strong></div> -->
+                    <div class="crowding-score-hint">Not many seats</div>
+                </div>
+                
+                <div class="crowding-score-bar-container">
+                    <div id="level4" class="crowding-score-bar"></div>
+                </div>
+                <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+            </div>
+        
+            <div class="location-card-container">
+                <div class="location-info">
+                    <div class="location-name"><span>South College</span></div>
+                    <!-- <div class="floor-name"><strong>Floor 2</strong></div> -->
+                    <div class="crowding-score-hint">Not too busy</div>
+                </div>
+                
+                <div class="crowding-score-bar-container">
+                    <div id="level2" class="crowding-score-bar"></div>
+                </div>
+                <div class="crowding-score-updated-time">Last updated 3/5 8:28PM ET</div>
+            </div>
+
+            <!-- end location-browsing-container -->
+        </div>
+    </main>
+</body>
