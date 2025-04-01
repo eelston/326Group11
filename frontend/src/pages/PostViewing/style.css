@@ -1,0 +1,254 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#body {
+    background: #fefefe;
+}
+
+#app-logo {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.user-icon {
+    background: #5ad8cc;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 25px;
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-icon:hover {
+    cursor: pointer;
+    background: #fefefe;
+    box-shadow: 3px 3px #602dcf;
+}
+
+.can-click:hover {
+    cursor: pointer;
+    color: #602dcf
+}
+
+#make-post {
+    font-size: 1rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
+nav {
+    background: #dcccff;
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-button {
+    background-color: #dedede;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 25px;
+    padding: 10px 30px;
+    margin-top: 25px;
+    margin-left: 10px;
+}
+
+.post-container {
+    background-color: #d8cafb;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 20px auto;
+    justify-content: flex-start;
+    max-width:95%
+}
+
+.post-content {
+    padding: 15px;
+    margin-bottom: 12px;
+    background-color:#baa2f6;
+    border-radius: 10px;
+}
+
+.user-post-info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info-subgroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+/* POST CSS ABOVE, COMMENT CSS BELOW*/
+
+.comment {
+    background-color: #baa2f6;
+    margin-bottom: 15px;
+}
+
+.commenter-icon {
+    background-color: #5ad8cc;
+    color: black;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-style: solid;
+    border-color: #d8cafb;
+    border-width: 8px;
+    border-radius: 13px;
+}
+
+.commenter-info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    margin: 0px;
+}
+
+.comment-container {
+    margin-top: 100px;
+    max-width:95%;
+    margin: auto;
+}
+
+.comment-data {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 15px;
+}
+
+.comment-data {
+    padding: 20px 5px;
+}
+.comment-text {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.comment-box {
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    border-style:none;
+    padding: 5px;
+    font-size: 1em;
+    outline: none;
+    resize:vertical;
+    vertical-align: top;
+}
+
+.comment-add {
+    min-width: auto;
+    max-width: 30rem;
+    border-radius: 5px;
+    border: none;
+    padding: 5px 5px;
+    margin-top: 10px;
+    color: black;
+    background-color: #dedede;
+}
+
+.tag-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin: 12px 0px;
+
+    gap: 6px;
+    max-width: 100%;
+    border-radius: 6px;
+
+    font-size: 1rem;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+.tag {
+    background-color: white;
+    border-radius: 6px;
+    padding: 1px 5px;
+    min-width: 75px;
+    text-align: center;
+    overflow:hidden;
+    white-space: nowrap;
+}
+
+.comment-user {
+    font-weight: bold;
+}
+
+/* MEDIA CSS FOR MOBILE */
+@media (max-width: 535px) {
+    #app-logo {
+        font-size: 1rem;
+    }
+    .user-icon{
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+        font-weight: 475;
+    }
+    .nav-button {
+        text-align: center;
+    }
+    .posts-container {
+        max-width: 100%;
+    }
+    .back-button {
+        padding: 20px 30px;
+        font-size: 20px;
+        font-weight: 650;
+        width: 100%;
+        margin-left: 0;
+    }
+    .commenter-icon {
+        width: 10px;
+        max-width: 10px;
+        height: 10px;    
+        max-height: 10px;
+    }
+    .user-post-info {
+        justify-content: space-evenly;
+    }
+    .comment-add {
+        font-size: 20px;
+        padding: 12px 0;
+    }
+}

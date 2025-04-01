@@ -1,0 +1,209 @@
+:root {
+    /* crowding bar colors */
+    --level1: #66d575;
+    --level2: #5ad8cc;
+    --level3: #ffc943;
+    --level4: #ff9e42; 
+    --level5: #f24822;
+
+    /* greys */
+    --lightgrey: #f2f2f2;
+    --mediumgrey: #d9d9d9;
+    --darkgrey: #757575;
+}
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    height: 100vh;
+}
+
+body {
+    background: #fefefe;
+    height: 100vh;
+}
+
+/******************************
+*********** HEADER ************
+******************************/
+header {
+    background: #dcccff;
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#app-logo {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-left: 1rem;
+}
+
+#app-logo:hover {
+    cursor: pointer;
+    color: #602dcf;
+}
+
+.user-icon {
+    background: var(--level2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.user-icon.can-click:hover {
+    cursor: pointer;
+    background: white;
+    box-shadow: 3px 3px #602dcf;
+}
+
+/******************************
+************ MAIN *************
+******************************/
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100vh - 11vh);
+    overflow: hidden;
+}
+
+.post-container{
+    height: 100%;
+    padding: 1vw;
+}
+
+/****** POST CONTENT *******/
+
+.post-content{
+    block-size: fit-content;
+    display: flex;
+    flex-direction: column;  
+}
+
+.post-title, .post-location, .post-body{
+    margin: 0.75vw;
+}
+
+.post-body {
+    min-height: 40vh;
+}
+
+.post-title input, .post-location input{
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    padding: 0.5vw;
+    font-size: 1.5rem;
+    border-width: medium;
+    box-sizing: border-box;
+}
+
+.post-title input {
+    border-color: #e5dcfd;
+}
+
+.post-location input {
+    border-color: #d5f5f2;
+}
+
+.post-body textarea {
+    resize: none;
+    width: 100%;
+    min-height: 40dvh;
+    border-radius: 0.5rem;
+    padding: 0.5vw;
+    font-size: 1.5rem;
+    border-width: medium;
+    border-color: #e4e4e4;
+    box-sizing: border-box;
+}
+
+/****** TAG AND SUBMIT CONTENT *******/
+
+.post-actions{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/****** SUBMIT CONTENT *******/
+
+.post-send{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#submit-post, .submit-cancel{
+    flex: 1;
+    margin: 0.75vw;
+    padding: 0.5vw;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+#submit-post{
+    background-color: #e5dcfd;
+    border-color: #e5dcfd;
+}
+
+#submit-post:hover{
+    background-color: #874fff;
+    border-color: #874fff;
+    color: #ffffff;
+}
+
+.submit-cancel{
+    background-color: #e4e4e4;
+    border-color: #e4e4e4;
+}
+
+.submit-cancel:hover{
+    background-color: #757575;
+    border-color: #757575;
+    color: #ffffff;
+}
+
+/****** TAG CONTENT *******/
+
+.added-tags{
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.tag-major, .tag-class, .tag-assignment{
+    margin: 0.75vw;
+    text-align: center;
+}
+
+#majors, #classes, #assignments {
+    background-color: #d5f5f2;
+    border-color: #d5f5f2;
+    padding: 0.5vw;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+#majors:hover, #classes:hover, #assignments:hover {
+    background-color: #5ad8cc;
+    border-color: #5ad8cc;
+    color: #ffffff;
+}
