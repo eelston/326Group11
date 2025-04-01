@@ -1,1 +1,0 @@
-Init file for frontend folder
