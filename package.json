@@ -20,17 +20,12 @@
   "author": {
     "name": "CS 326 Group 11"
   },
-  "contributors": [
-
-  ],
+  "contributors": [],
   "scripts": {
     "dev": "",
     "test": ""
   },
   "dependencies": {
-
-  },
-  "devDependencies": {
-
+    "@playwright/test": "^1.51.1"
   }
 }
