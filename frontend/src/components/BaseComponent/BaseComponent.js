@@ -24,7 +24,7 @@ export class BaseComponent {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       // Dynamically load CSS from the same directory as the JS file
-      link.href = `../components/${fileName}/${fileName}.css`; // EDIT FROM CLASS EXAMPLE: adjust file path for compatibility with our folder structure
+      link.href = `../../components/${fileName}/${fileName}.css`; // EDIT FROM CLASS EXAMPLE: adjust file path for compatibility with our folder structure
       document.head.appendChild(link);
       this.cssLoaded = true;
     }
