@@ -1,4 +1,5 @@
 import { Post } from "./Post.ts"
+import { Fact } from "./Fact.ts"
 
 export interface User {
     userId: string // user_id, unique to account, public
@@ -16,7 +17,7 @@ export interface User {
         receiveEmailNotifications: boolean; // for authored posts, posts commented on, mentions/replies
     };
     profileContent: {
-        about: string[]; // user-input facts (e.g., *Favorite Study Spot:* SEL)
+        about: Fact[]; // user-input facts (e.g., *Favorite Study Spot:* SEL)
         blurb: string; 
         courses: string;
     }
