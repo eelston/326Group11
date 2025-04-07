@@ -7,12 +7,19 @@
 </head>
 
 <body>
-    <nav>
+    <header>
         <div id = "app-logo" class= "nav-button can-click">Study On Campus</div>
-        <div class = "hidden"></div>
-        <div id = "make-post" class = "nav-button can-click">Create a Post</div>
-        <div class = "user-icon"><span class = "icon-content">:3</span></div>
-    </nav>
+        <div id = "location-browsing" class = "nav-button can-click">Browse Locations</div>
+        <div id = "make-post" class = "nav-button can-click">+ Create a Post</div>
+
+        <div class = "dropdown">
+            <div class = "user-icon dropdown-button"><span class = "icon-content">:3</span></div>
+            <div class = "dropdown-content">
+                <span class = "dd-content-buttons can-click">Profile</span>
+                <span class = "dd-content-buttons can-click">Settings</span>
+            </div>
+        </div>
+    </header>
 
     <input class = "back-button can-click" type = "button" id ="go-back" value="<  Back to All Posts">
 
@@ -32,7 +39,8 @@
             <div class = "tag-container">
                 <span style="background-color: lightblue;" class = "tag">CS 250</span> <span style="background-color: rgb(248, 191, 212);" class = "tag">Midterm Studying</span> <span style="background-color: rgb(194, 230, 173);" class = "tag">Computer Science</span>
             </div>
-            <span class = "location"><b>Location: </b>Library -- Main Campus</span>
+            <span class = "time data"><b>Starts at: </b>9:00 A.M, Tomorrow</span>
+            <span class = "location data"><b>Location: </b>Library -- Main Campus</span>
             <p class = "post-desc">Hi everyone! My names Melissa and I am a cs major! I am looking to study 
                 with my fellow classmates for this upcoming CS 250 midterm. I am feeling 
                 honestly rlly nervous and even with the SI sessions I'm still stressed.

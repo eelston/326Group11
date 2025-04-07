@@ -31,18 +31,40 @@
     box-shadow: 3px 3px #602dcf;
 }
 
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #dedede;
+    padding: 0.7rem;
+    right: 0;
+    width: 4rem;
+    z-index: 1;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 .can-click:hover {
     cursor: pointer;
     color: #602dcf
 }
 
-#make-post {
+.nav-button {
     font-size: 1rem;
     font-weight: bold;
     font-style: italic;
 }
 
-nav {
+header {
     background: #dcccff;
     padding: 1rem;
 
@@ -58,10 +80,10 @@ nav {
     border: none;
     font-weight: 600;
     font-size: 15px;
-    border-radius: 25px;
+    border-radius: 0.5rem;
     padding: 10px 30px;
     margin-top: 25px;
-    margin-left: 10px;
+    margin-left: 1rem;
 }
 
 .post-container {
@@ -74,6 +96,8 @@ nav {
 }
 
 .post-content {
+    display: flex;
+    flex-direction: column;
     padding: 15px;
     margin-bottom: 12px;
     background-color:#baa2f6;
@@ -215,9 +239,9 @@ nav {
 }
 
 /* MEDIA CSS FOR MOBILE */
-@media (max-width: 535px) {
+@media (max-width: 625px) {
     #app-logo {
-        font-size: 1rem;
+        font-size: 1.5rem;
     }
     .user-icon{
         width: 30px;
@@ -250,5 +274,22 @@ nav {
     .comment-add {
         font-size: 20px;
         padding: 12px 0;
+    }
+    header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .dropdown:hover .dropdown-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 1.5rem;
+        width: 7rem;
+    }
+    .nav-button {
+        text-align: center;
+        font-size: 1.4rem;
+        margin: 0.1rem;
     }
 }
