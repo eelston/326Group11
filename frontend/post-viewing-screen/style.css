@@ -101,7 +101,7 @@ header {
     padding: 15px;
     margin-bottom: 12px;
     background-color:#baa2f6;
-    border-radius: 10px;
+    border-radius: 0.5rem;
 }
 
 .user-post-info {
@@ -186,7 +186,7 @@ header {
 }
 
 .comment-box {
-    border-radius: 10px;
+    border-radius: 0.5rem;
     display: flex;
     flex-wrap: wrap;
     border-style:none;
@@ -200,7 +200,7 @@ header {
 .comment-add {
     min-width: auto;
     max-width: 30rem;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     border: none;
     padding: 5px 5px;
     margin-top: 10px;
