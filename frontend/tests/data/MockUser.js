@@ -4,11 +4,11 @@ export const MockUser = {
     email: "secret@email.com",
     password: "secret",
     
-    pronouns: "she/he",
+    pronouns: "she/her",
     iconContent: ":P",
 
     settings: {
-        displayPronouns: false,
+        displayPronouns: true,
         displayMajor: true,
         
         receiveEmailNotifications: true,

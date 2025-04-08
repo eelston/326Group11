@@ -51,18 +51,19 @@
     align-items: center;
 }
 
-.display-name {
+#profile-name {
     font-size: 2.5rem;
 }
 
 .user-pronouns {
-    color: var(--grey-500);
-    background: var(--grey-100);
+    color: var(--grey-400);
+    background: var(--grey-300);
     
     border-radius: 0.5rem;
     padding: 0.5rem;
     height: fit-content;
     width: fit-content;
+    min-width: 2rem;
 
     font-size: 1.2rem;
 }
@@ -73,7 +74,7 @@
 }
 
 /****** PROFILE CONTENT *******/
-.profile-content {
+#profile-content {
     display: grid;
     grid-template-columns: 3fr 2fr;
     grid-template-rows: repeat(3, 1fr);
@@ -117,7 +118,11 @@
 
 #blurb-container {
     display: flex;
+    justify-content: center;
     align-items: center;
+}
+
+#blurb {
     text-align: center;
 }
 
@@ -145,6 +150,10 @@
     align-items: center;
 }
 
+.placeholder-text {
+    color: var(--grey-400);
+}
+
 /******************************
 ******** MEDIA QUERIES ********
 ******************************/
@@ -153,7 +162,7 @@
         e.g., mobile devices in portrait mode, most likely */
 
     /**** subsection layout ****/
-    .profile-content-container {
+    #profile-content {
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: auto;
@@ -162,29 +171,67 @@
         min-height: 60vh;
     }
 
-    .user-info-container {
+    #about-container {
         grid-row: auto;
     }
      
-    .course-list-container {
+    #course-list-container {
         grid-row: auto;
     }
     
-    .blurb-container {
+    #blurb-container {
         grid-row: 1;
     }
     
-    .recent-post-container {
+    #recent-post-container {
         grid-row: auto;
     }
 }
 
 @media screen and (max-width: 40rem) {
-/* window width small enough to need profile header wrapping */
-/**** profile header ****/
-main {background:lightblue}
+    #profile-container {
+        padding: 0.5rem;
+    }
+
+    #profile-header {
+        padding: 0.5rem;
+    }
+
+    #profile-content {
+        gap: 0.5rem;
+    }
+
+    /**** profile header ****/
+    #profile-name {
+        font-size: 1.5rem;
+    }
+
     .header-text-container {
-        display: flex;
-        flex-wrap: wrap;
+        column-gap: 0.5rem;
+    }
+
+    .header-text-container .user-id {
+        font-size: 1rem;
+    }
+
+    .header-text-container .user-pronouns {
+        font-size: 0.8rem;
+    }
+
+    #profile-icon {
+        /* this is the one in the profile header, different size from navbar header */
+        min-width: 2rem;
+        min-height: 2rem;
+    }
+    
+    #profile-icon .icon-content {
+        font-size: 1.5rem;
+    }
+
+    /* content section */
+    .profile-subsection-title, #blurb, #about-list li, .fact-title, #courses, .placeholder-text {
+        /* padding: 0.5rem; */
+        font-size: large;
+
     }
 }

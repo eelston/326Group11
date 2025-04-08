@@ -82,7 +82,7 @@ export class UserProfileComponent extends BaseComponent {
     #setupProfileContent() {
         // set up profile content container HTML
         const profileContent = document.createElement('div');
-        profileContent.classList.add('profile-content');
+        profileContent.setAttribute('id', 'profile-content');
         profileContent.innerHTML = this.#getProfileContentTemplate();
         this.#container.appendChild(profileContent); // add to user profile container
 
