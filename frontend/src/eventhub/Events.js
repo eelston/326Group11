@@ -9,8 +9,6 @@ An object containing various messages for task management
 export const Events = {
     // Post Creation 
     NewPost: 'NewPost',
-    // Post Viewing -- adding a comment
-    NewComment: 'NewComment',
 
     // Post Browsing 
     LoadPosts: 'LoadPosts',
@@ -23,9 +21,9 @@ export const Events = {
     LoadPostFailure: 'LoadPostFailure',
 
     // Post Viewing ??? todo
-    LoadComments: 'LoadComments',
-    LoadCommentsSuccess: 'LoadCommentsSuccess',
-    LoadCommentsFailure: 'LoadCommentsFailure',
+    UpdatePost: 'UpdatePost',
+    UpdatePostSuccess: 'UpdatePostSuccess',
+    UpdatePostFailure: 'UpdatePostFailure',
 
     // Post Creation
     StorePost: 'StorePost',

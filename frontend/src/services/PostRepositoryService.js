@@ -65,11 +65,29 @@ export class PostRepositoryService extends Service {
     });
   }
 
+  async loadPost(postId) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction([this.storeName], 'readonly');
+      const store = transaction.objectStore(this.storeName);
+      const request = store.get(postId);
+
+      request.onsuccess = event => {
+        const post = event.target.result;
+        this.publish(Event.LoadPostSuccess, post);
+        resolve(post);
+      };
+      request.onerror = () => {
+        this.publish(Events.LoadPostFailure);
+        reject("Error retrieving post with id: " + postId)
+      }
+    })
+  }
+
   async storePost(postData) {
     return new Promise((resolve, reject) => {
         const transaction = this.db.transaction([this.storeName], 'readwrite');
         const store = transaction.objectStore(this.storeName);
-        const request = store.add(postData);
+        const request = store.put(postData);
 
         request.onsuccess = (event) => {
             postData.postId = event.target.result; 
@@ -78,9 +96,29 @@ export class PostRepositoryService extends Service {
           };
         request.onerror = () => {
           this.publish(Events.StorePostFailure, postData);
-          reject('Error storing post: ');
+          console.log("Hello!")
+          reject('Error storing post: ' + postData);
         };
         
+    })
+  }
+  
+  async updatePost(postId, comment) {
+    const post = await this.loadPost(postId);
+    post.postComments.push(comment);
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction([this.storeName], 'readwrite');
+      const store = transaction.objectStore(this.storeName);
+      const request = store.put(post);
+
+      request.onsuccess = (event) => {
+        this.publish(Events.UpdatePostSuccess, post)
+        resolve('Post updated with new comments successfully.');
+      };
+    request.onerror = () => {
+      this.publish(Events.UpdatePostFailure, post);
+      reject("Error updating post with id: " + post.postId);
+    };
     })
   }
 
@@ -107,7 +145,11 @@ export class PostRepositoryService extends Service {
       this.storePost(data);
     });
 
-    this.subscribe(Events.UnStorePost, () => {
+    this.subscribe(Events.UpdatePost, data => {
+      this.updatePost(data.postId)
+    })
+
+    this.subscribe(Events.UnStorePosts, () => {
       this.clearPosts();
     });
   }

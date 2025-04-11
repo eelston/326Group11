@@ -1,6 +1,9 @@
 export const mockFeed = [
     {
         postId: "0000001",
+        name: "Melissa",
+        userId: "0000004",
+        pronouns: "she/her",
         title: "Study buds for discrete exam coming up...",
         tags: [{
             color: "#5feee0",
@@ -24,8 +27,8 @@ export const mockFeed = [
         I'd love to meet some of my classmates! Anyway good luck to everyone else taking this
         exam in two days. :P `,
         location: "Campus Library",
-        startTime: "9:00 A.M, Tomorrow",
-        timeStamp: "9:30 A.M, 9/26/2026", // will be updated in next milestone
+        startTime: {time:"9:00 A.M", date: "Tomorrow"},
+        timeStamp: {time:"9:30 A.M", date: "9/26/2026"}, // will be updated in next milestone
         isExpired: false,
         postComments: [{
             userId: "0000003",
@@ -34,8 +37,8 @@ export const mockFeed = [
             iconBgColor: "#5ad8cc",
             iconContent: ":U",
             pronouns: "she/her",
-            commentDescription: "Omg I'll show up! At 11 am tho prolly. See u then!",
-            timeStamp: "11:32 A.M, 9/26/2026",
+            message: "Omg I'll show up! At 11 am tho prolly. See u then!",
+            timeStamp: {time: "11:32 A.M.", date: "9/26/2026"},
         }, {
             userId: "0000004",
             commentId: "2",
@@ -43,8 +46,8 @@ export const mockFeed = [
             iconBgColor: "#5ad8cc",
             iconContent: ":J",
             pronouns: "She/her",
-            commentDescription: "I'll be joining!",
-            timeStamp: "3:21 P.M, 9/26/2026",
+            message: "I'll be joining!",
+            timeStamp: {time: "3:29 A.M.", date: "9/26/2026"},
         }]
     },
     {
@@ -57,8 +60,8 @@ export const mockFeed = [
         description: `Some text goes here. A lot of varied text too. Of all various unique
         sizes. Maybe some expressions too as well. Agreed upon here.`,
         location: "Location here",
-        startTime: "Time, Date",
-        timeStamp: "Post Time, Date",
+        startTime: {time:"Time", date: "Date"},
+        timeStamp: {time:"TimePosted", date: "DatePosted"},
         isExpired: false, 
         postComments: [],
         userId: "0000000",
@@ -75,8 +78,8 @@ export const mockFeed = [
         description: `Some text goes here. A lot of varied text too. Of all various unique
         sizes. Maybe some expressions too as well. Agreed upon here.`,
         location: "Location here",
-        startTime: "Time, Date",
-        timeStamp: "Post Time, Date",
+        startTime: {time:"Time", date: "Date"},
+        timeStamp: {time:"TimePosted", date: "DatePosted"},
         isExpired: false, 
         postComments: [],
         userId: "0000000",
@@ -93,8 +96,8 @@ export const mockFeed = [
         description: `Some text goes here. A lot of varied text too. Of all various unique
         sizes. Maybe some expressions too as well. Agreed upon here.`,
         location: "Location here",
-        startTime: "Time, Date",
-        timeStamp: "Post Time, Date",
+        startTime: {time:"Time", date: "Date"},
+        timeStamp: {time:"TimePosted", date: "DatePosted"},
         isExpired: false, 
         postComments: [],
         userId: "0000000",
@@ -111,8 +114,8 @@ export const mockFeed = [
         description: `Some text goes here. A lot of varied text too. Of all various unique
         sizes. Maybe some expressions too as well. Agreed upon here.`,
         location: "Location here",
-        startTime: "Time, Date",
-        timeStamp: "Post Time, Date",
+        startTime: {time:"Time", date: "Date"},
+        timeStamp: {time:"TimePosted", date: "DatePosted"},
         isExpired: false, 
         postComments: [],
         userId: "0000000",

@@ -6,16 +6,37 @@ export class PostRepositoryRemoteFakeService extends Service {
         super();
     }
 
-    async loadAllTasks() {
-        //TODO
+    async loadPost(postId) {
+        const resp = await fetch(`http://localhost:5500/post/${postId}`, {
+            method: "GET" 
+        });
+        const data = await response.json();
+        return data;
     }
 
-    async storeTask(taskData) {
-        //TODO
+    async loadAllPosts() {
+        const resp = await fetch("http://localhost:5500/post", {
+            method: "GET"
+        });
+        const data = await response.json();
+        return data;
     }
 
-    async clearTasks() {
-        //TODO
+    async storePost(postData) {
+        const resp = await fetch("http://localhost:5500/post", {
+            method: "POST",
+            body: JSON.stringify(postData)
+        });
+        const data = await response.json();
+        return data;
+    }
+
+    async clearPosts() {
+        const response = await fetch("http://localhost:5500/post", {
+            method: "DELETE"
+        });
+        const data = await response.json();
+        return data;
     }
 
     addSubscriptions() {

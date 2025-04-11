@@ -29,7 +29,6 @@ export class PostBrowsingComponent extends BaseComponent {
             this.#renderPosts(this.#allPosts);
         }
         this.#searchQueryListener();
-        return this.#container
     }
 
     #searchQueryListener() { 
@@ -37,7 +36,7 @@ export class PostBrowsingComponent extends BaseComponent {
             this.filterPosts(search.target.value)
         })
     }
-
+    
     #renderPosts(posts) {
         this.#container.innerHTML = '';
         if (posts.length === 0) {
@@ -50,6 +49,7 @@ export class PostBrowsingComponent extends BaseComponent {
             console.log(post)
             const postView = document.createElement('div');
             postView.classList.add('post', 'can-click');
+            postView.setAttribute('id', post.postId);
             const postHalf = document.createElement('div');
             postHalf.classList.add('post-half');
             const title = document.createElement('h2');
