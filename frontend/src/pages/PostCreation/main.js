@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const title = titleInput.value.trim();
     
     if (title === ''){
-      titleInput.placeholder = 'Post name required';
+      titleInput.placeholder = 'Post name required.';
       titleInput.classList.add('input-error');
       titleInput.focus();
       return;
