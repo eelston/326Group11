@@ -131,7 +131,7 @@ export class PostViewingComponent extends BaseComponent {
         submitC.type = "button";
         submitC.value = "add comment";
         commentBox.appendChild(submitC);
-        submitC.addEventListener("click", async () => {
+        submitC.addEventListener("click", () => {
             if (box.value.length > 0) {
                 const newComment = {
                     userId: "1111111",
