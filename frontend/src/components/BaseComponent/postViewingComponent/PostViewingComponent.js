@@ -143,10 +143,9 @@ export class PostViewingComponent extends BaseComponent {
                     pronouns: "they/them"
                 }
                 this.#post.postComments.push(newComment);
-                await this.#service.updatePost(this.#post.postId, newComment)
+                this.#service.updatePost(this.#post.postId, newComment)
                 this.#renderComments();
                 box.textContent = '';
-                
             }
         })
     }

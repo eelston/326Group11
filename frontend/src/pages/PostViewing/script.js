@@ -7,8 +7,7 @@ await service.initDB();
 
 const component = new PostViewingComponent(service);
 
-const urlParams = new URLSearchParams(window.location.search);
-const postId = urlParams.get("postId") || "0000001";
+const postId = "0000001";
 console.log("testing");
 console.log("POST ID: " + postId);
 

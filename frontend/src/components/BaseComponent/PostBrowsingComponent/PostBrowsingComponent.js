@@ -74,7 +74,7 @@ export class PostBrowsingComponent extends BaseComponent {
             postHalf.appendChild(desc);
             const location = document.createElement('p');
             location.classList.add('location');
-            location.textContent = `${post.location} at ${post.startTime}`;
+            location.textContent = `${post.location} at ${post.startTime.time}, ${post.startTime.date}`;
             postView.appendChild(postHalf);
             postView.appendChild(location);
             this.#container.appendChild(postView);
@@ -89,7 +89,6 @@ export class PostBrowsingComponent extends BaseComponent {
         post.tags.some(tag => tag.tag.toLowerCase().includes(sQLower)) || 
         post.location.toLowerCase().includes(sQLower)); 
        }); //next milestone will use isExpired as well to check if post is too old.
-
        this.#renderPosts(filteredPosts);
        }
 }
