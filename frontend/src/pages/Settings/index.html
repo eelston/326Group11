@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Study on Campus</title>
     <link rel="stylesheet" href="../../main.css" />
-    <link rel="stylesheet" href="settings-screen.css" />
-    <script src="./settings-screen.js" type="module"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" type="module"></script>
 </head>
 <body>
     <header>
@@ -54,11 +54,24 @@
                       <div class="add-btn-container">
                         <button class="add-btn">+</button>
                         <div class="dropdown-menu">
-                          <label for="mock-course-select">Choose a class:</label>
-                          <select id="mock-course-select">
-                              <option value="">-- Select a class --</option>
-                          </select>
-                          <button class="dropdown-add-btn">Add Class</button>
+                            <div class="dropdown-group">
+                                <label for="subject-select">Subject:</label>
+                                <select id="subject-select">
+                                    <option value="">-- Select a subject --</option>
+                                    <option value="CS">CS</option>
+                                    <option value="MATH">MATH</option>
+                                    <option value="CICS">CICS</option>
+                                </select>
+                            </div>
+                            
+                            <div class="dropdown-group">
+                                <label for="course-number-select">Course Number:</label>
+                                <select id="course-number-select" disabled>
+                                    <option value="">-- Select a number --</option>
+                                </select>
+                            </div>
+                            
+                            <button class="dropdown-add-btn" disabled>Add Class</button>
                         </div>
                       </div>
                     </div>
@@ -68,3 +81,4 @@
         </div>
     </main>
 </body>
+</html>

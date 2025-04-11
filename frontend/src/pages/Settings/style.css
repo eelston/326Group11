@@ -1,5 +1,3 @@
-
-
 main {
     display: flex;
     gap: 20px;
@@ -256,6 +254,32 @@ input:disabled, textarea:disabled {
     width: 100%;
     padding: 10px;
     border-radius: 6px;
+}
+
+.dropdown-group {
+    margin-bottom: 10px;
+}
+
+.dropdown-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.dropdown-group select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+select:disabled {
+    background-color: #e9e9e9;
+    cursor: not-allowed;
+}
+
+.dropdown-add-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

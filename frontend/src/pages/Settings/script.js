@@ -1,4 +1,4 @@
-import { MockCourses } from "../../tests/data/MockCourses.js";
+import { MockCourses } from "../../tests/data/mockcourses.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const passwordInput = document.getElementById("password-input");
@@ -6,15 +6,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const emailInput = document.querySelector("input[type='email']");
   const emailEditBtn = document.querySelectorAll(".edit-btn")[0];
   const passwordEditBtn = document.querySelectorAll(".edit-btn")[1];
-  const dropdownMenu = document.querySelector(".dropdown-menu");
-  const addBtnContainer = document.querySelector(".add-btn-container");
-  const addBtn = addBtnContainer.querySelector(".add-btn");
-  const dropdownAddBtn = document.querySelector(".dropdown-add-btn");
-  const courseSelect = dropdownMenu.querySelector("#mock-course-select");
-  const currentClassesContainer = document.querySelector(".current-classes");
-
   const preferences = document.querySelectorAll(".preferences-section input[type='checkbox']");
   const preferenceSaveBtn = document.querySelectorAll(".save-btn")[1];
+
+  /** course related items */
+  const subjectSelect = document.getElementById("subject-select");
+  const courseNumberSelect = document.getElementById("course-number-select");
+  const dropdownAddBtn = document.querySelector(".dropdown-add-btn");
+  const currentClasses = document.querySelector(".current-classes");
+  const addBtnContainer = document.querySelector(".add-btn-container");
+  const addBtn = document.querySelector(".add-btn");
+  const dropdownMenu = document.querySelector(".dropdown-menu");
 
   /** show/hide password */
   showPasswordCheckbox.addEventListener("change", () => {
@@ -42,35 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /** dropdown for adding class */
-  addBtn.addEventListener("click", (event) => {
+  addBtn?.addEventListener("click", (event) => {
     event.stopPropagation();
-    if (dropdownMenu.style.display === "block") {
-      dropdownMenu.style.display = "none";
-    } else {
-      dropdownMenu.style.display = "block";
-    }
+    dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
   });
 
   document.addEventListener("click", (event) => {
     if (!addBtnContainer.contains(event.target)) {
       dropdownMenu.style.display = "none";
     }
-  });
-
-  /** add classes */
-  dropdownAddBtn.addEventListener("click", () => {
-    const className = courseSelect.value;
-    if (className === "") return;
-
-    const input = document.createElement("input");
-    input.type = "text";
-    input.value = className;
-    input.disabled = true;
-
-    currentClassesContainer.insertBefore(input, addBtnContainer);
-    dropdownMenu.style.display = "none";
-    courseSelect.value = "";
-    saveClassToDB(className);
   });
 
   /** save preferences to IndexedDB */
@@ -82,15 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
       emailNotifications: prefs[2]
     };
     savePreferencesToDB(prefData);
-  });
-
-  /** use MockCourses */
-  console.log("Example Courses (from MockCourses.js):", MockCourses);
-  MockCourses.forEach(course => {
-    const option = document.createElement("option");
-    option.value = course.course_name;
-    option.textContent = `${course.course_name} (${course.course_subject} ${course.course_number})`;
-    courseSelect.appendChild(option);
   });
 
   /** IndexedDB */
@@ -121,4 +94,64 @@ document.addEventListener("DOMContentLoaded", () => {
     tx.objectStore("classes").add({ name: className });
     tx.oncomplete = () => console.log("Class saved to DB:", className);
   }
+
+  subjectSelect?.addEventListener("change", (event) => {
+    console.log("Subject changed:", event.target.value);
+    const subject = event.target.value;
+    
+    courseNumberSelect.innerHTML = '<option value="">-- Select a number --</option>';
+
+    if (subject) {
+      console.log("Filtering courses for subject:", subject);
+      const subjectCourses = MockCourses.filter(course => course.course_subject === subject);
+      console.log("Found courses:", subjectCourses);
+
+      if (subjectCourses.length > 0) {
+        subjectCourses.forEach(course => {
+          const option = document.createElement("option");
+          option.value = course.course_number;
+          option.textContent = `${course.course_number} - ${course.course_name}`;
+          courseNumberSelect.appendChild(option);
+        });
+        courseNumberSelect.disabled = false;
+      } else {
+        console.log("No courses found for subject:", subject);
+        courseNumberSelect.disabled = true;
+      }
+    } else {
+      courseNumberSelect.disabled = true;
+    }
+    dropdownAddBtn.disabled = true;
+  });
+
+  courseNumberSelect?.addEventListener("change", (event) => {
+    dropdownAddBtn.disabled = !event.target.value;
+  });
+
+  dropdownAddBtn?.addEventListener("click", () => {
+    const subject = subjectSelect.value;
+    const number = courseNumberSelect.value;
+    if (!subject || !number) return;
+
+    const course = MockCourses.find(c => 
+      c.course_subject === subject && c.course_number === number
+    );
+
+    if (course) {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = `${course.course_name} (${course.course_subject} ${course.course_number})`;
+      input.disabled = true;
+
+      currentClasses.insertBefore(input, currentClasses.querySelector(".add-btn-container"));
+      
+      subjectSelect.value = "";
+      courseNumberSelect.innerHTML = '<option value="">-- Select a number --</option>';
+      courseNumberSelect.disabled = true;
+      dropdownAddBtn.disabled = true;
+      dropdownMenu.style.display = "none";
+
+      saveClassToDB(course.course_name);
+    }
+  });
 });
