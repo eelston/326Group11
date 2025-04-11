@@ -67,6 +67,40 @@ header {
     color: #602dcf;
 }
 
+/* site navigation options */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nav-button {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 20rem;
+
+    color: var(--grey-500);
+    background: var(--grey-200);
+    font-weight: 600;
+}
+
+nav a {
+    color: black;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.nav-button:hover {
+    outline: var(--grey-500) solid 2px;
+    background: var(--level1);
+    border-color: var(--level1);
+    cursor: pointer;
+}
+
 /* user icon, appears in top right */
 .user-icon {
     background: var(--level2);
@@ -88,5 +122,5 @@ header {
 .user-icon:hover {
     cursor: pointer;
     background: white;
-    box-shadow: 3px 3px #602dcf;
+    outline: var(--grey-500) solid 2px;
 }
