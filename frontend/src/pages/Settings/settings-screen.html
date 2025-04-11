@@ -4,13 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Study on Campus</title>
+    <link rel="stylesheet" href="../../main.css" />
     <link rel="stylesheet" href="settings-screen.css" />
+    <script src="./settings-screen.js" type="module"></script>
 </head>
 <body>
-    <nav>
+    <header>
         <div id="app-logo" class="nav-button can-click">Study On Campus</div>
         <div class="user-icon"><span class="icon-content">:3</span></div>
-    </nav>
+    </header>
 
     <main>
         <div class="settings-sections-container">
@@ -20,10 +22,10 @@
 
                 <section class="account-section">
                     <label>User ID <input type="user_id" placeholder="user_id" disabled /></label>
-                    <label>Email <input type="email" placeholder="email address" /><button class="edit-btn">Edit</button></label>
-                    <label>Password <input type="password" value="123456789" /><button class="edit-btn">Edit</button></label>
+                    <label>Email <input type="email" placeholder="email address" disabled /><button class="edit-btn">Edit</button></label>
+                    <label>Password <input type="password" id="password-input" value="123456789" disabled /><button class="edit-btn">Edit</button></label>
                     <div class="show-password-container">
-                        <input type="checkbox" onclick="myFunction()">
+                        <input type="checkbox" id="show-password-checkbox">
                         <small>Show Password</small>
                     </div>
                     <button class="save-btn">Save changes</button>
@@ -49,14 +51,16 @@
                     <textarea id="bio" placeholder="Current biography"></textarea>
                     <h4>Current classes</h4>
                     <div class="current-classes">
-                      <input type="text" placeholder="Current class" disabled/>
-                      <input type="text" placeholder="Current class" disabled/>
-                      <input type="text" placeholder="Current class" disabled/>
-                      <button class="add-btn">+</button>
-                      <div class="dropdown-menu">
-                        <input type="text" placeholder="Add new class" />
-                        <button class="dropdown-add-btn">Add Class</button>
-                    </div>
+                      <div class="add-btn-container">
+                        <button class="add-btn">+</button>
+                        <div class="dropdown-menu">
+                          <label for="mock-course-select">Choose a class:</label>
+                          <select id="mock-course-select">
+                              <option value="">-- Select a class --</option>
+                          </select>
+                          <button class="dropdown-add-btn">Add Class</button>
+                        </div>
+                      </div>
                     </div>
                     <button class="save-btn">Save changes</button>
                 </section>
@@ -64,4 +68,3 @@
         </div>
     </main>
 </body>
-</html>

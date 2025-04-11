@@ -1,51 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-sizing: border-box;
-}
 
-body {
-    background: #fefefe;
-}
-
-nav {
-    background: #dcccff;
-    padding: 1rem;
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#app-logo {
-    font-weight: bold;
-    font-size: 2rem;
-}
-
-.user-icon {
-    background: #5ad8cc;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.user-icon:hover {
-    cursor: pointer;
-    background: #fefefe;
-    box-shadow: 3px 3px #602dcf;
-}
-
-.can-click:hover {
-    cursor: pointer;
-    color: #602dcf;
-}
 
 main {
     display: flex;
@@ -216,8 +169,14 @@ input:disabled, textarea:disabled {
 
 .current-classes {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+}
+
+.add-btn-container {
+    position: relative;
+    display: inline-block;
 }
 
 /* edit button */
@@ -261,6 +220,8 @@ input:disabled, textarea:disabled {
     justify-content: center;
     align-items: center;
     position: relative;
+    padding: 0;
+    line-height: 1;
 }
 
 .add-btn:hover {
@@ -271,24 +232,26 @@ input:disabled, textarea:disabled {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 50px;
-    left: 0;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: #f0f0f0;
     padding: 10px;
     border-radius: 8px;
-    width: 200px;
+    width: 250px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
 
-.dropdown-menu input {
+.dropdown-menu select {
     width: 100%;
-    margin-bottom: 10px;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
 
 .dropdown-menu button {
-    background-color: #b388eb;
-    color: white;
-    border: none;
     cursor: pointer;
     width: 100%;
     padding: 10px;
