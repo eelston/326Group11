@@ -1,13 +1,12 @@
 import { PostBrowsingComponent } from "../../components/BaseComponent/PostBrowsingComponent/PostBrowsingComponent.js"
-import { TaskRepositoryService } from "../../services/TaskRepositoryService.js"
+import { PostRepositoryService } from "../../services/PostRepositoryService.js"
 import { mockFeed } from "../../../tests/postData/mockFeed.js"
 
-const service = new TaskRepositoryService();
+const service = new PostRepositoryService();
 
 async function feedLoad() {
     await service.initDB();
     await service.clearPosts();
-
     await Promise.all(
         mockFeed.map(post =>
             service.storePost(post).then(() => {
@@ -19,9 +18,6 @@ async function feedLoad() {
     );
     const component = new PostBrowsingComponent(service); 
     component.render();
-
-    document.getElementById("search-bar").addEventListener("input", (search) => {
-        component.filterPosts(search.target.value)
-    })
 }
+
 feedLoad(); 

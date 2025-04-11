@@ -28,7 +28,14 @@ export class PostBrowsingComponent extends BaseComponent {
         } else {
             this.#renderPosts(this.#allPosts);
         }
+        this.#searchQueryListener();
         return this.#container
+    }
+
+    #searchQueryListener() { 
+        document.getElementById("search-bar").addEventListener("input", (search) => {
+            this.filterPosts(search.target.value)
+        })
     }
 
     #renderPosts(posts) {

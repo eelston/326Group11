@@ -1,10 +1,10 @@
 /************************************************************************************
- * Based on TaskRepositoryService.js from CS326 frontend integration example tasks-v2
+ * Based on PostRepositoryService.js from CS326 frontend integration example tasks-v2
  ***********************************************************************************/
 import { Events } from '../eventhub/Events.js';
 import Service from './Service.js';
 
-export class TaskRepositoryService extends Service {
+export class PostRepositoryService extends Service {
   constructor() {
     super();
     this.dbName = 'postsDB';
