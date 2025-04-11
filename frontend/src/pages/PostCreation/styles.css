@@ -47,6 +47,10 @@ main {
     border-color: #e5dcfd;
 }
 
+.input-error::placeholder {
+    color: red;
+}
+
 .post-location input {
     border-color: #d5f5f2;
 }
@@ -100,7 +104,7 @@ main {
 /****** SUBMIT CONTENT *******/
 
 #submit-post,
-.submit-cancel {
+#submit-cancel {
   padding: 0.5vw;
   border-radius: 0.5rem;
   font-size: 1.5rem;
@@ -119,12 +123,12 @@ main {
   color: #ffffff;
 }
 
-.submit-cancel {
+#submit-cancel {
   background-color: #e4e4e4;
   border-color: #e4e4e4;
 }
 
-.submit-cancel:hover {
+#submit-cancel:hover {
   background-color: #757575;
   border-color: #757575;
   color: #ffffff;
@@ -156,7 +160,7 @@ main {
 .tag {
     background-color: #d5f5f2;
     border-radius: 0.5rem;
-    padding: 0.5vw;
+    padding: 0.25rem;
     font-size: 1.2rem;
     display: flex;
     align-items: center;
