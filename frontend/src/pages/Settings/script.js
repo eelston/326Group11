@@ -1,9 +1,8 @@
 import { MockCourses } from "../../tests/data/MockCourses.js";
-import { SettingsComponent } from '../../components/BaseComponent/SettingsComponent/SettingsComponent.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   const subjects = [...new Set(MockCourses.map(course => course.course_subject))];
-
+  
   const subjectSelect = document.getElementById("subject-select");
   subjects.forEach(subject => {
     const option = document.createElement("option");
@@ -19,9 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const passwordEditBtn = document.querySelectorAll(".edit-btn")[1];
   const preferences = document.querySelectorAll(".preferences-section input[type='checkbox']");
   const preferenceSaveBtn = document.querySelectorAll(".save-btn")[1];
-
   const accountSaveBtn = document.querySelectorAll(".save-btn")[0];
   const profileSaveBtn = document.querySelectorAll(".save-btn")[2];
+  const majorInput = document.getElementById("major-input");
+  const pronounsInput = document.getElementById("pronouns-input");
 
   /** course related items */
   const courseNumberSelect = document.getElementById("course-number-select");
@@ -79,29 +79,29 @@ document.addEventListener("DOMContentLoaded", () => {
     savePreferencesToDB(prefData);
   });
 
-  /** save account settings */
-  accountSaveBtn?.addEventListener("click", () => {
+  /** save account changes */
+  accountSaveBtn.addEventListener("click", () => {
+    emailInput.disabled = true;
+    passwordInput.disabled = true;
+    
     const accountData = {
       email: emailInput.value,
       password: passwordInput.value
     };
-    saveAccountToDB(accountData);
+    
+    alert("Account information updated.");
   });
 
-  /** save profile settings */
-  profileSaveBtn?.addEventListener("click", () => {
-    const displayName = document.querySelector("input[placeholder='Current display name']").value;
-    const pronouns = document.querySelector("input[placeholder='Current pronouns']").value;
-    const major = document.querySelector("input[placeholder='Current major']").value;
-    const bio = document.getElementById("bio").value;
+  emailInput.addEventListener("blur", () => {
+    if (emailInput.checkValidity()) {
+      emailInput.disabled = true;
+    }
+  });
 
-    const profileData = {
-      displayName,
-      pronouns,
-      major,
-      bio
-    };
-    saveProfileToDB(profileData);
+  passwordInput.addEventListener("blur", () => {
+    if (passwordInput.value.length > 0) {
+      passwordInput.disabled = true;
+    }
   });
 
   /** IndexedDB */
@@ -123,23 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tx = db.transaction("preferences", "readwrite");
     const store = tx.objectStore("preferences");
     store.put({ id: "userPrefs", ...prefs });
-    tx.oncomplete = () => alert("Preferences saved.");
-  }
-
-  async function saveAccountToDB(accountData) {
-    const db = await openDB();
-    const tx = db.transaction("preferences", "readwrite");
-    const store = tx.objectStore("preferences");
-    store.put({ id: "accountSettings", ...accountData });
-    tx.oncomplete = () => alert("Account settings saved.");
-  }
-
-  async function saveProfileToDB(profileData) {
-    const db = await openDB();
-    const tx = db.transaction("preferences", "readwrite");
-    const store = tx.objectStore("preferences");
-    store.put({ id: "profileSettings", ...profileData });
-    tx.oncomplete = () => alert("Profile settings saved.");
+    tx.oncomplete = () => alert("Preferences updated.");
   }
 
   async function saveClassToDB(className) {
@@ -147,6 +131,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const tx = db.transaction("classes", "readwrite");
     tx.objectStore("classes").add({ name: className });
     tx.oncomplete = () => console.log("Class saved to DB:", className);
+  }
+
+  async function saveProfileToDB(profileData) {
+    try {
+      const db = await openDB();
+      const tx = db.transaction("preferences", "readwrite");
+      const store = tx.objectStore("preferences");
+      await store.put({ id: "userProfile", ...profileData });
+      alert("Profile information updated successfully!");
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      alert("Failed to save profile information. Please try again.");
+    }
   }
 
   subjectSelect?.addEventListener("change", (event) => {
@@ -209,7 +206,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const root = document.getElementById('settings-root');
-  const settingsComponent = new SettingsComponent();
-  root.appendChild(settingsComponent.render());
+  /** save profile changes */
+  profileSaveBtn?.addEventListener("click", async () => {
+    if (!majorInput.value && !pronounsInput.value) {
+      alert("Please enter at least one field before saving.");
+      return;
+    }
+
+    const profileData = {
+      major: majorInput.value,
+      pronouns: pronounsInput.value
+    };
+    
+    await saveProfileToDB(profileData);
+    
+    majorInput.disabled = true;
+    pronounsInput.disabled = true;
+  });
+
+  majorInput?.addEventListener("blur", () => {
+    if (majorInput.value.length > 0) {
+      majorInput.disabled = true;
+    }
+  });
+
+  pronounsInput?.addEventListener("blur", () => {
+    if (pronounsInput.value.length > 0) {
+      pronounsInput.disabled = true;
+    }
+  });
 });
