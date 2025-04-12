@@ -20,17 +20,13 @@
   "author": {
     "name": "CS 326 Group 11"
   },
-  "contributors": [
-
-  ],
+  "contributors": [],
   "scripts": {
+    "start-server": "http-server ./frontend/src -p 3000",
     "dev": "",
     "test": ""
   },
   "dependencies": {
-
-  },
-  "devDependencies": {
-
+    "http-server": "^14.1.1"
   }
 }

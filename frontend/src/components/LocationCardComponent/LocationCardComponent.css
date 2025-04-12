@@ -1,0 +1,176 @@
+/* LocationCardComponent.css */
+
+/* location card container */
+.location-card {
+    background: var(--grey-100);
+    box-shadow: var(--grey-400) 0 1px 3px;
+
+    height: fit-content;
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+/* location card hover effect */
+.location-card:hover {
+    background: var(--grey-200);
+    cursor: pointer;
+}
+
+.location-card:hover .location-name {
+    text-decoration: underline;
+}
+
+/* container for location name, crowding score hint */
+.location-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* location name */
+.location-name {
+    width: fit-content;
+    font-size: 1.15rem;
+    flex-grow: 1;
+}
+
+/* text indicator for crowsing score */
+.crowding-score-hint {
+    margin-left: auto;
+    width: fit-content;
+}
+
+.floor-name {
+    text-align: left;
+    display: inline-block;
+    width: fit-content;
+}
+
+.crowding-score-updated-time {
+    font-size: 0.7rem;
+    color: var(--grey-400);
+    text-align: right;
+}
+
+.floor-info {
+    margin-bottom: 0.5rem;
+}
+
+/******* "LOADING BARS" *******/
+.crowding-score-bar-container {
+    margin: 0.4rem 0;
+    height: var(--crowding-bar-height);
+    border: black solid 3px;
+    background: white;
+    border-radius: 1rem;
+
+    /* width: var(--crowding-bar-width); */
+    width: inherit
+}
+
+.crowding-score-bar {
+    height: var(--crowding-bar-height);
+    border-radius: 1rem;
+}
+
+/* loading bar gradients, with fallback color */
+/* TODO: add secondary colors to main.css, name/rename all accent colors more intuitively */
+#level1 {
+    background: var(--level1) linear-gradient(to right, #15a36d, var(--level1));
+    width: 20%;
+}
+
+#level2 {
+    background: var(--level2) linear-gradient(to right, #5591df, var(--level2));
+
+    width: 40%;
+}
+
+#level3 {
+    background: var(--level3) linear-gradient(to right, #e69926, var(--level3));
+    width: calc(3*var(--crowding-bar-width)/5);
+    width: 60%;
+}
+
+#level4 {
+    background: var(--level4) linear-gradient(to right, #e66326, var(--level4));
+    width: 80%;
+}
+
+#level5 {
+    /* background: var(--level5); */
+    background: linear-gradient(to right, #a80a67, var(--level5));
+    width: 100%;
+}
+/* TODO: reorganize/label everything below to correct categories */
+/* expanded card styling */
+.expanded {
+    /* bring card to center of window */
+    position: absolute;
+    margin: 0 30vw; /* TODO: adjust to center better */
+
+    z-index: 999; /* bring to top */
+    /* width: 33%; */
+    /* TODO: figure out issue with varying bar width (understand inherit better) */
+}
+/* TODO: add media query for mobile width and/or decide if dim functionality is appropriate for mobile */ 
+/* i.e., consider potentially implementing different expand appearance for mobile */
+
+.expanded:hover {
+    background: var(--grey-100); /* default bg color*/
+    cursor: auto;
+}
+
+.expanded:hover .location-name {
+    text-decoration: none; /* no hover styling for expanded card location name */
+    cursor: auto;
+}
+
+.exit-expanded {
+    display: none;
+    font-size: 0.7rem;
+    color: var(--grey-500);
+    width: 100%;
+    /* display: inline-block; */
+    text-align: right;
+}
+
+.exit-expanded:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.address {
+    font-size: 0.75rem;
+}
+
+.show-on-expand {
+    display: none;
+}
+
+/* crowding report button */
+/* TODO: adjust alignment with timestamp when card is expanded? */
+.expanded .crowding-score-updated-time {
+    width: fit-content;
+    text-align: left;
+}
+
+.report-button {
+    box-sizing: border-box;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--grey-200);
+    border-radius: 10rem;
+
+    color: var(--grey-500);
+    background: var(--grey-200);
+    font-weight: 600;
+    float: right;
+}
+
+/* TODO: rework hover styling? (just colors) */
+.report-button:hover {
+    /* outline: var(--level1) solid 2px; */
+    border: 1px solid var(--grey-300);
+    background: var(--grey-300);
+    cursor: pointer;
+}
