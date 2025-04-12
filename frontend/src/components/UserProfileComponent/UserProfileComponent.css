@@ -32,7 +32,6 @@
 }
 
 #profile-icon:hover {
-    cursor: pointer;
     background: #40a198;
     box-shadow: none;
 }
@@ -70,7 +69,7 @@
 
 .header-text-container .user-id {
     font-size: 1.2rem;
-    color: var(--darkgrey);
+    color: var(--grey-500);
 }
 
 /****** PROFILE CONTENT *******/
@@ -90,8 +89,12 @@
     background: var(--grey-050);
 }
 
-.profile-subsection * {
+/* .profile-subsection * {
     font-size: 1.5rem;
+} */
+
+.subsection-content *, .profile-subsection-title {
+    font-size: 1.4rem;
 }
 
 .location-link {
@@ -155,6 +158,50 @@
 }
 
 /******************************
+********* EDIT FIELDS *********
+******************************/
+#edit-container {
+    display: grid;
+    /* justify-content: space-between; */
+}
+
+#edit-container input.button {
+    box-sizing: border-box;
+    padding: 0.25rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+
+    color: var(--grey-500);
+    background: var(--grey-200);
+    font-weight: 600;
+}
+
+#edit-container input.button:hover {
+    outline: var(--grey-500) solid 2px;
+    background: var(--grey-300);
+    cursor: pointer;
+}
+
+#about-edit-list li {
+    /* width: 100%; */
+    /* display: flex; */
+}
+
+.fact-input {
+    /* width: auto; */
+    /* flex-grow: 1; */
+}
+
+.edit-options {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+
+
+/******************************
 ******** MEDIA QUERIES ********
 ******************************/
 @media screen and (max-width: 60rem) {
@@ -185,6 +232,14 @@
     
     #recent-post-container {
         grid-row: auto;
+    }
+    /* subsection content formatting */
+    .profile-subsection-title {
+        /* color: var(--grey-500); */
+    }
+
+    .subsection-content * {
+        font-size: 1.2rem
     }
 }
 
@@ -229,9 +284,10 @@
     }
 
     /* content section */
-    .profile-subsection-title, #blurb, #about-list li, .fact-title, #courses, .placeholder-text {
+    .subsection-content * {
+    /* .profile-subsection-title, #blurb, #about-list li, .fact-title, #courses, .placeholder-text { */
         /* padding: 0.5rem; */
-        font-size: large;
+        font-size: 1rem;
 
     }
 }

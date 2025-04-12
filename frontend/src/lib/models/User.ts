@@ -11,6 +11,7 @@ export interface User {
     iconContent: string; // inner text for user icon
 
     settings: {
+        iconColor: string; // hex code
         displayPronouns: boolean;
         displayMajor: boolean;
         

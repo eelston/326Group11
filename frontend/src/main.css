@@ -85,7 +85,7 @@ header {
     font-size: 1.5rem;
 }
 
-.user-icon:hover {
+.user-icon.can-click:hover {
     cursor: pointer;
     background: white;
     box-shadow: 3px 3px #602dcf;

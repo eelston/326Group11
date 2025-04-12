@@ -8,6 +8,7 @@ export const MockUser = {
     iconContent: ":P",
 
     settings: {
+        iconColor: "#5CA832",
         displayPronouns: true,
         displayMajor: true,
         
@@ -15,9 +16,9 @@ export const MockUser = {
     },
     profileContent: {
         about: [
-            { factName: "Major", factContent: "Electrical Engineering" },
-            { factName: "Favorite Study Spot", factContent: "Science and Engineering Library" },
-            { factName: "Another Fact", factContent: "Another Answer" }
+            { factName: "Major", factAnswer: "Electrical Engineering" },
+            { factName: "Favorite Study Spot", factAnswer: "Science and Engineering Library" },
+            { factName: "Another Fact", factAnswer: "Another Answer" }
         ],
         blurb: "I am writing this as a test. I hope this works.", 
         courses: "ECE 311, CS 326",
