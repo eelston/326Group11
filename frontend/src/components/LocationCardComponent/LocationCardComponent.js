@@ -25,18 +25,6 @@ export class LocationCardComponent extends BaseComponent {
 
         // add event listeners
         this.#attachEventListeners();
-        // this.#container = document.createElement('div');
-    // this.#container.classList.add('task-item');
-
-    // // Render the task text
-    // const taskText = this.#createTaskText();
-    // this.#container.appendChild(taskText);
-
-    // // Render the file link if a file is present
-    // if (this.taskData.file) {
-    //   const fileLink = this.#createFileLink(this.taskData.file);
-    //   this.#container.appendChild(fileLink);
-    // }
 
         return this.#container;
     }
