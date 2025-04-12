@@ -33,9 +33,21 @@ export const MockLocations = [
         "type": "Single-Floor",
         "reports": [
             {
+                user_id: "user789",
+                score: 3,
+                timestamp: Date.now()
+            },
+            
+            {
+                user_id: "user789",
+                score: 3,
+                timestamp: Date.now()
+            },
+            
+            {
                 user_id: "user123",
                 score: 2,
-                timestamp: Date.now()
+                timestamp: Date.parse(new Date("April 10, 2025 12:34:05"))
             }
         ]
     },
@@ -77,6 +89,25 @@ export const MockLocations = [
                         timestamp: Date.parse(new Date("December 19, 2025 12:24:00"))
                     }
                 ]
+            }
+        ]
+    },
+
+    {
+        "name": "Isenberg Hub",
+        "address": "121 Presidents Dr, Amherst, MA 01003",
+        "type": "Single-Floor",
+        "reports": [
+            {
+                user_id: "user123",
+                score: 3,
+                timestamp: Date.now()
+            },
+
+            {
+                user_id: "user456",
+                score: 1,
+                timestamp: Date.now()
             }
         ]
     }
