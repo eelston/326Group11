@@ -1,0 +1,103 @@
+/* LocationCardComponent.css */
+
+/* location card container */
+.location-card {
+    background: var(--grey-100);
+    box-shadow: var(--grey-400) 0 1px 3px;
+
+    height: fit-content;
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+/* location card hover effect */
+.location-card:hover {
+    background: var(--grey-200);
+    cursor: pointer;
+}
+
+.location-card:hover .location-name {
+    text-decoration: underline;
+}
+
+/* container for location name, crowding score hint */
+.location-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* location name */
+.location-name {
+    width: fit-content;
+    font-size: 1.15rem;
+    flex-grow: 1;
+}
+
+/* text indicator for crowsing score */
+.crowding-score-hint {
+    margin-left: auto;
+    width: fit-content;
+}
+
+.floor-name {
+    text-align: left;
+    display: inline-block;
+    width: fit-content;
+}
+
+.crowding-score-updated-time {
+    font-size: 0.7rem;
+    color: var(--grey-400);
+    text-align: right;
+}
+
+.floor-info {
+    margin-bottom: 0.5rem;
+}
+
+/******* "LOADING BARS" *******/
+.crowding-score-bar-container {
+    margin: 0.4rem 0;
+    height: var(--crowding-bar-height);
+    border: black solid 3px;
+    background: white;
+    border-radius: 1rem;
+
+    /* width: var(--crowding-bar-width); */
+    width: inherit
+}
+
+.crowding-score-bar {
+    height: var(--crowding-bar-height);
+    border-radius: 1rem;
+}
+
+/* loading bar gradients, with fallback color */
+#level1 {
+    background: var(--level1) linear-gradient(to right, #15a36d, var(--level1));
+    width: 20%;
+}
+
+#level2 {
+    background: var(--level2) linear-gradient(to right, #5591df, var(--level2));
+
+    width: 40%;
+}
+
+#level3 {
+    background: var(--level3) linear-gradient(to right, #e69926, var(--level3));
+    width: calc(3*var(--crowding-bar-width)/5);
+    width: 60%;
+}
+
+#level4 {
+    background: var(--level4) linear-gradient(to right, #e66326, var(--level4));
+    width: 80%;
+}
+
+#level5 {
+    /* background: var(--level5); */
+    background: linear-gradient(to right, #a80a67, var(--level5));
+    width: 100%;
+}
