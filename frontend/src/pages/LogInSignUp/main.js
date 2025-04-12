@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //successful signup
     eventHub.subscribe(Events.SIGNUP_SUCCESS, (user) => {
-        //window.location.href = "/frontend/src/pages/UserProfile/index.html";
+        window.location.href = "/frontend/src/pages/UserProfile/index.html";
     });
 
     //unsuccessful signup (duplicate email)
