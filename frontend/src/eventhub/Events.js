@@ -3,12 +3,45 @@
  * This object contains the various event/message types used in our app
  *********************************************************************/
 
-/**
- * An object containing various message types for task management.
- */
+/*********************************************************
+An object containing various messages for task management
+*********************************************************/
 export const Events = {
-    // example: NewTask: 'NewTask', LoadTasks: 'LoadTasks', UnStoreTasksSuccess: 'UnStoreTasksSuccess'
+    // Post Creation 
+    NewPost: 'NewPost',
 
-  
-  };
+    // Post Browsing 
+    LoadPosts: 'LoadPosts',
+    LoadPostsSuccess: 'LoadPostsSuccess',
+    LoadPostsFailure: 'LoadPostsFailure',
+
+    // Post Viewing
+    LoadPost: 'LoadPost',
+    LoadPostSuccess: 'LoadPostSuccess',
+    LoadPostFailure: 'LoadPostFailure',
+
+    // Post Viewing ??? todo
+    UpdatePost: 'UpdatePost',
+    UpdatePostSuccess: 'UpdatePostSuccess',
+    UpdatePostFailure: 'UpdatePostFailure',
+
+    // Post Creation
+    StorePost: 'StorePost',
+    StorePostSuccess: 'StorePostSuccess',
+    StorePostFailure: 'StorePostFailure',
+
+    // Post Browsing Wipe DB
+    UnStorePosts: 'UnStorePosts',
+    UnStorePostsSuccess: 'UnStorePostsSuccess',
+    UnStorePostsFailure: 'UnStorePostsFailure',
+
+    // Post Browsing -- expired
+    UnStorePost: 'UnStorePost',
+    UnStorePostSuccess: 'UnStoreFullPostSuccess',
+    UnStorePostFailure: 'UnStoreFullPostFailure',
+
+    // View Switching Events:
+    SwitchToPostBrowsingView: 'SwitchToPostBrowsingView',
+    SwitchToPostViewingView: 'SwitchToPostViewingView',
+}
   
