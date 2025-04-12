@@ -1,0 +1,313 @@
+:root {
+    /* defining variables */
+    --max-width: 1600px; /* main content max width */
+    --crowding-bar-height: 1.25rem;
+    --crowding-bar-width: 18rem;
+
+    /* crowding bar colors */
+    --level1: #66d575;
+    --level2: #5ad8cc;
+    --level3: #ffc943;
+    --level4: #ff9e42; 
+    --level5: #f24822;
+
+    /* component colors */
+    --grey-050: #fafafa; /* lightest */
+    --grey-100: #f2f2f2;
+    --grey-200: #e4e4e4; /* card hover grey */
+    --grey-300: #b9b9b9;
+    --grey-400: #757575; /* drop shadow grey */
+    --grey-500: #424651; /* darkest */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14pt;
+}
+
+body {
+    /* background: #fefefe; */
+    background: var(--grey-050);
+}
+
+/******************************
+*********** HEADER ************
+******************************/
+header {
+    background: #cbc9ec;
+
+    height: 65px;
+    box-sizing: border-box; /* don't want padding to affect height */
+    padding: 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* vertical alignment */
+}
+
+#app-logo {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+#app-logo:hover {
+    cursor: pointer;
+    color: #602dcf;
+}
+
+.user-icon {
+    background: var(--level2);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    box-sizing: border-box; 
+
+    display: flex;
+    justify-content: center;
+}
+
+.icon-content {
+    height: fit-content;
+    font-size: 1.5rem;
+}
+
+.user-icon:hover {
+    cursor: pointer;
+    background: white;
+    box-shadow: 3px 3px #602dcf;
+}
+
+/******************************
+************ MAIN *************
+******************************/
+main {
+    max-width: var(--max-width);
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+
+/********* SORT OPTIONS *********/
+#search-option-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* search bar */
+#search-bar-container {
+    width: max-content;
+    display: flex;
+
+    flex-shrink: 0; /* should shrink in width before sort-by-container*/
+    flex-grow: 1;
+
+    margin-right: 1rem
+}
+
+#search-bar {
+    box-sizing: border-box;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+
+    max-width: 450px;
+    width: 100%;
+}
+
+#search-button {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+
+    color: var(--grey-500);
+    background: var(--grey-200);
+    font-weight: 600;
+}
+
+#search-button:hover {
+    outline: var(--grey-500) solid 2px;
+    background: var(--grey-300);
+    cursor: pointer;
+}
+
+/* card sorting */
+#sort-by-container {
+    display: flex;
+
+    flex-shrink: 1; 
+    flex-grow: 0;
+
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap; /* keep label text to one line */
+}
+
+#sort-by-select {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+}
+
+#sort-by-select:hover {
+    cursor: pointer;
+}
+
+/********* CONTENT CONTAINER *********/
+#location-browsing-container {
+    margin: 1rem 0;
+    /* display: flex;
+    flex-wrap: wrap; */
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+}
+
+/*********** CARDS ***********/
+.location-card-container {
+    background: var(--grey-100);
+    box-shadow: var(--grey-400) 0 1px 3px;
+
+    height: fit-content;
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+.location-card-container:hover {
+    background: var(--grey-200);
+    cursor: pointer;
+}
+
+.location-card-container:hover .location-name {
+    text-decoration: underline;
+}
+
+.location-info {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.location-name {
+    width: fit-content;
+    font-size: 1.15rem;
+    flex-grow: 1;
+}
+
+.crowding-score-hint {
+    margin-left: auto;
+    width: fit-content;
+}
+
+.floor-name {
+    text-align: left;
+    display: inline-block;
+    width: fit-content;
+}
+
+.crowding-score-updated-time {
+    font-size: 0.7rem;
+    color: var(--grey-400);
+    text-align: right;
+}
+
+.floor-info-container {
+    margin-bottom: 0.5rem;
+}
+
+/******* "LOADING BARS" *******/
+.crowding-score-bar-container {
+    margin: 0.4rem 0;
+    height: var(--crowding-bar-height);
+    border: black solid 3px;
+    background: white;
+    border-radius: 1rem;
+
+    /* width: var(--crowding-bar-width); */
+    width: inherit
+}
+
+.crowding-score-bar {
+    height: var(--crowding-bar-height);
+    border-radius: 1rem;
+}
+
+/* loading bar gradients, with fallback color */
+#level1 {
+    background: var(--level1) linear-gradient(to right, #15a36d, var(--level1));
+    width: 20%;
+}
+
+#level2 {
+    background: var(--level2) linear-gradient(to right, #5591df, var(--level2));
+
+    width: 40%;
+}
+
+#level3 {
+    background: var(--level3) linear-gradient(to right, #e69926, var(--level3));
+    width: calc(3*var(--crowding-bar-width)/5);
+    width: 60%;
+}
+
+#level4 {
+    background: var(--level4) linear-gradient(to right, #e66326, var(--level4));
+    width: 80%;
+}
+
+#level5 {
+    /* background: var(--level5); */
+    background: linear-gradient(to right, #a80a67, var(--level5));
+    width: 100%;
+}
+
+/******************************
+******** MEDIA QUERIES ********
+******************************/
+@media screen and (max-width: 35rem) {
+/*  window width small enough for single card rows,
+    e.g., mobile devices in portrait mode, most likely */
+
+    /**** search options ****/
+    #search-option-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #search-bar-container {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        
+    }
+
+    #search-bar {
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+        max-width: none;
+    }
+
+    #search-button {
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+    }
+
+    #sort-by-container {
+        align-self: flex-end;
+    }
+
+    #sort-by-select  {
+    /*  unfortunately, option font size cannot be styled using css:
+        https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Advanced_form_styling */
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+    }
+
+    label[for=sort-by-select] {
+        font-size: smaller;
+    }
+}
