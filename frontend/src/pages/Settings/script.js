@@ -1,6 +1,17 @@
-import { MockCourses } from "../../tests/data/mockcourses.js";
+import { MockCourses } from "../../tests/data/MockCourses.js";
+import { SettingsComponent } from '../../components/BaseComponent/SettingsComponent/SettingsComponent.js';
 
 document.addEventListener("DOMContentLoaded", () => {
+  const subjects = [...new Set(MockCourses.map(course => course.course_subject))];
+
+  const subjectSelect = document.getElementById("subject-select");
+  subjects.forEach(subject => {
+    const option = document.createElement("option");
+    option.value = subject;
+    option.textContent = subject;
+    subjectSelect.appendChild(option);
+  });
+
   const passwordInput = document.getElementById("password-input");
   const showPasswordCheckbox = document.getElementById("show-password-checkbox");
   const emailInput = document.querySelector("input[type='email']");
@@ -9,8 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const preferences = document.querySelectorAll(".preferences-section input[type='checkbox']");
   const preferenceSaveBtn = document.querySelectorAll(".save-btn")[1];
 
+  const accountSaveBtn = document.querySelectorAll(".save-btn")[0];
+  const profileSaveBtn = document.querySelectorAll(".save-btn")[2];
+
   /** course related items */
-  const subjectSelect = document.getElementById("subject-select");
   const courseNumberSelect = document.getElementById("course-number-select");
   const dropdownAddBtn = document.querySelector(".dropdown-add-btn");
   const currentClasses = document.querySelector(".current-classes");
@@ -66,6 +79,31 @@ document.addEventListener("DOMContentLoaded", () => {
     savePreferencesToDB(prefData);
   });
 
+  /** save account settings */
+  accountSaveBtn?.addEventListener("click", () => {
+    const accountData = {
+      email: emailInput.value,
+      password: passwordInput.value
+    };
+    saveAccountToDB(accountData);
+  });
+
+  /** save profile settings */
+  profileSaveBtn?.addEventListener("click", () => {
+    const displayName = document.querySelector("input[placeholder='Current display name']").value;
+    const pronouns = document.querySelector("input[placeholder='Current pronouns']").value;
+    const major = document.querySelector("input[placeholder='Current major']").value;
+    const bio = document.getElementById("bio").value;
+
+    const profileData = {
+      displayName,
+      pronouns,
+      major,
+      bio
+    };
+    saveProfileToDB(profileData);
+  });
+
   /** IndexedDB */
   function openDB() {
     return new Promise((resolve, reject) => {
@@ -86,6 +124,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const store = tx.objectStore("preferences");
     store.put({ id: "userPrefs", ...prefs });
     tx.oncomplete = () => alert("Preferences saved.");
+  }
+
+  async function saveAccountToDB(accountData) {
+    const db = await openDB();
+    const tx = db.transaction("preferences", "readwrite");
+    const store = tx.objectStore("preferences");
+    store.put({ id: "accountSettings", ...accountData });
+    tx.oncomplete = () => alert("Account settings saved.");
+  }
+
+  async function saveProfileToDB(profileData) {
+    const db = await openDB();
+    const tx = db.transaction("preferences", "readwrite");
+    const store = tx.objectStore("preferences");
+    store.put({ id: "profileSettings", ...profileData });
+    tx.oncomplete = () => alert("Profile settings saved.");
   }
 
   async function saveClassToDB(className) {
@@ -154,4 +208,8 @@ document.addEventListener("DOMContentLoaded", () => {
       saveClassToDB(course.course_name);
     }
   });
+
+  const root = document.getElementById('settings-root');
+  const settingsComponent = new SettingsComponent();
+  root.appendChild(settingsComponent.render());
 });

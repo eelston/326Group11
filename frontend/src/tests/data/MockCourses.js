@@ -18,5 +18,20 @@ export const MockCourses = [
       course_name: "Data Structures",
       course_subject: "CICS",
       course_number: "210"
+    },
+    {
+      course_name: "Linear Algebra",
+      course_subject: "MATH",
+      course_number: "235"
+    },
+    {
+      course_name: "General Chemistry I",
+      course_subject: "CHEM",
+      course_number: "111"
+    },
+    {
+      course_name: "Physics I",
+      course_subject: "PHYSICS",
+      course_number: "151"
     }
   ];
