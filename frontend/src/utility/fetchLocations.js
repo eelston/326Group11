@@ -17,7 +17,7 @@ import { MockLocations } from "../lib/data/MockLocations.js";
 export function fetch(url, options = {}) {
   return new Promise((resolve, reject) => {
     // Define a delay to simulate network latency (e.g., 1 second)
-    const delay = 1000;
+    const delay = 250;
 
     setTimeout(() => {
       // Define a mock response object

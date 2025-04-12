@@ -48,7 +48,7 @@ export const MockLocations = [
             {
                 user_id: "user123",
                 score: 3,
-                timestamp: Date.now()
+                timestamp: Date.parse(new Date("May 21, 2024 03:20:21"))
             }
         ]
     },
@@ -74,7 +74,7 @@ export const MockLocations = [
                     {
                         user_id: "user123",
                         score: 3,
-                        timestamp: Date.now()
+                        timestamp: Date.parse(new Date("December 19, 2025 12:24:00"))
                     }
                 ]
             }
