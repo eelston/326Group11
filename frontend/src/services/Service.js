@@ -3,6 +3,7 @@
  * Abstract, provides common interface for service classes
  * Subclass services must have subscribed events
  *********************************************************************/
+
 import { EventHub } from '../eventhub/EventHub.js';
 
 /**
