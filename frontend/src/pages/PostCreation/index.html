@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study on Campus</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="main.js"></script>
 </head>
 
 <body>
@@ -17,7 +19,6 @@
 
         <form>
             <div class="post-container">
-
                 <div class="post-content">
                     <div class="post-title">
                         <input type="text" id="post-title" placeholder="Name your post." autocomplete="off">
@@ -31,42 +32,24 @@
                 </div>
 
                 <div class="post-actions">
-
-                    <div class="added-tags">
-                        <div class="tag-major">
-                            <select name="majors" id="majors">
-                                <option value="major-0" selected>Add a Major?</option>
-                                <option value="major-1">Major 1</option>
-                                <option value="major-2">Major 2</option>
-                                <option value="major-3">Major 3</option>
-                            </select>
+                    <div class="all-buttons">
+                        <button type="button" id="add-tags-btn">Open Tag Menu</button>
+                        <div class="post-buttons">
+                            <button type="button" id="submit-cancel">Cancel</button>
+                            <input type="submit" id="submit-post" value="Post">
                         </div>
-                        <div class="tag-class">
-                            <select name="classes" id="classes">
-                                <option value="class-0" selected>Add a Class?</option>
-                                <option value="class-1">Class 1</option>
-                                <option value="class-2">Class 2</option>
-                                <option value="class-3">Class 3</option>
-                            </select>
-                        </div>
-                        <div class="tag-assignment">
-                            <select name="assignments" id="assignments">
-                                <option value="assignments-0" selected>Add an Assignment Type?</option>
-                                <option value="assignments-1">Assignment Type 1</option>
-                                <option value="assignments-2">Assignment Type 2</option>
-                                <option value="assignments-3">Assignment Type 3</option>
-                            </select>
-                        </div>
-                    </div>    
-        
-                    <div class="post-send">
-                        <button class="submit-cancel">Cancel</button>
-                        <input type="submit" id=submit-post value="Post">
                     </div>
-
-                </div>
+                  
+                    <div class="tag-menu-wrapper">
+                      <div id="tag-input-view" class="hidden">
+                        <input type="text" id="tag-input" placeholder="Enter a tag and press enter." autocomplete="off"/>
+                      </div>
+                      <div class="tag-display" id="tag-list"></div>
+                    </div>
+                  </div>
 
             </div>
         </form>
     </main>
 </body>
+</html>

@@ -36,13 +36,13 @@
     color: #602dcf
 }
 
-#make-post {
+.nav-button {
     font-size: 1rem;
     font-weight: bold;
     font-style: italic;
 }
 
-nav {
+header {
     background: #dcccff;
     padding: 1rem;
 
@@ -58,10 +58,10 @@ nav {
     border: none;
     font-weight: 600;
     font-size: 15px;
-    border-radius: 25px;
+    border-radius: 0.5rem;
     padding: 10px 30px;
     margin-top: 25px;
-    margin-left: 10px;
+    margin-left: 1rem;
 }
 
 .post-container {
@@ -74,10 +74,12 @@ nav {
 }
 
 .post-content {
+    display: flex;
+    flex-direction: column;
     padding: 15px;
     margin-bottom: 12px;
     background-color:#baa2f6;
-    border-radius: 10px;
+    border-radius: 0.5rem;
 }
 
 .user-post-info {
@@ -162,7 +164,7 @@ nav {
 }
 
 .comment-box {
-    border-radius: 10px;
+    border-radius: 0.5rem;
     display: flex;
     flex-wrap: wrap;
     border-style:none;
@@ -176,7 +178,7 @@ nav {
 .comment-add {
     min-width: auto;
     max-width: 30rem;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     border: none;
     padding: 5px 5px;
     margin-top: 10px;
@@ -215,9 +217,9 @@ nav {
 }
 
 /* MEDIA CSS FOR MOBILE */
-@media (max-width: 535px) {
+@media (max-width: 625px) {
     #app-logo {
-        font-size: 1rem;
+        font-size: 1.5rem;
     }
     .user-icon{
         width: 30px;
@@ -250,5 +252,16 @@ nav {
     .comment-add {
         font-size: 20px;
         padding: 12px 0;
+    }
+    header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .nav-button {
+        text-align: center;
+        font-size: 1.4rem;
+        margin: 0.1rem;
     }
 }

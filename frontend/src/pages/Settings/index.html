@@ -4,13 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Study on Campus</title>
-    <link rel="stylesheet" href="settings-screen.css" />
+    <link rel="stylesheet" href="../../main.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" type="module"></script>
 </head>
 <body>
-    <nav>
+    <header>
         <div id="app-logo" class="nav-button can-click">Study On Campus</div>
         <div class="user-icon"><span class="icon-content">:3</span></div>
-    </nav>
+    </header>
 
     <main>
         <div class="settings-sections-container">
@@ -20,10 +22,10 @@
 
                 <section class="account-section">
                     <label>User ID <input type="user_id" placeholder="user_id" disabled /></label>
-                    <label>Email <input type="email" placeholder="email address" /><button class="edit-btn">Edit</button></label>
-                    <label>Password <input type="password" value="123456789" /><button class="edit-btn">Edit</button></label>
+                    <label>Email <input type="email" placeholder="email address" disabled /><button class="edit-btn">Edit</button></label>
+                    <label>Password <input type="password" id="password-input" value="123456789" disabled /><button class="edit-btn">Edit</button></label>
                     <div class="show-password-container">
-                        <input type="checkbox" onclick="myFunction()">
+                        <input type="checkbox" id="show-password-checkbox">
                         <small>Show Password</small>
                     </div>
                     <button class="save-btn">Save changes</button>
@@ -40,7 +42,7 @@
             </div>
             
             <div class="right-column">
-                <h3>User Profile <span class="preview-profile">Preview Profile</span></h3>
+                <h3>User Profile</h3>
                 <section class="profile-section">
                     <label>Display name <input type="text" placeholder="Current display name" /></label>
                     <label>Pronouns <input type="text" placeholder="Current pronouns" /></label>
@@ -49,14 +51,26 @@
                     <textarea id="bio" placeholder="Current biography"></textarea>
                     <h4>Current classes</h4>
                     <div class="current-classes">
-                      <input type="text" placeholder="Current class" disabled/>
-                      <input type="text" placeholder="Current class" disabled/>
-                      <input type="text" placeholder="Current class" disabled/>
-                      <button class="add-btn">+</button>
-                      <div class="dropdown-menu">
-                        <input type="text" placeholder="Add new class" />
-                        <button class="dropdown-add-btn">Add Class</button>
-                    </div>
+                      <div class="add-btn-container">
+                        <button class="add-btn">+</button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-group">
+                                <label for="subject-select">Subject:</label>
+                                <select id="subject-select">
+                                    <option value="">-- Select a subject --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="dropdown-group">
+                                <label for="course-number-select">Course Number:</label>
+                                <select id="course-number-select" disabled>
+                                    <option value="">-- Select a number --</option>
+                                </select>
+                            </div>
+                            
+                            <button class="dropdown-add-btn" disabled>Add Class</button>
+                        </div>
+                      </div>
                     </div>
                     <button class="save-btn">Save changes</button>
                 </section>
