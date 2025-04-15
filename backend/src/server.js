@@ -1,0 +1,25 @@
+// start server by running 'npm install' and 'node backend/src/server.js'
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const app = express();
+const PORT = 3000;
+
+
+const __filename = fileURLToPath(import.meta.url); // get file path
+const __dirname = path.dirname(__filename); // get file folder
+const url = path.join(__dirname, "../../frontend/src"); // ref: https://stackoverflow.com/a/76335925 and https://expressjs.com/en/starter/static-files.html
+
+// setup middleware to serve static files from frontend directory
+app.use(express.static(url)); 
+console.log(`Serving static files from ${url}`);
+
+// setup middleware to parse incoming JSON data & add new data
+app.use(express.json());
+
+// TODO: additional setup 
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
