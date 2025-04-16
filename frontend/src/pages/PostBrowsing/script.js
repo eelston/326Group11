@@ -1,6 +1,6 @@
-import { PostBrowsingComponent } from "../../components/BaseComponent/PostBrowsingComponent/PostBrowsingComponent.js"
+import { PostBrowsingComponent } from "../../components/PostBrowsingComponent/PostBrowsingComponent.js"
 import { PostRepositoryService } from "../../services/PostRepositoryService.js"
-import { mockFeed } from "../../../tests/postData/mockFeed.js"
+import { mockFeed } from "../../lib/data/MockFeed.js"
 
 const service = new PostRepositoryService();
 
