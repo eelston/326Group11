@@ -1,10 +1,13 @@
 import { BaseComponent } from '../BaseComponent/BaseComponent.js'
 import { LocationCardComponent } from '../LocationCardComponent/LocationCardComponent.js';
+import { EventHub } from '../../eventhub/EventHub.js';
+import { Events } from '../../eventhub/Events.js';
 import { fetch } from "../../utility/fetchLocations.js"
 
 export class LocationBrowsingComponent extends BaseComponent {
     #container = null; // private variable to store the container element
     #locationsData; // private variable for location data from server
+    #dimmerElement; // private variable for background dimmer element
 
     constructor() {
         super();
@@ -13,14 +16,14 @@ export class LocationBrowsingComponent extends BaseComponent {
 
     async render() {
         if (this.#container) {
-            return this.#container;
+            return;
         }
         this.#locationsData = await this.#getLocations();
         
-        
-        this.#createContainer();
-        this.#renderCards();
-        this.#attachEventListeners();
+        this.#createContainer(); // create location-browsing div element, set this.#container
+        this.#renderCards(); // render a card element for every location
+        this.#dimmerElement = this.#createDimmerElement(); // element to dim screen when a card is expanded
+        this.#attachEventListeners(); // attach relevant event listeners
 
         // add container to main component
         document.getElementsByTagName('main')[0].appendChild(this.#container); 
@@ -54,7 +57,6 @@ export class LocationBrowsingComponent extends BaseComponent {
         }
 
         toBeRendered.forEach(location => { // render each location in given order
-            console.log(`rendering ${location.name}`); // printing to console for confirmation
             const locationCard = new LocationCardComponent(location); // create new component for each location
             locationBrowsingContainer.appendChild(locationCard.render()); // add location card to location browsing container
         })
@@ -128,11 +130,60 @@ export class LocationBrowsingComponent extends BaseComponent {
         this.#renderCards(this.#locationsData, sortOption);
     }
 
-    #attachEventListeners() {
-        // const hub = EventHub.getInstance();
+    // create div container to dim full screen
+    // reference: https://stackoverflow.com/a/15841516
+    #createDimmerElement() {
+        // dim rest of screen
+        const dim = document.createElement('div'); // create new element to dim rest of screen
+        dim.setAttribute('id', 'dim');
+        dim.style["z-index"] = 998; // move to below card
 
+        // cover full window
+        dim.style.height = "100%"; // extra percentage for safety
+        dim.style.width = "100%";
+        dim.style.position = "absolute";
+        dim.style.background = "rgba(0,0,0,0.5)"; // black & mostly transparent
+        // begin div in top left of screen
+        dim.style.top = 0;
+        dim.style.left = 0;
+
+        dim.style.display = "none"; // hide by default
+
+        document.getElementsByTagName("main")[0].appendChild(dim); // add to main div
+
+        return dim; // return element
+    }
+
+    // dim window
+    #showDimmerElement() {
+        this.#dimmerElement.style.display = "block";
+    }
+
+    // revert/un-dim window
+    #hideDimmerElement() {
+        this.#dimmerElement.style.display = "none";
+    }
+
+    #attachEventListeners() {
+        const hub = EventHub.getInstance();
+
+        // related to expanded card view
+        hub.subscribe(Events.ExpandLocationCard, () => {
+            this.#showDimmerElement(); // dim background when a card is expanded
+        })
+
+        // related to minimizing expanded card view
+        hub.subscribe(Events.MinimizeLocationCard, () => {
+            this.#hideDimmerElement(); // hide dimmer element when a card is minimized/returned to normal view
+        })
+
+        // alert eventhub to minimize expanded card view if area outside of card (i.e., dimmer element) is clicked
+        this.#dimmerElement.addEventListener("click", () => {
+            hub.publish(Events.MinimizeLocationCard); // minimize expanded location card if clicked
+        })
+
+        // TODO: search bar and sort by filtering would work together
         // attach event listener for search bar filter
-        // TODO: determine if this is better implemented using eventhub
         const searchBarElement = document.getElementById("search-bar");
         searchBarElement.addEventListener("keyup", (event) => this.#filterLocationCardsByQuery(event.target.value)); // update on keyup
         // event.target is reference to searchBarElement (reference: https://developer.mozilla.org/en-US/docs/Web/API/Event/target)
