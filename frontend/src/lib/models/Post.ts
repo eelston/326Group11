@@ -9,12 +9,12 @@ export interface Post {
     
     postId: string; 
     title: string;
-    tags: Tag[]; // see: Tag.js
+    tags: Tag[]; // see: Tag.ts
     description: string;
     location: string;
     startTime: Date; // Parsed 
     timeStamp: Date; // Parsed
     isExpired: boolean; 
     
-    comments: Comment[]; // see: Comment.js
+    comments: Comment[]; // see: Comment.ts
 }
