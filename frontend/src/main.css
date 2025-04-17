@@ -24,13 +24,14 @@
     --crowding-bar-width: 18rem;
 }
 
+html {
+    font-size: 14pt;
+}
 
 * {
     margin: 0;
     padding: 0;
-
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14pt;
 }
 
 /******************************
@@ -119,7 +120,7 @@ nav a:hover {
     font-size: 1.5rem;
 }
 
-.user-icon:hover {
+.user-icon.can-click:hover {
     cursor: pointer;
     background: white;
     outline: var(--grey-500) solid 2px;
