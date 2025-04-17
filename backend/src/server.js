@@ -1,4 +1,8 @@
-// start server by running 'npm install' and 'node backend/src/server.js'
+// start server by running:
+// 'npm install -S express' (if express is not installed), 
+// 'npm install'
+// 'node backend/src/server.js'
+// and navigate to http://localhost:3000/pages/FOLDERNAME
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
