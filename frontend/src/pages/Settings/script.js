@@ -1,4 +1,4 @@
-import { MockCourses } from "../../tests/data/MockCourses.js";
+import { MockCourses } from "../../lib/data/MockCourses.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const subjects = [...new Set(MockCourses.map(course => course.course_subject))];

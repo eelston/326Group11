@@ -1,5 +1,5 @@
 /********************************************************************
- *Service.js from CS326 frontend integration example tasks-v3
+ * Service.js from CS326 frontend integration example tasks-v3
  * Abstract, provides common interface for service classes
  * Subclass services must have subscribed events
  *********************************************************************/
