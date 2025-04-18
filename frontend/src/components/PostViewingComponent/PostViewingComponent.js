@@ -1,4 +1,4 @@
-import { BaseComponent } from "../BaseComponent.js"
+import { BaseComponent } from "../BaseComponent/BaseComponent.js"
  
 export class PostViewingComponent extends BaseComponent { 
     #container = null;
@@ -9,6 +9,7 @@ export class PostViewingComponent extends BaseComponent {
     constructor(service) {
         super();
         this.#service = service;
+        this.loadCSS("PostViewingComponent");
 
     }
 
@@ -27,7 +28,7 @@ export class PostViewingComponent extends BaseComponent {
         this.#renderComments();
         this.#goBackListener();
         this.#navBarListeners();
-        }
+    }
 
     #navBarListeners() {
         document.getElementById("app-logo").addEventListener('click', () => {

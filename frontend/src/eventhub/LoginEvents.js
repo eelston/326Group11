@@ -1,5 +1,5 @@
 /**
- * An object containing event types used in loging in and signing up.
+ * An object containing event types used in logging in and signing up.
  */
 
 export const Events = {
