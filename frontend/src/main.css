@@ -16,6 +16,7 @@
     --bright-yellow: #ffc943;
     --bright-orange: #ff9e42; 
     --bright-red: #f24822;
+
     /* dark */
     --dark-green: #15a36d;
     --dark-blue: #5591df;
@@ -87,17 +88,6 @@ nav {
     gap: 0.75rem;
 }
 
-.nav-button {
-    box-sizing: border-box;
-    padding: 0.5rem;
-    border: 1px solid var(--grey-300);
-    border-radius: 20rem;
-
-    color: var(--grey-500);
-    background: var(--grey-200);
-    font-weight: 600;
-}
-
 nav a {
     color: black;
     text-decoration: none;
@@ -107,16 +97,32 @@ nav a:hover {
     text-decoration: underline;
 }
 
+.nav-button {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--navbar-purple);
+    outline: none;
+    border-radius: 20rem;
+
+    color: var(--grey-500);
+    background: var(--light-purple);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
 .nav-button:hover {
-    outline: var(--grey-500) solid 2px;
-    background: var(--level1);
-    border-color: var(--level1);
     cursor: pointer;
+
+    color: black; /* button text */
+    background: greenyellow; /* this color will probably change */
+
+    border-color: var(--level1);
+    outline: var(--grey-500) solid 1px;
 }
 
 /* user icon, appears in top right */
 .user-icon {
-    background: var(--level2);
+    background: var(--bright-blue);
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
@@ -127,13 +133,12 @@ nav a:hover {
     align-items: center;
 }
 
+.user-icon.can-click:hover {
+    cursor: pointer;
+    outline: var(--grey-500) solid 2px;
+}
+
 .icon-content {
     height: fit-content;
     font-size: 1.5rem;
-}
-
-.user-icon.can-click:hover {
-    cursor: pointer;
-    background: white;
-    outline: var(--grey-500) solid 2px;
 }
