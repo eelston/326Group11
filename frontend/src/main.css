@@ -1,17 +1,30 @@
 /* Base styles for web application */
 :root {
     /**** defining variables ****/
-    /* brand/accent/crowding bar colors */
-    --navbar-purple: #dcccff;
+    /* brand/theme colors */
+    --navbar-purple: #d1befb;
+    --light-purple: #e5dcfd;
+    --dark-purple: #874fff; 
 
-    --level1: #66d575;
-    --level2: #5ad8cc;
-    --level3: #ffc943;
-    --level4: #ff9e42; 
-    --level5: #f24822;
+    /* accent colors */
+    /* light */
+    --light-blue: #d5f5f2;
+
+    /* bright */
+    --bright-green: #66d575;
+    --bright-blue: #5ad8cc;
+    --bright-yellow: #ffc943;
+    --bright-orange: #ff9e42; 
+    --bright-red: #f24822;
+    /* dark */
+    --dark-green: #15a36d;
+    --dark-blue: #5591df;
+    --dark-yellow: #e69926;
+    --dark-orange: #e66326;
+    --dark-red: #a80a67;
 
     /* component colors */
-    --grey-050: #fafafa; /* lightest */
+    --grey-050: #fafafa; /* lightest, body off white */
     --grey-100: #f2f2f2;
     --grey-200: #dedede; /* main grey */
     --grey-300: #b9b9b9;
@@ -20,7 +33,7 @@
 
     /* misc. values */
     --max-width: 1600px; /* main content max width */
-    --crowding-bar-height: 1.25rem;
+    --crowding-bar-height: 1.25rem; /* for location crowding indicator */
     --crowding-bar-width: 18rem;
 }
 
@@ -40,7 +53,6 @@ html {
 body {
     background: var(--grey-050); /* page background slightly off-white */
 }
-
 
 /******************************
 *********** HEADER ************
