@@ -1,6 +1,10 @@
 import { Events } from '../../eventhub/PostingEvents.js';
 import { EventHub } from '../../eventhub/EventHub.js';
 import { IndexedDB } from '../../utility/indexeddb.js';
+import { NavbarComponent } from '../../components/NavbarComponent/NavbarComponent.js';
+
+const navbarComponent = new NavbarComponent();
+navbarComponent.render();
 
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,6 +1,121 @@
+/* content container */
 #location-browsing {
     margin: 1rem 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 1rem;
+}
+
+/********* SORT OPTIONS *********/
+#search-option-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* search bar */
+#search-bar-container {
+    width: max-content;
+    display: flex;
+
+    flex-shrink: 0; /* should shrink in width before sort-by-container*/
+    flex-grow: 1;
+
+    margin-right: 1rem
+}
+
+#search-bar {
+    box-sizing: border-box;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+
+    max-width: 450px;
+    width: 100%;
+}
+
+#search-button {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+
+    color: var(--grey-500);
+    background: var(--grey-200);
+    font-weight: 600;
+}
+
+#search-button:hover {
+    outline: var(--grey-500) solid 2px;
+    background: var(--grey-300);
+    cursor: pointer;
+}
+
+/* card sorting */
+#sort-by-container {
+    display: flex;
+
+    flex-shrink: 1; 
+    flex-grow: 0;
+
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap; /* keep label text to one line */
+}
+
+#sort-by-select {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+}
+
+#sort-by-select:hover {
+    cursor: pointer;
+}
+
+/******************************
+******** MEDIA QUERIES ********
+******************************/
+@media screen and (max-width: 35rem) {
+    /*  window width small enough for single card rows,
+        e.g., mobile devices in portrait mode, most likely */
+    
+    /**** search options ****/
+    #search-option-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #search-bar-container {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        
+    }
+
+    #search-bar {
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+        max-width: none;
+    }
+
+    #search-button {
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+    }
+
+    #sort-by-container {
+        align-self: flex-end;
+    }
+
+    #sort-by-select  {
+    /*  unfortunately, option font size cannot be styled using css:
+        https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Advanced_form_styling */
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+    }
+
+    label[for=sort-by-select] {
+        font-size: smaller;
+    }
 }

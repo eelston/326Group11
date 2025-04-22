@@ -74,7 +74,6 @@
 }
 
 /* loading bar gradients, with fallback color */
-/* TODO: add secondary colors to main.css, name/rename all accent colors more intuitively */
 #level1 {
     background: var(--bright-green) linear-gradient(to right, var(--dark-green), var(--bright-green));
     width: 20%;

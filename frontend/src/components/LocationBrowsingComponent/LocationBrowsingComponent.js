@@ -16,7 +16,8 @@ export class LocationBrowsingComponent extends BaseComponent {
             return this.#container;
         }
         this.#locationsData = await this.#getLocations();
-        
+
+        this.#renderSearchOptions();
         
         this.#createContainer();
         this.#renderCards();
@@ -24,6 +25,29 @@ export class LocationBrowsingComponent extends BaseComponent {
 
         // add container to main component
         document.getElementsByTagName('main')[0].appendChild(this.#container); 
+    }
+
+    #renderSearchOptions() {
+        // create div for search bar
+        // TODO: condense a bit, and also fix some redundancy with the html & css, because search button no longer exists
+        // also TODO: maybe just do this with innerHTML lol
+        const searchOptionContainer = document.createElement('div');
+        searchOptionContainer.setAttribute('id', 'search-option-container');
+
+        searchOptionContainer.innerHTML = `
+            <input type="text" id="search-bar" placeholder="Enter keywords...">
+
+            <div id="sort-by-container">
+                <label for="sort-by-select">Sort by</label>
+                <select id="sort-by-select" autocomplete="off">
+                    <option value="Recently Updated" selected="selected">Recently Updated</option>
+                    <option value="Ascending Crowd Score">Ascending Crowd Score</option>
+                    <option value="Descending Crowd Score">Descending Crowd Score</option>
+                </select>
+            </div>
+        `
+        
+        document.getElementsByTagName('main')[0].appendChild(searchOptionContainer);
     }
 
     // create container element and apply class
