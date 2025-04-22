@@ -1,4 +1,4 @@
-import { MockCourses } from "../../tests/data/MockCourses.js";
+import { MockCourses } from "../../lib/data/MockCourses.js";
 import { NavbarComponent } from "../../components/NavbarComponent/NavbarComponent.js";
 
 // const navbarComponent = new NavbarComponent();

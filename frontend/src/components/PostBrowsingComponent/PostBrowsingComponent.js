@@ -1,4 +1,4 @@
-import { BaseComponent } from "../BaseComponent.js"
+import { BaseComponent } from "../BaseComponent/BaseComponent.js"
  
 export class PostBrowsingComponent extends BaseComponent { 
     #container = null; 

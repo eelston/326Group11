@@ -40,8 +40,12 @@ export const Events = {
     UnStorePostSuccess: 'UnStoreFullPostSuccess',
     UnStorePostFailure: 'UnStoreFullPostFailure',
 
-    // View Switching Events:
+    // View Switching Events
     SwitchToPostBrowsingView: 'SwitchToPostBrowsingView',
     SwitchToPostViewingView: 'SwitchToPostViewingView',
+
+    // Location Browsing
+    ExpandLocationCard: `ExpandLocationCard`,
+    MinimizeLocationCard: `MinimizeLocationCard`
 }
   
