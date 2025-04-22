@@ -10,7 +10,7 @@ export class PostBrowsingComponent extends BaseComponent {
         this.loadCSS('PostBrowsingComponent');
         this.#service = service;
     }
-
+ 
     async render() {
         console.log("Creating new feed");
         document.title = 'Post Feed | Study on Campus';
@@ -29,6 +29,7 @@ export class PostBrowsingComponent extends BaseComponent {
             this.#renderPosts(this.#allPosts);
         }
         this.#searchQueryListener();
+        this.#navBarListeners();
     }
 
     #searchQueryListener() { 
@@ -37,8 +38,16 @@ export class PostBrowsingComponent extends BaseComponent {
         })
     }
 
-    #buttonListeners() {
-        //TODO
+    #navBarListeners() {
+        document.getElementById("app-logo").addEventListener('click', () => {
+            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostBrowsing/index.html"
+        });
+        document.getElementById("location-browsing").addEventListener('click', () => {
+            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/LocationBrowsing/index.html"
+        });
+        document.getElementById("make-post").addEventListener('click', () => {
+            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostCreation/index.html"
+        });
     }
     
     #renderPosts(posts) {

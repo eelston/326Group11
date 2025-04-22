@@ -49,11 +49,10 @@ class PostController {
                 return res.status(400).json({error: "Post "});
             }
         //}
-    }
-
+    } // do delete a post too, do update post . too . 
     
 
-    async clearTasks(req, res) {
+    async clearPosts(req, res) {
         await this.model.delete();
         res.json(await this.model.read());
     }
