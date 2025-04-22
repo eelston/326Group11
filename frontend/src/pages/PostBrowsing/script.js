@@ -9,4 +9,4 @@ await service.clearPosts();
 mockFeed.map(post => service.storePost(post));
 
 const component = new PostBrowsingComponent(service); 
-component.render();
+component.render(); 

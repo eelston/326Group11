@@ -28,6 +28,7 @@ export class PostViewingComponent extends BaseComponent {
         this.#renderComments();
         this.#goBackListener();
         this.#navBarListeners();
+        this.#postSettingsDropdownListener();
     }
 
     #navBarListeners() {
@@ -48,6 +49,23 @@ export class PostViewingComponent extends BaseComponent {
         })
     }
 
+    #postSettingsDropdownListener() {
+        const settingsMenu = document.getElementsByClassName('settings-dropdown')[0];
+        const ddButton = document.getElementById('post-settings');
+        ddButton.addEventListener('click', () => {
+            if (settingsMenu.style.display === 'none') {
+                settingsMenu.style.display = 'block';
+            } else {
+                settingsMenu.style.display = 'none';
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (!settingsMenu.contains(e.target) && !ddButton.contains(e.target)) {
+                settingsMenu.style.display = 'none';
+            }
+        })
+    }
+
     #renderPost() { // next milestone, post.StartTime will change to an object
         this.#container.innerHTML = `
     <div class="user-post-info">
@@ -58,6 +76,12 @@ export class PostViewingComponent extends BaseComponent {
         <div class="info-subgroup date">
             <p>${this.#post.timeStamp.time}</p>
             <p>${this.#post.timeStamp.date}</p>
+        </div>
+        <div class="info-subgroup settings-container">
+            <span id="post-settings" class="can-click"><b>…</b></span>
+            <div class = "settings-dropdown">
+                <span class = "dd-settings-content can-click">Delete Post</span>
+            </div>
         </div>
     </div>
 

@@ -9,6 +9,6 @@ const component = new PostViewingComponent(service);
 
 const postId = "0000001";
 console.log("testing");
-console.log("POST ID: " + postId);
+console.log("POST ID: " + postId); 
 
 component.render(postId);

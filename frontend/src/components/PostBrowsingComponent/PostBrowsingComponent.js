@@ -6,8 +6,8 @@ export class PostBrowsingComponent extends BaseComponent {
     #allPosts = [];
 
     constructor(service) {
-        console.log("Loading all Posts...");
         super();
+        this.loadCSS('PostBrowsingComponent');
         this.#service = service;
     }
 
@@ -35,6 +35,10 @@ export class PostBrowsingComponent extends BaseComponent {
         document.getElementById("search-bar").addEventListener("input", (search) => {
             this.filterPosts(search.target.value)
         })
+    }
+
+    #buttonListeners() {
+        //TODO
     }
     
     #renderPosts(posts) {

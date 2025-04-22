@@ -42,7 +42,7 @@ class PostController {
     }
 
     // Add a new task
-    async addTask(req, res) { //TODO Fix
+    async addPost(req, res) { //TODO, Ask Anastasia about her implementation of post creation
         //try {
             // Check if 'post' is provided in the request body
             if (!req.body || !req.body.post) {
@@ -50,6 +50,8 @@ class PostController {
             }
         //}
     }
+
+    
 
     async clearTasks(req, res) {
         await this.model.delete();
