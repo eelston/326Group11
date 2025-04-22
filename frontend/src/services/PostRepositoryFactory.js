@@ -27,8 +27,11 @@ export class PostRepositoryFactory {
     if (repoType === 'local') {
       return new PostRepositoryService();
     }
-    else if (repoType === 'remote') {
+    else if (repoType === 'fake') {
       return new PostRepositoryRemoteFakeService();
+    }
+    else if (repoType === 'remote') {
+      return new TaskRepositoryRemoteService();
     }
     else {
       throw new Error('Invalid repository type');

@@ -32,19 +32,19 @@ export class PostViewingComponent extends BaseComponent {
 
     #navBarListeners() {
         document.getElementById("app-logo").addEventListener('click', () => {
-            window.location.href = "http://127.0.0.1:5500/src/pages/PostBrowsing/index.html"
+            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostBrowsing/index.html"
         });
         document.getElementById("location-browsing").addEventListener('click', () => {
-            window.location.href = "http://127.0.0.1:5500/src/pages/LocationBrowsing/index.html"
+            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/LocationBrowsing/index.html"
         });
         document.getElementById("make-post").addEventListener('click', () => {
-            window.location.href = "http://127.0.0.1:5500/src/pages/PostCreation/index.html"
+            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostCreation/index.html"
         });
     }
 
     #goBackListener() {
         document.getElementById("go-back").addEventListener('click', () => {
-            window.location.href = "http://127.0.0.1:5500/src/pages/PostBrowsing/index.html"
+            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostBrowsing/index.html"
         })
     }
 
