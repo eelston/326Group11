@@ -8,7 +8,11 @@
 
     /* accent colors */
     /* light */
-    --light-blue: #d5f5f2;
+    --light-blue: #c6faf6;
+    --light-green: #cdf4d3;
+    --light-yellow: #ffecbd;
+    --light-orange: #ffe0c2;
+    --light-red: #ffc7c2;
 
     /* bright */
     --bright-green: #66d575;
