@@ -2,10 +2,6 @@
  * Based on Events.js from CS326 frontend integration example tasks-v2
  * This object contains the various event/message types used in our app
  *********************************************************************/
-
-/*********************************************************
-An object containing various messages for task management
-*********************************************************/
 export const Events = {
     // Post Creation 
     NewPost: 'NewPost',
@@ -45,7 +41,16 @@ export const Events = {
     SwitchToPostViewingView: 'SwitchToPostViewingView',
 
     // Location Browsing
-    ExpandLocationCard: `ExpandLocationCard`,
-    MinimizeLocationCard: `MinimizeLocationCard`
+    ExpandLocationCard: 'ExpandLocationCard',
+    MinimizeLocationCard: 'MinimizeLocationCard',
+    OpenReportModal: 'OpenReportModal',
+    CloseReportModal: 'CloseReportModal',
+
+    // Crowding Score Reporting
+    AddReport: 'AddReport', // trigger html post method
+    DeleteReport: 'DeleteReport', // trigger html delete method for deletion of singular report
+    ClearAllReports: 'ClearAllReports', // trigger html delete method for deleting all reports
+    DeleteReportSuccess: 'DeleteReportSuccess', // for UI updates
+    ClearAllReportsSuccess: 'ClearAllReportsSuccess'
 }
   

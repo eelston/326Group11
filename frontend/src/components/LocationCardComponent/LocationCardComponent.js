@@ -6,10 +6,12 @@ import { Events } from '../../eventhub/Events.js';
 export class LocationCardComponent extends BaseComponent {
     #container = null; // private variable to store location card container element
     #locationData;
+    #nameTag;
 
     constructor(locationData = {}) {
         super();
         this.#locationData = locationData;
+        this.#nameTag = this.#locationData.name.replaceAll(/[^\w]/g, ""); // used repeatedly for styling, easier to define up here -> location name without spaces or punctuation
         this.loadCSS('LocationCardComponent');
     }
 
@@ -26,6 +28,8 @@ export class LocationCardComponent extends BaseComponent {
         } else if (this.#locationData.type === "Multi-Floor") {
             this.#renderMultiFloor();
         }
+
+        this.#renderCrowdingScore();
 
         this.#renderAddress(); // render location address
 
@@ -50,16 +54,18 @@ export class LocationCardComponent extends BaseComponent {
         const averageCrowdingScore = this.#calculateAverageCrowdingScore(locationReports); // average crowding score
         const level = Math.round(averageCrowdingScore); // level for crowding score bar
 
+        // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace with hyphen for styling tag
+
         this.#container.innerHTML = `
                 <span class="exit-expanded show-on-expand">Minimize</span>
 
                 <div class="location-info">
                    <div class="location-name">${this.#locationData.name}</div>
-                   <div class="crowding-score-hint">${CrowdingHints[level-1]}</div>
+                   <div id="${this.#nameTag}-hint" class="crowding-score-hint"></div>
                 </div>
                 
                 <div class="crowding-score-bar-container">
-                   <div id="level${level}" class="crowding-score-bar"></div>
+                   <div id="${this.#nameTag}-bar" class="crowding-score-bar"></div>
                 </div>
                 <input type="button" class="report-button show-on-expand" value="Report Crowding"/>
                 <div class="crowding-score-updated-time">Last updated ${this.#timestampToString(lastUpdatedTimestamp)}</div>            `
@@ -87,11 +93,11 @@ export class LocationCardComponent extends BaseComponent {
             floorInfo.innerHTML = `
                 <div class="location-info">
                     <div class="floor-name"><strong>Floor ${floor.name}</strong></div>
-                    <div class="crowding-score-hint">${CrowdingHints[level-1]}</div>
+                    <div id="${this.#nameTag}-${floor.name}-hint" class="crowding-score-hint"></div>
                 </div>
                 
                 <div class="crowding-score-bar-container">
-                    <div id="level${level}" class="crowding-score-bar"></div>
+                    <div id="${this.#nameTag}-${floor.name}-bar" class="crowding-score-bar"></div>
                 </div>
                 <input type="button" class="report-button floor-${floor.name} show-on-expand" value="Report Crowding"/>
                 <div class="crowding-score-updated-time">Last updated ${this.#timestampToString(lastUpdatedTimestamp)}</div>
@@ -101,6 +107,45 @@ export class LocationCardComponent extends BaseComponent {
         });
     }
 
+    // gets crowding score and updates crowding score bar and hint text
+    #renderCrowdingScore() {
+        // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace in location name with hyphen for styling tag
+
+        if (this.#locationData.type === "Single-Floor") {
+            const averageCrowdingScore = this.#calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
+            const level = Math.round(averageCrowdingScore); // level for crowding score bar
+
+            const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-hint`); // get hint div
+            crowdingScoreHint.innerText = CrowdingHints[level-1]; // set/reset hint text
+            
+            const crowdingScoreBar = this.#container.querySelector(`#${this.#nameTag}-bar`); // get crowding score bar element
+
+            const className = crowdingScoreBar.classList.values().find((className) => /level./.test(className)); // get current level/styling tag
+            if (className) {crowdingScoreBar.classList.remove(className)}; // remove previous level tag, if exists
+
+            crowdingScoreBar.classList.add(`level${level}`) // replace with updated level
+
+        } else if (this.#locationData.type === "Multi-Floor") {
+            this.#locationData.floors.forEach(floor => { 
+                const averageCrowdingScore = this.#calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
+                const level = Math.round(averageCrowdingScore); // level for crowding score bar
+
+                console.log(`#${this.#nameTag}-${floor.name}-bar`)
+                const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-${floor.name}-hint`); // get hint div
+                crowdingScoreHint.innerText = CrowdingHints[level-1];
+
+                const crowdingScoreBar = this.#container.querySelector(`#${this.#nameTag}-${floor.name}-bar`); // get crowding score bar element
+
+                const className = crowdingScoreBar.classList.values().find((className) => /level./.test(className)); // get current level/styling tag
+                if (className) {crowdingScoreBar.classList.remove(className)}; // remove previous level tag, if exists
+
+                crowdingScoreBar.classList.add(`level${level}`) // replace with updated level
+            });
+        }
+
+    }
+
+    // adds address to bottom of card
     #renderAddress() {
         // hidden detail when minimized - location address
         const address = document.createElement('div'); // create element for address
@@ -155,6 +200,10 @@ export class LocationCardComponent extends BaseComponent {
         // attach event listeners for reporting crowding score (on button click)
         this.#container.querySelectorAll(".report-button") // get each report button
             .forEach(button => button.addEventListener('click', (event) => {
+                const hub = EventHub.getInstance();
+                hub.publish(Events.OpenReportModal);
+
+                event.stopPropagation(); // prevent bubble up
                 // TODO: implement location crowding score reporting
                 // TODO: determine if saving user-id is necessary for location report...
                 // if (event.target.classList.values().some(className => className.includes("floor"))) { // TODO: clean up this conditional...
@@ -217,5 +266,9 @@ export class LocationCardComponent extends BaseComponent {
                 hub.publish(Events.MinimizeLocationCard);
             }
         });
+
+        // update crowding bar and hint (if needed) when new report is added
+        // TODO: optional -> add conditional to prevent unnecessary rendering if score didn't change
+        // hub.subscribe(Events.AddReport, this.#renderCrowdingScore)
     }
 }

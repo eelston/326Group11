@@ -8,7 +8,7 @@ export const MockLocations = [
                 "name": "2",
                 "reports": [
                     {
-                        user_id: "user123",
+                        report_id: 12,
                         score: 4,
                         timestamp: Date.now()
                     }
@@ -18,7 +18,7 @@ export const MockLocations = [
                 "name": "3",
                 "reports": [
                     {
-                        user_id: "user123",
+                        report_id: 23,
                         score: 1,
                         timestamp: Date.now()
                     }
@@ -33,19 +33,19 @@ export const MockLocations = [
         "type": "Single-Floor",
         "reports": [
             {
-                user_id: "user789",
+                report_id: 14,
                 score: 3,
                 timestamp: Date.now()
             },
             
             {
-                user_id: "user789",
+                report_id: 13,
                 score: 3,
                 timestamp: Date.now()
             },
             
             {
-                user_id: "user123",
+                report_id: 10,
                 score: 2,
                 timestamp: Date.parse(new Date("April 10, 2025 12:34:05"))
             }
@@ -58,7 +58,7 @@ export const MockLocations = [
         "type": "Single-Floor",
         "reports": [
             {
-                user_id: "user123",
+                report_id: 2,
                 score: 3,
                 timestamp: Date.parse(new Date("May 21, 2024 03:20:21"))
             }
@@ -74,7 +74,7 @@ export const MockLocations = [
                 "name": "2",
                 "reports": [
                     {
-                        user_id: "user123",
+                        report_id: 35,
                         score: 5,
                         timestamp: Date.now()
                     }
@@ -84,7 +84,7 @@ export const MockLocations = [
                 "name": "3",
                 "reports": [
                     {
-                        user_id: "user123",
+                        report_id: 8,
                         score: 3,
                         timestamp: Date.parse(new Date("December 19, 2025 12:24:00"))
                     }
@@ -99,13 +99,13 @@ export const MockLocations = [
         "type": "Single-Floor",
         "reports": [
             {
-                user_id: "user123",
+                report_id: 22,
                 score: 3,
                 timestamp: Date.now()
             },
 
             {
-                user_id: "user456",
+                report_id: 27,
                 score: 1,
                 timestamp: Date.now()
             }
