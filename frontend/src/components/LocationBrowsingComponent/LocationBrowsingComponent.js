@@ -1,5 +1,6 @@
 import { BaseComponent } from '../BaseComponent/BaseComponent.js'
 import { LocationCardComponent } from '../LocationCardComponent/LocationCardComponent.js';
+import { CrowdingHints } from '../LocationCardComponent/CrowdingHints.js'
 import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/Events.js';
 import { fetch } from "../../utility/fetchLocations.js"
@@ -8,6 +9,7 @@ export class LocationBrowsingComponent extends BaseComponent {
     #container = null; // private variable to store the container element
     #locationsData; // private variable for location data from server
     #dimmerElement; // private variable for background dimmer element
+    #reportModal; // private variable for crowding score report modal
 
     constructor() {
         super();
@@ -23,8 +25,8 @@ export class LocationBrowsingComponent extends BaseComponent {
         this.#createContainer(); // create location-browsing div element, set this.#container
         this.#renderCards(); // render a card element for every location
         this.#dimmerElement = this.#createDimmerElement(); // element to dim screen when a card is expanded
-        this.#attachEventListeners(); // attach relevant event listeners
-
+        this.#reportModal = this.#createReportModal(); // element to report crowding score for expanded card
+        this.#attachEventListeners(); // attach relevant event listeners   
         // add container to main component
         document.getElementsByTagName('main')[0].appendChild(this.#container); 
     }
@@ -154,14 +156,52 @@ export class LocationBrowsingComponent extends BaseComponent {
         return dim; // return element
     }
 
-    // dim window
-    #showDimmerElement() {
-        this.#dimmerElement.style.display = "block";
+    // // dim window 
+    // #showElement(element) {
+    //     element.style.display = "block";
+    // }
+
+    // // revert/un-dim window
+    // #hideDimmerElement(element) {
+    //     element.style.display = "none";
+    // }
+
+    // show element 
+    #showElement(element) {
+        element.style.display = "flex";
     }
 
-    // revert/un-dim window
-    #hideDimmerElement() {
-        this.#dimmerElement.style.display = "none";
+    // hide element
+    #hideElement(element) {
+        element.style.display = "none";
+    }
+
+    #createReportModal() {
+        const reportModal = document.createElement('div'); // create new element for report modal
+        reportModal.setAttribute('id', 'report-modal');
+
+        document.getElementsByTagName("main")[0].appendChild(reportModal); // add to main div
+        
+        reportModal.innerHTML = `
+            <p>How crowded is <strong id="report-location-name"></strong>?</p>
+
+            <button id="level1"></button>
+            <button id="level2"></button>
+            <button id="level3"></button>
+            <button id="level4"></button>
+            <button id="level5"></button>
+
+            <button id="report-submit" type="submit" value="Submit">Submit</button>
+        `
+
+        CrowdingHints.forEach((hint, i) => {
+            const button = document.querySelector(`button#level${i+1}`);
+            button.innerText = `${i+1}: ${hint}`
+        })
+        
+        reportModal.style.display = "none";
+        
+        return reportModal;
     }
 
     #attachEventListeners() {
@@ -169,12 +209,12 @@ export class LocationBrowsingComponent extends BaseComponent {
 
         // related to expanded card view
         hub.subscribe(Events.ExpandLocationCard, () => {
-            this.#showDimmerElement(); // dim background when a card is expanded
+            this.#showElement(this.#dimmerElement); // dim background when a card is expanded
         })
 
         // related to minimizing expanded card view
         hub.subscribe(Events.MinimizeLocationCard, () => {
-            this.#hideDimmerElement(); // hide dimmer element when a card is minimized/returned to normal view
+            this.#hideElement(this.#dimmerElement); // hide dimmer element when a card is minimized/returned to normal view
         })
 
         // alert eventhub to minimize expanded card view if area outside of card (i.e., dimmer element) is clicked
@@ -191,5 +231,12 @@ export class LocationBrowsingComponent extends BaseComponent {
         // attach event listener for 'Sort by' dropdown/select
         const sortByElement = document.getElementById("sort-by-select");
         sortByElement.addEventListener("change", (event) => this.#sortLocationCards(event.target.value)); // update on changed selection
+
+        // attach event listener to open report modal
+        hub.subscribe(Events.OpenReportModal, (data) => {
+            this.#showElement(this.#reportModal); // open report modal
+            document.getElementById("report-location-name").innerText = data;
+            
+        });
     }
 }

@@ -155,6 +155,8 @@ export class LocationCardComponent extends BaseComponent {
         // attach event listeners for reporting crowding score (on button click)
         this.#container.querySelectorAll(".report-button") // get each report button
             .forEach(button => button.addEventListener('click', (event) => {
+                const hub = EventHub.getInstance();
+                hub.publish(Events.OpenReportModal, this.#locationData.name);
                 // TODO: implement location crowding score reporting
                 // TODO: determine if saving user-id is necessary for location report...
                 // if (event.target.classList.values().some(className => className.includes("floor"))) { // TODO: clean up this conditional...
