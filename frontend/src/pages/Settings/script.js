@@ -1,10 +1,8 @@
 import { MockCourses } from "../../lib/data/MockCourses.js";
 import { NavbarComponent } from "../../components/NavbarComponent/NavbarComponent.js";
 
-// const navbarComponent = new NavbarComponent();
-// navbarComponent.render();
-// some of the button styling in style.css (width: 72%) affects the navbar component
-// maybe see if it's feasible to use the specific button tags for styling?
+const navbarComponent = new NavbarComponent();
+navbarComponent.render();
 
 document.addEventListener("DOMContentLoaded", () => {
   const subjects = [...new Set(MockCourses.map(course => course.course_subject))];

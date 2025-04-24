@@ -5,6 +5,7 @@ import { NavbarComponent } from '../../components/NavbarComponent/NavbarComponen
 
 const navbarComponent = new NavbarComponent();
 navbarComponent.render();
+// there's also some minor styling conflicts on this page, again we can probably deal with after more backend stuff is implemented - erika
 
 const service = new PostRepositoryService();
 

@@ -5,6 +5,8 @@ import { mockFeed } from "../../lib/data/MockFeed.js"
 
 // const navbarComponent = new NavbarComponent();
 // navbarComponent.render();
+// looks like there's some styling conflicts with the navbar on this page,
+// I can check which tags are messing with the navbar elements later on, not super high priority at the moment - erika
 
 const service = new PostRepositoryService();
 await service.initDB();
