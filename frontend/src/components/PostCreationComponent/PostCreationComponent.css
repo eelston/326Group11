@@ -1,19 +1,13 @@
-/* @import url("../../main.css"); */
-
-/******************************
-************ MAIN *************
-******************************/
-
-main {
+form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: calc(100vh - 11vh);
+    height: calc(100vh - 8vh);
     overflow: hidden;
 }
 
 .post-container{
-    height: 100%;
+    block-size: fit-content;
     padding: 1vw;
 }
 
