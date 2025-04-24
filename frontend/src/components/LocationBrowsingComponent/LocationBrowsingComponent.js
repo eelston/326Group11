@@ -217,7 +217,7 @@ export class LocationBrowsingComponent extends BaseComponent {
             this.#hideElement(this.#dimmerElement); // hide dimmer element when a card is minimized/returned to normal view
         })
 
-        // alert eventhub to minimize expanded card view if area outside of card (i.e., dimmer element) is clicked
+        // alert event hub to minimize expanded card view if area outside of card (i.e., dimmer element) is clicked
         this.#dimmerElement.addEventListener("click", () => {
             hub.publish(Events.MinimizeLocationCard); // minimize expanded location card if clicked
         })
@@ -232,11 +232,33 @@ export class LocationBrowsingComponent extends BaseComponent {
         const sortByElement = document.getElementById("sort-by-select");
         sortByElement.addEventListener("change", (event) => this.#sortLocationCards(event.target.value)); // update on changed selection
 
-        // attach event listener to open report modal
+        // subscribe event listener to open report modal
         hub.subscribe(Events.OpenReportModal, (data) => {
             this.#showElement(this.#reportModal); // open report modal
             document.getElementById("report-location-name").innerText = data;
-            
         });
+        
+        // close report modal if area outside modal is clicked
+        document.addEventListener("click", (event) => {
+            if (this.#reportModal.style.display !== "none" && !this.#reportModal.contains(event.target)) {
+                // ref for .contains() usage: https://johnsonkow.medium.com/event-listener-for-outside-click-75226f5c8ce0
+                this.#hideElement(this.#reportModal);
+                console.log("clicked outside")
+            }
+        })
+
+        // attach event listener for Escape key press
+        // if report modal is open, minimize
+        // otherwise, minimize card (still check if card is in expanded card view)
+        document.addEventListener("keyup", (event) => {
+            if (event.code === "Escape") { // escape key press
+                if (this.#reportModal.style.display !== "none") { // report modal visible
+                    this.#hideElement(this.#reportModal); // minimize report modal
+                    event.stopPropagation(); // shouldn't matter, but just to be safe
+                } else if (document.querySelector(".expanded") !== undefined) { // otherwise, escape expanded card if applicable
+                    hub.publish(Events.MinimizeLocationCard); // minimize expanded card (via event hub subscription)
+                }
+            }
+        })
     }
 }

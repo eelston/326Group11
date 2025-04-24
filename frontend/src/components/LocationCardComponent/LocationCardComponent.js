@@ -157,6 +157,7 @@ export class LocationCardComponent extends BaseComponent {
             .forEach(button => button.addEventListener('click', (event) => {
                 const hub = EventHub.getInstance();
                 hub.publish(Events.OpenReportModal, this.#locationData.name);
+                event.stopPropagation();
                 // TODO: implement location crowding score reporting
                 // TODO: determine if saving user-id is necessary for location report...
                 // if (event.target.classList.values().some(className => className.includes("floor"))) { // TODO: clean up this conditional...
@@ -206,16 +207,6 @@ export class LocationCardComponent extends BaseComponent {
                 this.#minimizeExpandedCard(); // call minimize method only if card is expanded
                 
                 // update eventhub for minimizing location card -> this affects dimmer element in LocationBrowsingComponent
-                hub.publish(Events.MinimizeLocationCard);
-            }
-        });
-
-        // attach event listener to minimize expanded card view on escape key press
-        document.addEventListener('keyup', (event) => {
-            if ((event.code === "Escape") && (this.#container.classList.contains("expanded"))){
-                this.#minimizeExpandedCard();
-
-                // update eventhub for minimizing location card -> this affects dimmer element
                 hub.publish(Events.MinimizeLocationCard);
             }
         });
