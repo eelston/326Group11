@@ -6,6 +6,8 @@ import { IndexedDB } from '../../utility/indexeddb.js';
 export class PostCreationComponent extends BaseComponent { 
     #container = null; // init component container element
     #tags = [];
+    #datetime = null;
+    #db = IndexedDB;
 
     constructor() {
         super();
@@ -22,6 +24,16 @@ export class PostCreationComponent extends BaseComponent {
         this.#container = document.createElement("form");
         this.#container.classList.add('post-form');
         this.#container.innerHTML = this.#getTemplate();
+        this.#setMinDateTime();
+    }
+
+    #setMinDateTime(){
+        const datetimeInput = this.#container.querySelector('#datetime-input');
+        if(datetimeInput) {
+            const now = new Date();
+            const formattedDateTime = now.toISOString().slice(0, 16);
+            datetimeInput.setAttribute('min', formattedDateTime);
+        }
     }
 
     #getTemplate() {
@@ -43,11 +55,23 @@ export class PostCreationComponent extends BaseComponent {
             <div class="post-actions">
 
                 <div class="all-buttons">
-                    <button type="button" id="add-tags-btn">Open Tag Menu</button>
+                    <div class="extra-input">
+                        <button type="button" id="add-datetime-btn">Open Date/Time</button>
+                        <button type="button" id="add-tags-btn">Open Tag Menu</button>
+                    </div>
                     <div class="post-buttons">
                         <button type="button" id="submit-cancel">Cancel</button>
                         <input type="submit" id="submit-post" value="Post">
                     </div>
+                </div>
+
+                <div class="datetime-wrapper">
+                    <div id="datetime-input-view" class="hidden">
+                        <label for="datetime-input">Enter a date and time and press enter: </label>
+                        <input type="datetime-local" id="datetime-input">
+                    </div>
+                    <span id="error" style="color: red; display: none;"></span>
+                    <div class="datetime-display" id="datetime-list"></div>
                 </div>
 
                 <div class="tag-menu-wrapper">
@@ -67,6 +91,9 @@ export class PostCreationComponent extends BaseComponent {
         this.#attachTagMenuToggleListener();
         this.#attachTagInputListener();
         this.#attachTagDeleteListener();
+        this.#attachDateTimeToggleListener();
+        this.#attachDateTimeInputListener();
+        this.#attachDateTimeDeleteListener();
     }
 
     #attachFormSubmitListener() {
@@ -99,12 +126,34 @@ export class PostCreationComponent extends BaseComponent {
         tagList.addEventListener('click', (e) => this.#handleRemoveTag(e));
     }
 
+    #attachDateTimeToggleListener() {
+        const addDateTimeBtn = this.#container.querySelector('#add-datetime-btn');
+        const dateTimeInputView = this.#container.querySelector('#datetime-input-view');
+    
+        addDateTimeBtn.addEventListener('click', () => {
+          const isHidden = dateTimeInputView.classList.toggle('hidden');
+          addDateTimeBtn.textContent = isHidden ? 'Open Date/Time' : 'Close Date/Time';
+          this.#container.querySelector('#datetime-input').focus();
+        });
+    }
+
+    #attachDateTimeInputListener() {
+        const dateTimeInput = this.#container.querySelector("#datetime-input");
+        dateTimeInput.addEventListener('keydown', (e) => this.#handleAddDateTime(e));
+    }
+
+    #attachDateTimeDeleteListener() {
+        const datetime = this.#container.querySelector('#datetime-list');
+        datetime.addEventListener('click', (e) => this.#handleRemoveDateTime(e));
+    }
+
     #handlePostSubmit(e) {
         e.preventDefault();
         const titleInput = this.#container.querySelector('#post-title');
         const locationInput = this.#container.querySelector('#post-location');
         const bodyInput = this.#container.querySelector('#post-body');
         const tagList = this.#container.querySelector('#tag-list');
+        const datetimeList = this.#container.querySelector('#datetime-list');
 
         const title = titleInput.value.trim();
 
@@ -120,14 +169,15 @@ export class PostCreationComponent extends BaseComponent {
         const post = {
             title,
             location: locationInput.value.trim(),
-            body: bodyInput.value.trim(),
+            description: bodyInput.value.trim(),
             tags: this.#tags,
-            createdAt: new Date()
+            startTime: new Date(this.#datetime),
+            timeStamp: new Date()
         };
 
-        IndexedDB.savePost(post).then((post) => {
+        this.#db.savePost(post).then((post) => {
             this.#publishPost(post);
-            this.#clearInputs(titleInput, locationInput, bodyInput, tagList);
+            this.#clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList);
             window.location.href = "/frontend/src/pages/PostBrowsing/index.html";
         });
     }
@@ -151,7 +201,7 @@ export class PostCreationComponent extends BaseComponent {
 
         const removeBtn = document.createElement('span');
         removeBtn.textContent = '✕';
-        removeBtn.classList.add('remove-tag');
+        removeBtn.classList.add('remove');
 
         tag.appendChild(removeBtn);
         tag.appendChild(tagLabel);
@@ -162,7 +212,7 @@ export class PostCreationComponent extends BaseComponent {
     }
 
     #handleRemoveTag(e) {
-        if (!e.target.classList.contains('remove-tag')) return;
+        if (!e.target.classList.contains('remove')) return;
 
         const tag = e.target.parentElement;
         const tagText = tag.querySelector('span').textContent;
@@ -171,18 +221,81 @@ export class PostCreationComponent extends BaseComponent {
         tag.remove();
     }
 
+    #handleAddDateTime(e) {
+        if ((e.key && e.key !== 'Enter') || !e.target.value.trim()) return;
+
+        e.preventDefault();
+
+        const datetime = e.target.value.trim();
+        const input = new Date(datetime);
+        const now = new Date();
+        const errorMessage = this.#container.querySelector('#error');
+
+        if (input == 'Invalid Date') {
+            errorMessage.innerHTML = "*Must be a valid date."
+            errorMessage.style.display = "block";
+            e.target.value = '';
+            return;
+        }
+
+        if (input < now) {
+            errorMessage.innerHTML = "*Must be a future date and time."
+            errorMessage.style.display = "block";
+            e.target.value = '';
+            return;
+        }
+
+        errorMessage.style.display = "none";
+
+        const datetimeList = this.#container.querySelector('#datetime-list');
+        const formatted = input.toLocaleString();
+
+        if (this.#datetime) {
+            const existing = datetimeList.querySelector('.datetime');
+            const label = existing.querySelector('span:not(.remove)');
+            label.textContent = formatted;
+        }
+        else {
+            const datetimeItem = document.createElement('div');
+            datetimeItem.classList.add('datetime');
+
+            const datetimeLabel = document.createElement('span');
+            datetimeLabel.textContent = formatted;
+
+            const removeBtn = document.createElement('span');
+            removeBtn.textContent = '✕';
+            removeBtn.classList.add('remove');
+
+            datetimeItem.appendChild(removeBtn);
+            datetimeItem.appendChild(datetimeLabel);
+            datetimeList.appendChild(datetimeItem);
+        }
+
+        this.#datetime = datetime;
+        e.target.value = '';
+    }
+
+    #handleRemoveDateTime(e) {
+        if (!e.target.classList.contains('remove')) return;
+        const datetimeElement = e.target.parentElement;
+        this.#datetime = null;
+        datetimeElement.remove();
+    }
+
     #publishPost(post) {
         const hub = EventHub.getInstance();
         hub.publish(Events.NewPost, { post });
         hub.publish(Events.StorePost, { post });
     }
 
-    #clearInputs(titleInput, locationInput, bodyInput, tagList) {
+    #clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList) {
         titleInput.value = '';
         locationInput.value = '';
         bodyInput.value = '';
         tagList.innerHTML = '';
+        datetimeList.innerHTML = '';
         this.#tags = [];
+        this.datetime = null;
     }
 
 }
