@@ -147,45 +147,6 @@ export class PostCreationComponent extends BaseComponent {
         datetime.addEventListener('click', (e) => this.#handleRemoveDateTime(e));
     }
 
-    #handlePostSubmit(e) {
-        e.preventDefault();
-        const titleInput = this.#container.querySelector('#post-title');
-        const locationInput = this.#container.querySelector('#post-location');
-        const bodyInput = this.#container.querySelector('#post-body');
-        const tagList = this.#container.querySelector('#tag-list');
-        const datetimeList = this.#container.querySelector('#datetime-list');
-
-        const title = titleInput.value.trim();
-
-        if (title === '') {
-            titleInput.placeholder = 'Post name required.';
-            titleInput.classList.add('input-error');
-            titleInput.focus();
-            return;
-        }
-
-        titleInput.classList.remove('input-error');
-
-        const post = {
-            title,
-            location: locationInput.value.trim(),
-            description: bodyInput.value.trim(),
-            tags: this.#tags,
-            startTime: new Date(this.#datetime),
-            timeStamp: new Date()
-        };
-
-        this.#db.savePost(post).then((post) => {
-            this.#publishPost(post);
-            this.#clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList);
-            window.location.href = "/frontend/src/pages/PostBrowsing/index.html";
-        });
-    }
-
-    #handleCancelPost() {
-        window.location.href = "/frontend/src/pages/PostBrowsing/index.html";
-    }
-
     #handleAddTag(e) {
         if (e.key !== 'Enter' || e.target.value.trim() === '') return;
         
@@ -280,6 +241,47 @@ export class PostCreationComponent extends BaseComponent {
         const datetimeElement = e.target.parentElement;
         this.#datetime = null;
         datetimeElement.remove();
+    }
+
+    #handlePostSubmit(e) {
+        e.preventDefault();
+        const titleInput = this.#container.querySelector('#post-title');
+        const locationInput = this.#container.querySelector('#post-location');
+        const bodyInput = this.#container.querySelector('#post-body');
+        const tagList = this.#container.querySelector('#tag-list');
+        const datetimeList = this.#container.querySelector('#datetime-list');
+
+        const title = titleInput.value.trim();
+
+        if (title === '') {
+            titleInput.placeholder = 'Post name required.';
+            titleInput.classList.add('input-error');
+            titleInput.focus();
+            return;
+        }
+
+        titleInput.classList.remove('input-error');
+
+        const post = {
+            title: titleInput.value.trim(),
+            location: locationInput.value.trim(),
+            description: bodyInput.value.trim(),
+            tags: this.#tags,
+            startTime: new Date(this.#datetime),
+            timeStamp: new Date(),
+            isExpired: false,
+            comments: null
+        };
+
+        this.#db.savePost(post).then((post) => {
+            this.#publishPost(post);
+            this.#clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList);
+            window.location.href = "/frontend/src/pages/PostBrowsing/index.html";
+        });
+    }
+
+    #handleCancelPost() {
+        window.location.href = "/frontend/src/pages/PostBrowsing/index.html";
     }
 
     #publishPost(post) {
