@@ -150,18 +150,6 @@ export class LocationCardComponent extends BaseComponent {
         this.#container.classList.add("expanded");        
         // display minimize button, address, report buttons (all previously"hidden" elements)
         this.#container.querySelectorAll(".show-on-expand").forEach(element => {element.style.display = "inline-block"});
-        
-        // TODO: move this elsewhere to avoid duplicate function creation
-        // attach event listeners for reporting crowding score (on button click)
-        this.#container.querySelectorAll(".report-button") // get each report button
-            .forEach(button => button.addEventListener('click', (event) => {
-                // TODO: implement location crowding score reporting
-                // TODO: determine if saving user-id is necessary for location report...
-                // if (event.target.classList.values().some(className => className.includes("floor"))) { // TODO: clean up this conditional...
-                //    console.log(event.target.classList[1]); // get floor name
-                // }
-                // console.log(`report for ${this.#locationData.name} ${event.target.}`);
-            }));
     }
 
     // reset expanded card
@@ -208,14 +196,18 @@ export class LocationCardComponent extends BaseComponent {
             }
         });
 
-        // attach event listener to minimize expanded card view on escape key press
-        document.addEventListener('keyup', (event) => {
-            if ((event.code === "Escape") && (this.#container.classList.contains("expanded"))){
-                this.#minimizeExpandedCard();
+        // attach necessary event listeners for reporting crowding score (on "Report Crowding" button click)
+        this.#container.querySelectorAll(".report-button") // get each report button
+            .forEach(button => button.addEventListener('click', (event) => {
+                const hub = EventHub.getInstance(); // get event hub
+                // if multi-floor, attach floor that the clicked report button corresponds with
+                const buttonClassList = button.classList.value.split(" "); // string array of class tags
+                const floor = this.#locationData.type === "Single-Floor" ? null : buttonClassList[1]; // get corresponding floor name if multi-floor
+                const data = { name: this.#locationData.name, floor: floor}; // data to send to report modal
+                hub.publish(Events.OpenReportModal, data); // alert event hub
 
-                // update eventhub for minimizing location card -> this affects dimmer element
-                hub.publish(Events.MinimizeLocationCard);
-            }
-        });
+                // prevent bubble up
+                event.stopPropagation(); // not really necessary, but just in case
+            }));
     }
 }
