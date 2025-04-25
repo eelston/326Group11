@@ -14,7 +14,7 @@ export class NavbarComponent extends BaseComponent {
         // main navbar content
         this.#container = document.createElement('header');
         this.#container.innerHTML = `
-            <div id="app-logo" onclick="location.href='../PostViewing/index.html'">Study on Campus</div>
+            <div id="app-logo" onclick="location.href='../PostViewing/index.html'" title="Browse study posts">Study on Campus</div>
 
             <nav>
                 <a href="../LocationBrowsing/index.html">Browse Locations</a>
