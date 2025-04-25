@@ -119,3 +119,101 @@
         font-size: smaller;
     }
 }
+
+/**** report modal ****/
+#report-modal { /* note: same styling as location card, for now */
+    background: var(--grey-100);
+    box-shadow: var(--grey-400) 0 1px 3px;
+
+    z-index: 1000; /* bring to top (higher than expanded card, if overlap occurs) */
+    position: absolute;
+
+    height: fit-content;
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 15rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}
+
+#report-modal button {
+    font-size: 1rem;
+    width: 100%;
+    margin: 0.25rem 0;
+
+    /* generally the same as other buttons */
+    box-sizing: border-box;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10rem;
+
+    color: var(--grey-500);
+    font-weight: 600;
+}
+
+#report-modal button:hover {
+    cursor: pointer;
+}
+
+button#report-submit {
+    width: fit-content;
+    background: var(--navbar-purple);
+    border: 1px solid var(--navbar-purple);
+}
+
+button#report-submit:hover {
+    border: 1px solid var(--grey-300);
+    background: var(--grey-300);
+}
+
+button#level1 {
+    background: var(--light-green);
+    border: 1px solid var(--light-green);
+}
+
+button#level1:hover {
+    color: black;
+    background: var(--bright-green)
+}
+
+button#level2 {
+    background: var(--light-blue);
+    border: 1px solid var(--light-blue);
+}
+
+button#level2:hover {
+    color: black;
+    background: var(--bright-blue);
+}
+
+button#level3 {
+    background: var(--light-yellow);
+    border: 1px solid var(--light-yellow);
+}
+
+button#level3:hover {
+    color: black;
+    background: var(--bright-yellow);
+}
+
+button#level4 {
+    background: var(--light-orange);
+    border: 1px solid var(--light-orange);
+}
+
+button#level4:hover {
+    color: black;
+    background: var(--bright-yellow);
+}
+
+button#level5 {
+    background: var(--light-red);
+    border: 1px solid var(--light-red);
+}
+
+button#level5:hover {
+    color: black;
+    background: var(--bright-red);
+}
