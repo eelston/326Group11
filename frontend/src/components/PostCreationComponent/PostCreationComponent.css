@@ -2,8 +2,8 @@ form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: calc(100vh - 8vh);
-    overflow: hidden;
+    min-height: calc(100vh - 8vh);
+    overflow-y: auto;
 }
 
 .post-container{
