@@ -1,4 +1,4 @@
-import InMemoryPostModel from "./InMemoryPostModel";
+import InMemoryPostModel from "./InMemoryPostModel.js";
 
 class _ModelPostFactory { // Will be Updated in Next Milestone to include SQLite.
     getModel() {

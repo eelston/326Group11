@@ -12,7 +12,7 @@
 // In the controller pattern, a "controller" is responsible for taking user
 // input (e.g., an HTTP request), processing it according to the business
 // logic, and sending a response. By using this pattern, each controller
-// method manages a specific functionality, like adding a task or updating
+// method manages a specific functionality, like adding a post or updating
 // a user profile, which keeps the logic modular and reusable. Controllers
 // interact with models (for data) and views (for user feedback) without
 // knowing the internal details of each, promoting low coupling.
@@ -25,7 +25,7 @@
 // handles input and output correctly, without dependencies on the
 // application's interface or data storage layers.
 
-import ModelPostFactory from "../model/ModelPostFactory";
+import ModelPostFactory from "../model/ModelPostFactory.js";
 
 class PostController {
     constructor() {
@@ -34,23 +34,98 @@ class PostController {
 
     // Get all Posts:
     async getAllPosts(req, res) {
-        const posts = await this.model.read(); 
+        const allPosts = await this.model.read();
+        const nonExpiredPosts = allPosts.filter(post => (post.isExpired === false)); 
+        const search = req.query.s?.toLowerCase() || "";
+        const filtered = nonExpiredPosts
+            .filter(post => (search === "") || (post.title.toLowerCase().includes(search) || 
+            post.description.toLowerCase().includes(search) ||
+            post.location.toLowerCase().includes(search) || 
+            post.tags.some(tag => tag.tag.toLowerCase().includes(search))));
+        res.json({posts: filtered})
         // Response is obj with a 'posts' property containing an array of posts.
         // Could be anything but define it as an obj with a 'posts' property to keep
         // responses consistent across different endpoints.
-        res.json({ posts });
     }
 
-    // Add a new task
-    async addPost(req, res) { //TODO, Ask Anastasia about her implementation of post creation
-        //try {
-            // Check if 'post' is provided in the request body
+    async getPost(req, res) {
+        try {
+            const postId = req.params.id;
+            const post = await this.model.read(postId);
+            res.json(post);
+        } catch (error) {
+            console.error("Error getting post:", error);
+            res.status(500).json({error: "Failed to get post."});
+        }
+    }
+
+    // Add a new post
+    async addPost(req, res) { 
+        try {
             if (!req.body || !req.body.post) {
-                return res.status(400).json({error: "Post "});
+                return res.status(400).json({ error: "Post description required."})
             }
-        //}
-    } // do delete a post too, do update post . too . 
+        // Create new post object with unique ID
+        const post = await this.model.create(req.body);
     
+        // For debug: 
+        console.log(`New Post details: ${post.userId}, ${post.postId},
+            ${post.userName}, ${post.userPronouns}, ${post.title},
+            ${post.tags}, ${post.description}, ${post.location}, 
+            ${post.startTime}, ${post.timeStamp}, ${post.isExpired},
+            ${post.comments},`);
+       
+        return res.status(201).json(post);
+        } catch (error) {
+            console.error("Error adding post: ", error);
+            return res.status(500).json({error: "Failed to add post. Please try again."})
+        }
+    }
+    
+    async deletePost(req, res) {
+        try {
+            if (!req.body || !req.body.post) {
+                return res.status(400).json({ error: "Post description required" });
+            }
+        
+            await this.model.delete(req.body);
+            res.json(await this.model.read());
+    
+            // should i return it? i dont know... 
+    
+        } catch (error) {
+            console.error("Error deleting post: ", error);
+            return res.status(500).json({error: "Failed to delete post. Please try again."})
+        }
+    }
+
+    // for comments 
+    async updatePost(req, res) {
+        try {
+            if (!req.body || !req.body.post) {
+                return res.status(400).json({ error: "Post description required "});
+            }
+            const post = await this.model.update(req.body);
+            return res.status(201).json(post);
+        } catch (error) {
+            console.error("Error in updating post: ", error);
+            return res.status(500).json({error: "Failed to update post. Please try again."})
+        }
+    }
+
+    
+    // maybe its like get all posts but filtered? 
+    async filterAllPosts(req, res) {
+        const allPosts = await this.model.read();
+        const nonExpiredPosts = allPosts.filter(post => (post.isExpired === false)); 
+        const search = req.query.s?.toLowerCase() || "";
+        const filtered = nonExpiredPosts
+            .filter(post => (search === "") || (post.title.toLowerCase().includes(search) || 
+            post.description.toLowerCase().includes(search) ||
+            post.location.toLowerCase().includes(search) || 
+            post.tags.some(tag => tag.tag.toLowerCase().includes(search))));
+        res.json({posts: filtered})
+    }    
 
     async clearPosts(req, res) {
         await this.model.delete();

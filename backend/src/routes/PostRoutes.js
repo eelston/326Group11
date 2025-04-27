@@ -22,17 +22,45 @@
 // route to be tested independently for correct handling of inputs and
 // outputs.
 
+//TODO ADD THE RESPONSE INFO AT TOP EMULATE THE GIVEN
 import express from "express";
-import PostController from "../controller/PostController";
+import PostController from "../controller/PostController.js";
 
 class PostRoutes {
     constructor() {
-        this.router = express.Router;
+        this.router = express.Router();
         this.initializeRoutes();
     }
 
     initializeRoutes() {
-        //TODO
+        // Getting all the posts 
+        this.router.get("/posts", async (req, res) => {
+            await PostController.getAllPosts(req, res);
+        });
+
+        this.router.get("/post", async (req, res) => {
+            await PostController.getPost(req, res);
+        } )
+
+        // Add a new post
+        this.router.post("/post", async (req, res) => {
+            await PostController.addPost(req, res);
+        });
+
+        // Clearing all posts
+        this.router.delete("/posts", async (req, res) => {
+            await PostController.clearPosts(req, res);
+        })
+
+        // Deleting a post 
+        this.router.delete("/post", async (req, res) => {
+            await PostController.deletePost(req, res);
+        })
+
+        // Updating a post (comments, and potentially editing a post in the future)
+        this.router.patch("/post", async (req, res) => {
+            await PostController.updatePost(req, res);
+        });
     }
 
     getRouter() {
@@ -40,4 +68,4 @@ class PostRoutes {
     }
 }
 
-export default new TaskRoutes().getRouter();
+export default new PostRoutes().getRouter();

@@ -49,9 +49,9 @@ const InMemoryPostModel = new _InMemoryPostModel();
 
 //Initializing the model with some sample posts. 
 InMemoryPostModel.create({
-    name: "Melissa",
+    //name: "Melissa",
     userId: "0000004",
-    pronouns: "she/her",
+    //pronouns: "she/her",
     title: "Study buds for discrete exam coming up...",
     tags: [{
         color: "#5feee0",
@@ -113,8 +113,8 @@ InMemoryPostModel.create({
     isExpired: false, 
     postComments: [],
     userId: "0000000",
-    name: "displayName",
-    pronouns: "she/he/they"
+    //name: "displayName",
+    //pronouns: "she/he/they"
 });
 
 export default InMemoryPostModel;

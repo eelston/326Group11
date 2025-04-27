@@ -152,5 +152,7 @@ export class PostRepositoryService extends Service {
     this.subscribe(Events.UnStorePosts, () => {
       this.clearPosts();
     });
+
+    this.subscribe(Events.loadAllPosts)
   }
 }

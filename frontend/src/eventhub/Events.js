@@ -20,7 +20,7 @@ export const Events = {
     LoadPostSuccess: 'LoadPostSuccess',
     LoadPostFailure: 'LoadPostFailure',
 
-    // Post Viewing ??? todo
+    // Post Viewing 
     UpdatePost: 'UpdatePost',
     UpdatePostSuccess: 'UpdatePostSuccess',
     UpdatePostFailure: 'UpdatePostFailure',

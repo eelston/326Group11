@@ -1,6 +1,6 @@
 import { PostRepositoryService } from "./PostRepositoryService.js";
 import { PostRepositoryRemoteFakeService } from "./PostRepositoryRemoteFakeService.js";
-
+import { PostRepositoryRemoteService } from "./PostRepositoryRemoteService.js";
 /** Taken From CS 326
  * Factory class to create instances of task repository services.
  * 
@@ -10,7 +10,7 @@ import { PostRepositoryRemoteFakeService } from "./PostRepositoryRemoteFakeServi
  */
 export class PostRepositoryFactory {
   constructor() {
-    throw new Error('Cannot instantiate a TaskRepositoryFactory object');
+    throw new Error('Cannot instantiate a PostRepositoryFactory object');
   }
 
   /**
@@ -18,7 +18,7 @@ export class PostRepositoryFactory {
    * repository type.
    *
    * @param {string} [repoType='local'] - The type of repository service to
-   * create. Can be 'local' or 'remote'.
+   * create. Can be 'local,' 'remote,' or 'fake'.
    * @returns {TaskRepositoryService|TaskRepositoryServerRemote} An instance
    * of the appropriate task repository service.
    * @throws Will throw an error if the repository type is not recognized.
@@ -26,12 +26,13 @@ export class PostRepositoryFactory {
   static get(repoType = 'local') {
     if (repoType === 'local') {
       return new PostRepositoryService();
+      console.log("meow");
     }
     else if (repoType === 'fake') {
       return new PostRepositoryRemoteFakeService();
     }
     else if (repoType === 'remote') {
-      return new TaskRepositoryRemoteService();
+      return new PostRepositoryRemoteService();
     }
     else {
       throw new Error('Invalid repository type');
