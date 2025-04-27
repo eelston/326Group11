@@ -23,7 +23,10 @@ export class PostRepositoryRemoteService extends Service {
         this.subscribe(Events.loadAllPosts, () => {
             this.loadAllPosts();
         });
-        // TODO
+        this.subscribe(Events.updatePost, (data) => {
+            this.updatePost(data)
+        });
+        // Filtering would clutter ? Ask prof
     }
 
     async #initPosts() { 

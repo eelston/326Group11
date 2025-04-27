@@ -150,6 +150,34 @@ export class PostViewingComponent extends BaseComponent {
             const timeFormat = this.#createTimeObj(comment.timeStamp);
             timeCommented.textContent = `${timeFormat.time}, ${timeFormat.date}`;
 
+            const settings = document.createElement("div");
+            cInfo.appendChild(settings);
+            settings.classList.add("c-settings-container");
+            const dots = document.createElement("span");
+            dots.classList.add("comment-settings", "can-click");
+            dots.innerHTML="…";
+            settings.appendChild(dots);
+
+            const comSetDD = document.createElement("div");
+            comSetDD.classList.add("comment-dropdown");
+            const delButton = document.createElement("span");
+            delButton.classList.add("commentDeleteButton");
+            delButton.classList.add("can-click");
+            delButton.innerHTML = "Delete";
+            comSetDD.appendChild(delButton);
+            dots.appendChild(comSetDD);
+            comSetDD.style.display = 'none';
+            
+            dots.addEventListener('click', () => {
+                if (comSetDD.style.display === 'none') {
+                    comSetDD.style.display = 'block';
+                } else {
+                    comSetDD.style.display = 'none';
+                }
+            });
+            delButton.id = `commentId${comment.commentId}`
+            this.#deleteCommentListener(comment.commentId);
+
             const textArea = document.createElement("div");
             const text = document.createElement("p");
             text.textContent = comment.message;
@@ -157,7 +185,15 @@ export class PostViewingComponent extends BaseComponent {
             c.appendChild(textArea);
             textArea.classList.add("comment-text");
         })
+
         const commentBox = document.createElement('div');
+        if (this.#post.postComments.length === 0) {
+            const talk = document.createElement("p");
+            talk.style.marginBottom = '15px';
+            talk.style.textAlign = 'center';
+            talk.innerHTML = "No comments yet. Be the first to comment!"
+            commentBox.appendChild(talk);
+        }
         this.#comments.appendChild(commentBox);
         commentBox.classList.add("comment", "add-comment");
         const box = document.createElement("textarea");
@@ -176,6 +212,7 @@ export class PostViewingComponent extends BaseComponent {
             if (box.value.length > 0) {
                 const currentTime = Date.now();
                 const newComment = {
+                    commentId: (this.#post.postComments.length + 1).toString(),
                     userId: "1111111",
                     name: "You",
                     message: box.value,
@@ -209,5 +246,23 @@ export class PostViewingComponent extends BaseComponent {
             return "Tomorrow"
         }
         return timeObj.date;
+    }
+
+    #deleteCommentListener(commentId) {
+        const deleteButton = document.getElementById(`commentId${commentId}`)
+        console.log(commentId);
+        console.log(deleteButton);
+            deleteButton.addEventListener('click', async () => {
+                if (confirm("Are you sure you want to delete your comment? This action CANNOT be undone.")) {
+                    const index = this.#post.postComments.findIndex(c => c.commentId === commentId);
+                    this.#post.postComments.splice(index, 1);
+                    await this.#service.updatePost(this.#post);
+                    const comment = document.getElementById(`commentId${commentId}`);
+                    if (comment) { 
+                        comment.remove(); 
+                        this.#renderComments();
+                    }
+                }
+            })
     }
 }

@@ -99,7 +99,7 @@ header {
     gap: 10px;
 }
 
-.settings-container {
+.settings-container, .comment-settings {
     position: relative;
     display: inline-block;
 }
@@ -111,6 +111,18 @@ header {
     padding: 0.7rem;
     right: 0;
     width: 5rem;
+    z-index: 1;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+}
+
+.comment-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #dedede;
+    padding: 0.7rem;
+    right: 0;
+    width: 3.4rem;
     z-index: 1;
     border-radius: 0.5rem;
     box-shadow: 0 2px 2px rgba(0,0,0,0.2);
