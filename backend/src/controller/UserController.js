@@ -19,10 +19,28 @@ class UserController {
         }
     }
 
+    async getUserLogin(req, res) {
+        try {
+            if (!req.body || !req.body.email){
+                return res.status(400).json({error: "Email required to get account."});
+            }
+            const user = await this.model.read(req.body);
+            if (!user) {
+                return res.status(400).json({ error: "User not found."})
+            }
+            res.json({ user });
+        } catch (error) {
+            console.error("Error getting user:", error);
+            return res
+            .status(500)
+            .json({ error: "Failed to get user. Please try again." });
+        }
+    }
+
     async getUser(req, res) {
         try {
-            if ((!req.body || !req.body.userId) || (!req.body || !req.body.email || !req.body.password)){
-                return res.status(400).json({error: "Information missing to retrieve account."});
+            if (!req.body || !req.body.userId){
+                return res.status(400).json({error: "User ID required to get account."});
             }
             const user = await this.model.read(req.body);
             if (!user) {

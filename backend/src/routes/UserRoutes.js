@@ -9,6 +9,10 @@ class UserRoutes {
 
     initializeRoutes() {
 
+        this.router.get("/login", async (req, res) => {
+            await UserController.getUserLogin(req, res);
+        })
+
         this.router.get("/users", async (req, res) => {
             await UserController.getAllUsers(req, res);
         })
