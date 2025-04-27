@@ -10,12 +10,12 @@ export class PostViewingComponent extends BaseComponent {
         super();
         this.#service = service;
         this.loadCSS("PostViewingComponent");
-
     }
 
     async render(postId) {
         console.log("loading a post with id: " + postId)
         this.#post = await this.#service.loadPost(postId);
+        console.log(this.#post);
         document.title = `${this.#post.title} | Study on Campus`;
 
         this.#container = document.createElement('div');
@@ -29,6 +29,7 @@ export class PostViewingComponent extends BaseComponent {
         this.#goBackListener();
         this.#navBarListeners();
         this.#postSettingsDropdownListener();
+        this.#deleteButtonListener();
     }
 
     #navBarListeners() {
@@ -49,6 +50,18 @@ export class PostViewingComponent extends BaseComponent {
         })
     }
 
+    #deleteButtonListener() {
+        const deleteButton = document.getElementById('deleteButton');
+        deleteButton.addEventListener('click', async () => {
+            if (confirm("Are you sure you want to delete your post? This action CANNOT be undone.")) {
+                await this.#service.deletePost(this.#post.postId);
+                window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostBrowsing/index.html";
+            }
+            const settingsMenu = document.getElementsByClassName('settings-dropdown')[0];
+            settingsMenu.style.display = 'none';
+        })
+    }
+
     #postSettingsDropdownListener() {
         const settingsMenu = document.getElementsByClassName('settings-dropdown')[0];
         const ddButton = document.getElementById('post-settings');
@@ -66,7 +79,9 @@ export class PostViewingComponent extends BaseComponent {
         })
     }
 
-    #renderPost() { // next milestone, post.StartTime will change to an object
+    #renderPost() { 
+        const posted = this.#createTimeObj(this.#post.timeStamp);
+        const tmrw = this.#isEventTmrw(this.#post.startTime);
         this.#container.innerHTML = `
     <div class="user-post-info">
         <div class="info-subgroup user">
@@ -74,13 +89,13 @@ export class PostViewingComponent extends BaseComponent {
             <p>(${this.#post.pronouns})</p>
         </div>
         <div class="info-subgroup date">
-            <p>${this.#post.timeStamp.time}</p>
-            <p>${this.#post.timeStamp.date}</p>
+            <p>${posted.time}</p>
+            <p>${posted.date}</p>
         </div>
         <div class="info-subgroup settings-container">
             <span id="post-settings" class="can-click"><b>…</b></span>
             <div class = "settings-dropdown">
-                <span class = "dd-settings-content can-click">Delete Post</span>
+                <span id = "deleteButton" class = "dd-settings-content can-click">Delete Post</span>
             </div>
         </div>
     </div>
@@ -88,7 +103,7 @@ export class PostViewingComponent extends BaseComponent {
     <div class="post-content">
         <h1 class="title"><b>${this.#post.title}</b></h1>
         <div class="tag-container"></div>
-        <span class="time data"><b>Starts At: </b>${this.#post.startTime.time}, ${this.#post.startTime.date}</span>
+        <span class="time data"><b>Starts At: </b>${this.#post.startTime.time}, ${tmrw}</span>
         <span class="location data"><b>Location: </b>${this.#post.location}</span>
         <p class="post-desc">${this.#post.description}</p>
     </div>
@@ -132,7 +147,8 @@ export class PostViewingComponent extends BaseComponent {
             pro.style.color = "#745faa";
             timeCommented.style.color = "#745faa";
             pro.textContent = `(${comment.pronouns})`;
-            timeCommented.textContent = `${comment.timeStamp.time}, ${comment.timeStamp.date}`
+            const timeFormat = this.#createTimeObj(comment.timeStamp);
+            timeCommented.textContent = `${timeFormat.time}, ${timeFormat.date}`;
 
             const textArea = document.createElement("div");
             const text = document.createElement("p");
@@ -158,20 +174,40 @@ export class PostViewingComponent extends BaseComponent {
         commentBox.appendChild(submitC);
         submitC.addEventListener("click", () => {
             if (box.value.length > 0) {
+                const currentTime = Date.now();
                 const newComment = {
                     userId: "1111111",
                     name: "You",
                     message: box.value,
-                    timeStamp: {time: "6:47 P.M.", date: "9/26/2026"},
+                    timeStamp: currentTime,
                     iconContent: ":Y",
                     iconBgColor: "#5ad8cc",
                     pronouns: "they/them"
                 }
                 this.#post.postComments.push(newComment);
-                this.#service.updatePost(this.#post.postId, newComment)
+                this.#service.updatePost(this.#post);
                 this.#renderComments();
                 box.textContent = '';
             }
         })
+    }
+    #createTimeObj(timeStamp) {
+        const time = new Date(timeStamp);
+        const hours = String(time.getHours()).padStart(2, '0');
+        const mins = String(time.getMinutes()).padStart(2, '0');
+        const month = time.getMonth();
+        const day = time.getDate();
+        const year = time.getFullYear();
+        return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+    }
+
+    #isEventTmrw(timeObj) {
+        const [month, day, year] = timeObj.date.split("/");
+        const userTime = new Date(Date.now());
+        const currTime = [userTime.getMonth(), userTime.getDate(), userTime.getFullYear()];
+        if (year !== currTime[2] && month !== currTime[0] && (currTime[1] - day === 1)) {
+            return "Tomorrow"
+        }
+        return timeObj.date;
     }
 }

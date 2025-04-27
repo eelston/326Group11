@@ -44,8 +44,6 @@ export class PostRepositoryRemoteService extends Service {
         }
         const data = await response.json();
         return data.posts;
-        //TODO what about try catch case ? 
-        // return empty array for catch 
     }
 
     async loadAllPosts() {
@@ -59,15 +57,16 @@ export class PostRepositoryRemoteService extends Service {
 
     async loadPost(postId) {
         const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postId)}`);
+        console.log("Response status: " + response.status);
         if (!response.ok) {
             throw new Error(`Failed to fetch post with postId ${postId}`);
         }
         const data = await response.json();
-        return data.post; //try catch?
+        return data; 
     }
 
     async updatePost(postData) {
-        const response = await fetch("http://localhost:3000/v1/post", {
+        const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postData.postId)}`, {
             method: "PATCH",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(postData)
@@ -77,7 +76,6 @@ export class PostRepositoryRemoteService extends Service {
         }
         const updatedPost = await response.json();
         return updatedPost;
-        // try catch? 
     }
 
     async deletePost(postId) {

@@ -96,7 +96,6 @@ export class PostRepositoryService extends Service {
           };
         request.onerror = () => {
           this.publish(Events.StorePostFailure, postData);
-          console.log("Hello!")
           reject('Error storing post: ' + postData);
         };
         

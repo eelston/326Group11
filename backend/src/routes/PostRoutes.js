@@ -49,7 +49,7 @@ class PostRoutes {
 
         // Clearing all posts
         this.router.delete("/posts", async (req, res) => {
-            await PostController.clearPosts(req, res);
+            await PostController.deleteAllPosts(req, res);
         })
 
         // Deleting a post 

@@ -50,8 +50,11 @@ class PostController {
 
     async getPost(req, res) {
         try {
-            const postId = req.params.id;
+            const postId = req.query.id;
             const post = await this.model.read(postId);
+            if (!post) {
+                return res.status(404).json({ error: "Post not found." });
+            }
             res.json(post);
         } catch (error) {
             console.error("Error getting post:", error);
@@ -62,7 +65,7 @@ class PostController {
     // Add a new post
     async addPost(req, res) { 
         try {
-            if (!req.body || !req.body.post) {
+            if (!req.body) {
                 return res.status(400).json({ error: "Post description required."})
             }
         // Create new post object with unique ID
@@ -82,27 +85,43 @@ class PostController {
         }
     }
     
-    async deletePost(req, res) {
+    async deleteAllPosts(req, res) {
         try {
-            if (!req.body || !req.body.post) {
+            if (!req.body) {
                 return res.status(400).json({ error: "Post description required" });
             }
         
-            await this.model.delete(req.body);
+            await this.model.deleteAll(req.body);
             res.json(await this.model.read());
     
-            // should i return it? i dont know... 
-    
+        } catch (error) {
+            console.error("Error deleting posts: ", error);
+            return res.status(500).json({error: "Failed to delete posts. Please try again."})
+        }
+    }
+
+    async deletePost(req, res) { 
+        try {
+            const postId = req.query.id;
+            if (!postId) {
+                return res.status(400).json({ error: "PostId is required!"})
+            }
+            const postDeleted = await this.model.delete(postId);
+            if (!postDeleted) {
+                return res.status(404).json({ error: "Post not found and deleted."});
+            }
+            return res.status(200).json({postDeleted});
+            
         } catch (error) {
             console.error("Error deleting post: ", error);
-            return res.status(500).json({error: "Failed to delete post. Please try again."})
+            return res.status(500).json({error: "Failed to delete post."})
         }
     }
 
     // for comments 
     async updatePost(req, res) {
         try {
-            if (!req.body || !req.body.post) {
+            if (!req.body) {
                 return res.status(400).json({ error: "Post description required "});
             }
             const post = await this.model.update(req.body);
@@ -115,6 +134,7 @@ class PostController {
 
     
     // maybe its like get all posts but filtered? 
+    // TODO DELETE MOST LIKELY 
     async filterAllPosts(req, res) {
         const allPosts = await this.model.read();
         const nonExpiredPosts = allPosts.filter(post => (post.isExpired === false)); 
@@ -134,3 +154,4 @@ class PostController {
 }
 
 export default new PostController();
+//TODO MAYBE ADD BACK THE POSTS STRUCT CHECK?? IDK

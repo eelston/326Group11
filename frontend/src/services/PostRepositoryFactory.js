@@ -26,7 +26,6 @@ export class PostRepositoryFactory {
   static get(repoType = 'local') {
     if (repoType === 'local') {
       return new PostRepositoryService();
-      console.log("meow");
     }
     else if (repoType === 'fake') {
       return new PostRepositoryRemoteFakeService();
