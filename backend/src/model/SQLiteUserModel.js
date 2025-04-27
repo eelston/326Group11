@@ -75,7 +75,7 @@ User.hasMany(Fact, {
     as: "facts",
 });
 
-Facts.belongsTo(User, {
+Fact.belongsTo(User, {
     foreignKey: "userId",
     as: "user",
 })
