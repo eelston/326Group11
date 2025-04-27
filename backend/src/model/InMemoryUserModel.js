@@ -1,12 +1,10 @@
 class _InMemoryUserModel {
-    static userid = 1;
 
     constructor(){
         this.users = [];
     }
 
     async create (user) {
-        user.id = _InMemoryUserModel.userid++;
         this.users.push(user);
         return user;
     }
