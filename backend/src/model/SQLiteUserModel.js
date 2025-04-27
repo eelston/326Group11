@@ -38,14 +38,17 @@ const User = sequelize.define("User", {
     name: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: "",
     },
     pronouns: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: "",
     },
     iconContent: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: ":3",
     },
     settings: {
         type: DataTypes.JSONB,
@@ -58,7 +61,7 @@ const User = sequelize.define("User", {
     },
     profileContent: {
         type: DataTypes.JSONB,
-        defautValue: {
+        defaultValue: {
             about: [],
             blurb: "",
             courses: "",
@@ -92,7 +95,14 @@ class _SQLiteUserModel {
     }
 
     async create(user) {
-        return await User.create(user);
+        const userc = {
+            userId: user.userId,
+            email: user.email,
+            password: user.password,
+            name: user.userId,
+        };
+        const newUser = await User.create(userc);
+        return await this.read({ userId: newUser.userId });
     }
 
     async read(user = null) {
@@ -102,50 +112,49 @@ class _SQLiteUserModel {
                     where: {userId: user.userId},
                     include: {model: Fact, as: "facts"},
                 });
-                if (userr){
-                    userr.profileContent = userr.profileContent || {};
-                    userr.profileContent.about = userr.facts.map((fact) => ({
-                        factName: fact.factName,
-                        factAnswer: fact.factAnswer,
-                    }));
-                    delete userr.facts;
-                    return userr;
-                }
+                if (userr) return this.transformUser(userr);
             }
-            const userr = User.findOne({ 
-                where: {email: user.email},
-                include: {model: Fact, as: "facts"},
-            });
-            if (userr){
-                userr.profileContent = userr.profileContent || {};
-                userr.profileContent.about = userr.facts.map((fact) => ({
-                    factName: fact.factName,
-                    factAnswer: fact.factAnswer,
-                }));
-                delete userr.facts;
-                return userr;
+            if (user.email){
+                const userr = await User.findOne({ 
+                    where: {email: user.email},
+                    include: {model: Fact, as: "facts"},
+                });
+                if (userr) return this.transformUser(userr);
             }
             return null;
         }
-        return await User.findAll();
+        const users = await User.findAll({ include: { model: Fact, as: "facts" } });
+        return users.map(this.transformUser);
+    }
+
+    async transformUser(userr) {
+        userr.profileContent = userr.profileContent || {};
+        userr.profileContent.about = (userr.facts || []).map(fact => ({
+            factName: fact.factName,
+            factAnswer: fact.factAnswer,
+        }));
+        delete userr.facts;
+        return userr;
     }
 
     async update(user) {
-        const useru = await User.findByPk(user.userid);
+        const useru = await User.findByPk(user.userId);
         if (!useru){
             return null;
         }
         await useru.update(user);
-        if (user.profileContent && user.profileContent.about){
+        if (user.profileContent && Array.isArray(user.profileContent.about)){
             await Fact.destroy({where: {userId: user.userId}});
             const facts = user.profileContent.about.map((fact) => ({
                 factName: fact.factName,
                 factAnswer: fact.factAnswer,
                 userId: user.userId,
             }));
-            await Fact.bulkCreate(facts);
+            if (facts.length > 0){
+                await Fact.bulkCreate(facts);
+            }
         }
-        return useru;
+        return await this.read({ userId: user.userId });
     }
 
     async delete(user = null) {

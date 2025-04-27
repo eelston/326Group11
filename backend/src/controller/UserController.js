@@ -61,7 +61,7 @@ class UserController {
                 return res.status(400).json({ error: "Email and password required to make account."})
             }
             const user = await this.model.create(req.body);
-            return res.status(201).json(user);
+            return res.status(201).json({ user });
         } catch (error) {
             console.error("Error adding user:", error);
             return res
