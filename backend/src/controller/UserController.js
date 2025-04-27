@@ -25,6 +25,9 @@ class UserController {
                 return res.status(400).json({error: "Information missing to retrieve account."});
             }
             const user = await this.model.read(req.body);
+            if (!user) {
+                return res.status(400).json({ error: "User not found."})
+            }
             res.json({ user });
         } catch (error) {
             console.error("Error getting user:", error);
