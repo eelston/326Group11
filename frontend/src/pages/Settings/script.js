@@ -119,9 +119,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             dropdownMenu.appendChild(dropdownAddBtn);
         }
 
+        const resetDropdowns = () => {
+            subjectSelect.value = '';
+            courseNumberSelect.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '-- Select a number --';
+            courseNumberSelect.appendChild(defaultOption);
+        };
+
         addBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            if (dropdownMenu.style.display === 'block') {
+                dropdownMenu.style.display = 'none';
+            } else {
+                dropdownMenu.style.display = 'block';
+                resetDropdowns();
+            }
         });
 
         document.addEventListener('click', (e) => {
@@ -159,15 +173,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     setupAddClassFunctionality();
 
-    function updateCourseNumbers(subject) {
+    async function updateCourseNumbers(subject) {
         courseNumberSelect.innerHTML = '';
         
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = '-- Select a number --';
         courseNumberSelect.appendChild(defaultOption);
+
+        const settings = await settingsService.getSettings();
+        const currentClasses = settings.classes || [];
         
-        const filteredCourses = MockCourses.filter(course => course.course_subject === subject);
+        const filteredCourses = MockCourses.filter(course => {
+            return course.course_subject === subject && 
+                   !currentClasses.some(cls => 
+                       cls.subject === subject && 
+                       cls.number === course.course_number
+                   );
+        });
         filteredCourses.forEach(course => {
             const option = document.createElement('option');
             option.value = course.course_number;
@@ -252,7 +275,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             };
             await settingsService.savePreferences(preferences);
             showMessage(successMessage, 'Preferences saved successfully');
-            
             await loadSettings();
         } catch (error) {
             showMessage(errorMessage, 'Failed to save preferences');

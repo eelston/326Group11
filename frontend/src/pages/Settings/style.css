@@ -158,11 +158,6 @@ input:disabled {
     align-items: center;
 }
 
-.add-btn-container {
-    position: relative;
-    display: inline-block;
-}
-
 /* edit button */
 
 .edit-btn {
@@ -216,15 +211,19 @@ input:disabled {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 35px;
+    bottom: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
-    background-color: #f0f0f0;
-    padding: 10px;
+    background-color: #f2f2f2;
+    padding: 15px;
     border-radius: 8px;
     width: 250px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
 }
 
 .dropdown-menu select {
@@ -241,6 +240,39 @@ input:disabled {
     padding: 10px;
     border-radius: 6px;
 }
+
+.add-btn-container {
+    position: relative;
+    display: inline-block;
+    z-index: 1000;
+}
+
+@keyframes float-up {
+    from {
+        transform: translate(-50%, 10px);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: rgba(242, 242, 242, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.dropdown-menu[style*="display: block"] {
+    opacity: 1;
+    animation: float-up 0.2s ease-out;
+}
+
 
 .dropdown-group {
     margin-bottom: 10px;
@@ -368,26 +400,6 @@ select:disabled {
 
 .save-btn:active, .edit-btn:active, .add-btn:active {
     transform: scale(0.95);
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 8px;
-    width: 250px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.dropdown-menu[style*="display: block"] {
-    opacity: 1;
 }
 
 input:disabled {
