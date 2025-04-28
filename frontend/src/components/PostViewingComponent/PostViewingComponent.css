@@ -1,3 +1,8 @@
+.can-click:hover {
+    cursor: pointer;
+    color: #602dcf
+}
+
 .back-button {
     background-color: #dedede;
     border: none;
