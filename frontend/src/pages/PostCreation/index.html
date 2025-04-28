@@ -4,53 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study on Campus</title>
-
     <link rel="stylesheet" href="../../main.css">
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="main.js"></script>
+    <script type="module" src="./script.js"></script>
 </head>
-
 <body>
     <header>
         <div id="app-logo">Study on Campus</div>
         <div class="user-icon can-click"><span class="icon-content">:3</span></div>
     </header>
-
-    <main>
-
-        <form>
-            <div class="post-container">
-                <div class="post-content">
-                    <div class="post-title">
-                        <input type="text" id="post-title" placeholder="Name your post." autocomplete="off">
-                    </div>
-                    <div class="post-location">
-                        <input type="text" id="post-location" placeholder="Have a location in mind?" autocomplete="off">
-                    </div>
-                    <div class="post-body">
-                        <textarea id="post-body" placeholder="Any extra information? Add it here." autocomplete="off"></textarea>
-                    </div>
-                </div>
-
-                <div class="post-actions">
-                    <div class="all-buttons">
-                        <button type="button" id="add-tags-btn">Open Tag Menu</button>
-                        <div class="post-buttons">
-                            <button type="button" id="submit-cancel">Cancel</button>
-                            <input type="submit" id="submit-post" value="Post">
-                        </div>
-                    </div>
-                  
-                    <div class="tag-menu-wrapper">
-                      <div id="tag-input-view" class="hidden">
-                        <input type="text" id="tag-input" placeholder="Enter a tag and press enter." autocomplete="off"/>
-                      </div>
-                      <div class="tag-display" id="tag-list"></div>
-                    </div>
-                  </div>
-
-            </div>
-        </form>
-    </main>
+    <div id="page"></div>
 </body>
 </html>
