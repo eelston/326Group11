@@ -46,6 +46,8 @@ export const Events = {
 
     // Location Browsing
     ExpandLocationCard: `ExpandLocationCard`,
-    MinimizeLocationCard: `MinimizeLocationCard`
+    MinimizeLocationCard: `MinimizeLocationCard`,
+
+    AddReport: `AddReport`
 }
   
