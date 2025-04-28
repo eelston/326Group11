@@ -152,21 +152,23 @@ export class PostCreationComponent extends BaseComponent {
         const tagText = e.target.value.trim();
         const tagList = this.#container.querySelector('#tag-list');
 
-        const tag = document.createElement('div');
-        tag.classList.add('tag');
+        if (!this.#tags.includes(tagText)){
+            const tag = document.createElement('div');
+            tag.classList.add('tag');
 
-        const tagLabel = document.createElement('span');
-        tagLabel.textContent = tagText;
+            const tagLabel = document.createElement('span');
+            tagLabel.textContent = tagText;
 
-        const removeBtn = document.createElement('span');
-        removeBtn.textContent = '✕';
-        removeBtn.classList.add('remove');
+            const removeBtn = document.createElement('span');
+            removeBtn.textContent = '✕';
+            removeBtn.classList.add('remove');
 
-        tag.appendChild(removeBtn);
-        tag.appendChild(tagLabel);
-        tagList.appendChild(tag);
+            tag.appendChild(removeBtn);
+            tag.appendChild(tagLabel);
+            tagList.appendChild(tag);
 
-        this.#tags.push(tagText);
+            this.#tags.push(tagText);
+        }
         e.target.value = '';
     }
 
