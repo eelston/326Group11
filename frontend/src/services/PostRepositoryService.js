@@ -96,7 +96,6 @@ export class PostRepositoryService extends Service {
           };
         request.onerror = () => {
           this.publish(Events.StorePostFailure, postData);
-          console.log("Hello!")
           reject('Error storing post: ' + postData);
         };
         
@@ -152,5 +151,7 @@ export class PostRepositoryService extends Service {
     this.subscribe(Events.UnStorePosts, () => {
       this.clearPosts();
     });
+
+    this.subscribe(Events.loadAllPosts)
   }
 }

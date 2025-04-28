@@ -1,5 +1,5 @@
-import { Service } from "./Service.js"
 import { fetch } from "../utility/fetch.js"
+import  Service  from "./Service.js"
 
 export class PostRepositoryRemoteFakeService extends Service {
     constructor() {
