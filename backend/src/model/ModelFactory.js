@@ -2,7 +2,7 @@ import InMemoryUserModel from "./InMemoryUserModel.js";
 import SQLiteUserModel from "./SQLiteUserModel.js";
 
 class _ModelFactory {
-    async getModel(model = "sqlite") {
+    async getModel(model = "") {
       if (model === "sqlite") {
         return SQLiteUserModel;
       } else if (model === "sqlite-fresh") {

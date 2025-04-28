@@ -21,8 +21,11 @@ class _InMemoryUserModel {
 
     async update (user) {
         const index = this.users.findIndex((u) => u.userId === user.userId);
-        this.users[index] = user;
-        return user;
+        if (index !== -1) {
+            this.users[index] = user;
+            return user;
+        }
+        return null;
     }
 
     async delete (user = null) {
@@ -31,8 +34,11 @@ class _InMemoryUserModel {
             return;
         }
         const index = this.users.findIndex((u) => u.userId === user.userId);
-        this.users.splice(index, 1);
-        return user;
+        if (index !== -1) {
+            this.users.splice(index, 1);
+            return user;
+        }
+        return null;
     }
 
 }
