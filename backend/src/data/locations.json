@@ -6,9 +6,7 @@
         "floors": [
             {
                 "name": "2",
-                "reports": [
-                    3
-                ]
+                "reports": []
             },
             {
                 "name": "3",
@@ -16,45 +14,21 @@
             }
         ]
     },
+
     {
         "name": "CEI Hub",
         "address": "100 Natural Resources Rd, Amherst, MA 01003",
         "type": "Single-Floor",
         "reports": []
     },
+
     {
         "name": "Courtside Cafe",
         "address": "161 Commonwealth Ave, Amherst, MA 01003",
         "type": "Single-Floor",
-        "reports": [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-        ]
+        "reports": []
     },
+
     {
         "name": "Student Union",
         "address": "41 Campus Center Way, Amherst, MA 01002",
@@ -70,20 +44,21 @@
             }
         ]
     },
+
     {
         "name": "Isenberg Hub",
         "address": "121 Presidents Dr, Amherst, MA 01003",
         "type": "Single-Floor",
-        "reports": [
-            2
-        ]
+        "reports": []
     },
+
     {
         "name": "Engineering Graduate Hub",
         "address": "100 Natural Resources Rd, Amherst, MA 01003",
         "type": "Single-Floor",
         "reports": []
     },
+
     {
         "name": "Integrated Learning Center",
         "address": "650 N Pleasant St, Amherst, MA 01003",
@@ -103,6 +78,7 @@
             }
         ]
     },
+
     {
         "name": "DuBois Quiet Study",
         "address": "154 Hicks Way, Amherst, MA 01003",
@@ -130,9 +106,7 @@
             },
             {
                 "name": "17",
-                "reports": [
-                    3
-                ]
+                "reports": []
             },
             {
                 "name": "20",
@@ -140,6 +114,7 @@
             }
         ]
     },
+
     {
         "name": "DuBois Group Study",
         "address": "154 Hicks Way, Amherst, MA 01003",
@@ -175,6 +150,7 @@
             }
         ]
     },
+
     {
         "name": "Integrated Sciences Building",
         "address": "661 N Pleasant St, Amherst, MA 01003",
@@ -198,12 +174,14 @@
             }
         ]
     },
+
     {
         "name": "Worcester First Floor",
         "address": "667 N Pleasant St, Amherst MA 01003",
         "type": "Single-Floor",
         "reports": []
     },
+
     {
         "name": "Gunness Student Center",
         "address": "100 Natural Resources Rd, Amherst, MA 01003",
