@@ -28,7 +28,6 @@ export class PostBrowsingComponent extends BaseComponent {
             this.#renderPosts(this.#allPosts);
         }
         this.#searchQueryListener();
-        this.#navBarListeners();
     }
 
     #openPost(postId) {
@@ -41,18 +40,6 @@ export class PostBrowsingComponent extends BaseComponent {
         document.getElementById("search-bar").addEventListener("input", (search) => {
             this.filterPosts(search.target.value)
         })
-    }
-
-    #navBarListeners() {
-        document.getElementById("app-logo").addEventListener('click', () => {
-            window.location.href = "/pages/PostBrowsing/index.html"
-        });
-        document.getElementById("location-browsing").addEventListener('click', () => {
-            window.location.href = "/pages/LocationBrowsing/index.html"
-        });
-        document.getElementById("make-post").addEventListener('click', () => {
-            window.location.href = "/pages/PostCreation/index.html"
-        });
     }
     
     #renderPosts(posts) {

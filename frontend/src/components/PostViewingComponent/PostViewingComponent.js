@@ -27,21 +27,8 @@ export class PostViewingComponent extends BaseComponent {
         document.querySelector('main').appendChild(this.#comments);
         this.#renderComments();
         this.#goBackListener();
-        this.#navBarListeners();
         this.#postSettingsDropdownListener();
         this.#deleteButtonListener();
-    }
-
-    #navBarListeners() {
-        document.getElementById("app-logo").addEventListener('click', () => {
-            window.location.href = "/pages/PostBrowsing/index.html"
-        });
-        document.getElementById("location-browsing").addEventListener('click', () => {
-            window.location.href = "/pages/LocationBrowsing/index.html"
-        });
-        document.getElementById("make-post").addEventListener('click', () => {
-            window.location.href = "/pages/PostCreation/index.html"
-        });
     }
 
     #goBackListener() {

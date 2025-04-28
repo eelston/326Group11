@@ -132,21 +132,6 @@ class PostController {
         }
     }
 
-    
-    // maybe its like get all posts but filtered? 
-    // TODO DELETE MOST LIKELY 
-    async filterAllPosts(req, res) {
-        const allPosts = await this.model.read();
-        const nonExpiredPosts = allPosts.filter(post => (post.isExpired === false)); 
-        const search = req.query.s?.toLowerCase() || "";
-        const filtered = nonExpiredPosts
-            .filter(post => (search === "") || (post.title.toLowerCase().includes(search) || 
-            post.description.toLowerCase().includes(search) ||
-            post.location.toLowerCase().includes(search) || 
-            post.tags.some(tag => tag.tag.toLowerCase().includes(search))));
-        res.json({posts: filtered})
-    }    
-
     async clearPosts(req, res) {
         await this.model.delete();
         res.json(await this.model.read());
@@ -154,4 +139,3 @@ class PostController {
 }
 
 export default new PostController();
-//TODO MAYBE ADD BACK THE POSTS STRUCT CHECK?? IDK
