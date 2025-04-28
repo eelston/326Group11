@@ -2,6 +2,10 @@ import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/SettingsEvents.js';
 import { SettingsService } from '../../services/SettingsRepositoryService.js';
 import { MockCourses } from '../../lib/data/MockCourses.js';
+import { NavbarComponent } from "../../components/NavbarComponent/NavbarComponent.js";
+
+const navbarComponent = new NavbarComponent();
+navbarComponent.render();
 
 document.addEventListener("DOMContentLoaded", async () => {
     const settingsService = new SettingsService();
