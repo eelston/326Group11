@@ -7,7 +7,6 @@ navbarComponent.render();
 
 const page = document.getElementById("page");
 const service = PostRepositoryFactory.get("remote");
-service.addSubscriptions();
 
 const postCreation = new PostCreationComponent();
 page.appendChild(postCreation.render());
