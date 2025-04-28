@@ -22,18 +22,6 @@ console.log(`Serving static files from ${url}`);
 // setup middleware to parse incoming JSON data & add new data
 app.use(express.json());
 
-// Allow cross-origin requests for API routes
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*'); 
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') {
-      return res.status(200).end();
-  }
-  next();
-});
-
-
 app.use("/v1", PostRoutes);
 
 app.listen(PORT, () => {

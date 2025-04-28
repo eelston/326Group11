@@ -32,7 +32,7 @@ export class PostBrowsingComponent extends BaseComponent {
     }
 
     #openPost(postId) {
-        const postUrl = new URL('/frontend/src/pages/PostViewing/index.html', window.location.origin);
+        const postUrl = new URL('/pages/PostViewing/index.html', window.location.origin);
         postUrl.searchParams.set('id', postId);
         window.location.href = postUrl.href;
     }
@@ -45,13 +45,13 @@ export class PostBrowsingComponent extends BaseComponent {
 
     #navBarListeners() {
         document.getElementById("app-logo").addEventListener('click', () => {
-            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostBrowsing/index.html"
+            window.location.href = "/pages/PostBrowsing/index.html"
         });
         document.getElementById("location-browsing").addEventListener('click', () => {
-            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/LocationBrowsing/index.html"
+            window.location.href = "/pages/LocationBrowsing/index.html"
         });
         document.getElementById("make-post").addEventListener('click', () => {
-            window.location.href = "http://127.0.0.1:5500/frontend/src/pages/PostCreation/index.html"
+            window.location.href = "/pages/PostCreation/index.html"
         });
     }
     
