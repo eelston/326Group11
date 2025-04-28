@@ -4,23 +4,28 @@
 // 'node backend/src/server.js'
 // and navigate to http://localhost:3000/pages/FOLDERNAME
 
-import express from 'express';
-import { fileURLToPath } from 'url';
-import path from 'path';
+
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import PostRoutes from "./routes/PostRoutes.js";
 import settingsRouter from './routes/settings.js';
 
 const app = express();
 const PORT = 3000;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url); // get file path
+const __dirname = path.dirname(__filename); // get file folder
+const url = path.join(__dirname, "../../frontend/src"); // ref: https://stackoverflow.com/a/76335925 and https://expressjs.com/en/starter/static-files.html
 
-const frontendDir = path.join(__dirname, "../../frontend/src");
+// setup middleware to serve static files from frontend directory
+app.use(express.static(url)); 
+console.log(`Serving static files from ${url}`);
 
 app.use(express.json());
 
-app.use(express.static(frontendDir));
-
+// set up routes for imported settings router
 app.use('/api', settingsRouter);
 
 app.get('/pages/:page', (req, res) => {
@@ -31,6 +36,9 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Something broke!' });
 });
+
+// set up routes for imported PostRoutes
+app.use("/v1", PostRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
