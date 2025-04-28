@@ -114,6 +114,16 @@ textarea[id="bio"] {
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 80px;
+    max-height: 200px;
+}
+
+@media (max-width: 768px) {
+    textarea[id="bio"] {
+        max-height: 150px;
+    }
 }
 
 input, button {
@@ -134,7 +144,7 @@ button {
     border: none;
     cursor: pointer;
     width: fit-content;
-    pointer-events: auto; /* Add this line */
+    pointer-events: auto; 
 }
 
 input:disabled {
@@ -148,7 +158,7 @@ input:disabled {
     border: none;
     cursor: pointer;
     width: fit-content;
-    pointer-events: auto; /* Add this line */
+    pointer-events: auto; 
 }
 
 .current-classes {
@@ -226,6 +236,19 @@ input:disabled {
     overflow-y: auto;
 }
 
+@media (max-width: 768px) {
+    .dropdown-menu {
+        position: fixed;
+        bottom: auto;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100% - 40px);
+        max-width: 300px;
+        max-height: 80vh;
+    }
+}
+
 .dropdown-menu select {
     width: 100%;
     margin: 10px 0;
@@ -258,6 +281,19 @@ input:disabled {
     }
 }
 
+@media (max-width: 768px) {
+    @keyframes float-up {
+        from {
+            transform: translate(-50%, -45%);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+    }
+}
+
 .dropdown-menu::before {
     content: '';
     position: absolute;
@@ -270,7 +306,7 @@ input:disabled {
 
 .dropdown-menu[style*="display: block"] {
     opacity: 1;
-    animation: float-up 0.2s ease-out;
+    animation: float-up 0.2s ease-out forwards;
 }
 
 
