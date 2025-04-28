@@ -49,11 +49,8 @@ export class LocationCardComponent extends BaseComponent {
     #renderSingleFloor() {
         const locationReports = this.#locationData.reports; // get crowding score reports
 
-        const lastUpdatedTimestamp = locationReports[0].timestamp; // get timestamp for most recent report
+        const lastUpdatedTimestamp = locationReports.length > 0 ? locationReports[0].timestamp : null; // get timestamp for most recent report (or assign null, if no reports)
         
-        const averageCrowdingScore = this.#calculateAverageCrowdingScore(locationReports); // average crowding score
-        const level = Math.round(averageCrowdingScore); // level for crowding score bar
-
         // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace with hyphen for styling tag
 
         this.#container.innerHTML = `
@@ -85,10 +82,7 @@ export class LocationCardComponent extends BaseComponent {
             const floorInfo = document.createElement('div'); // create new div for floor information
             floorInfo.classList.add("floor-info"); // add tag for styling
 
-            const lastUpdatedTimestamp = floor.reports[0].timestamp; // get timestamp for most recent report
-
-            const averageCrowdingScore = this.#calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
-            const level = Math.round(averageCrowdingScore); // level for crowding score bar
+            const lastUpdatedTimestamp = floor.reports.length > 0 ? floor.reports[0].timestamp : null; // get timestamp for most recent report (or null, if no reports)
 
             floorInfo.innerHTML = `
                 <div class="location-info">
@@ -113,10 +107,10 @@ export class LocationCardComponent extends BaseComponent {
 
         if (this.#locationData.type === "Single-Floor") {
             const averageCrowdingScore = this.#calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
-            const level = Math.round(averageCrowdingScore); // level for crowding score bar
+            const level = averageCrowdingScore !== null ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
             const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-hint`); // get hint div
-            crowdingScoreHint.innerText = CrowdingHints[level-1]; // set/reset hint text
+            crowdingScoreHint.innerText = level ? CrowdingHints[level-1] : "No data"; // set/reset hint text (null if no reports)
             
             const crowdingScoreBar = this.#container.querySelector(`#${this.#nameTag}-bar`); // get crowding score bar element
 
@@ -128,11 +122,11 @@ export class LocationCardComponent extends BaseComponent {
         } else if (this.#locationData.type === "Multi-Floor") {
             this.#locationData.floors.forEach(floor => { 
                 const averageCrowdingScore = this.#calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
-                const level = Math.round(averageCrowdingScore); // level for crowding score bar
+                const level = averageCrowdingScore ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
-                console.log(`#${this.#nameTag}-${floor.name}-bar`)
+                // console.log(`#${this.#nameTag}-${floor.name}-bar`)
                 const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-${floor.name}-hint`); // get hint div
-                crowdingScoreHint.innerText = CrowdingHints[level-1];
+                crowdingScoreHint.innerText = level ? CrowdingHints[level-1] : "No data"; // set/reset hint text
 
                 const crowdingScoreBar = this.#container.querySelector(`#${this.#nameTag}-${floor.name}-bar`); // get crowding score bar element
 
@@ -159,11 +153,13 @@ export class LocationCardComponent extends BaseComponent {
     // calculate average crowding score from given array of reports
     #calculateAverageCrowdingScore(reports) {
         const crowdingScores = reports.map(report => report.score); // get array of scores
-        return crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length; // calculate average
+        return crowdingScores.length > 0 ? crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length : null; // calculate average, or null if no reports
     }
 
     // convert number to string
     #timestampToString(timestamp) {
+        if (timestamp === null) {return "N/A"}; // TODO: determine if this is acceptable, visually/understanding-wise
+
         const date = new Date(timestamp); // convert to Date object
         // TODO: consider moving this to src/lib for use with post timestamps
         const options = { // timestamp format options (ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString#examples)

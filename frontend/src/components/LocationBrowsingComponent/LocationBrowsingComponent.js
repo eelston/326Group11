@@ -3,7 +3,8 @@ import { LocationCardComponent } from '../LocationCardComponent/LocationCardComp
 import { CrowdingHints } from '../LocationCardComponent/CrowdingHints.js'
 import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/Events.js';
-import { fetch } from "../../utility/fetchLocations.js"
+// import { fetch } from "../../utility/fetchLocations.js"
+import { ReportRepositoryRemoteService } from '../../services/ReportRepositoryRemoteService.js';
 
 export class LocationBrowsingComponent extends BaseComponent {
     #container = null; // private variable to store the container element
@@ -14,6 +15,7 @@ export class LocationBrowsingComponent extends BaseComponent {
     constructor() {
         super();
         this.loadCSS('LocationBrowsingComponent');
+        this.service = new ReportRepositoryRemoteService();
     }
 
     async render() {
@@ -67,9 +69,14 @@ export class LocationBrowsingComponent extends BaseComponent {
     // returns the most recent report timestamp from given location
     #getMostRecentTimestamp(location) {
         if (location.type === "Single-Floor") {
+            // check if there are reports
+            if (location.reports.length === 0) {return null}; // no reports stored for location (null ~= 0)
+
             return location.reports[0].timestamp; // return most recent timestamp
         } else if (location.type === "Multi-Floor") {
             const allReports = location.floors.map(floor => floor.reports); // get array of report arrays
+            if (allReports.length === 0) {return null}; // no reports stored for location
+
             const allTimestamps = allReports.map(reports => reports.map(report => report.timestamp)); // get array of all timestamps
             allTimestamps.sort((a,b) => b-a); // sort in descending order
             return allTimestamps[0]; // return largest (=== most recent) timestamp (Date timestamp is in ms since epoch)
@@ -90,20 +97,18 @@ export class LocationBrowsingComponent extends BaseComponent {
         }
     }
 
-    // fetch location data from mock server (local JSON file)
+    // fetch location data to render
     async #getLocations() {
         try {
-            const response = await fetch("http://localhost:3000/lib/data/MockLocations.json");
+            const response = await fetch("/locations"); // fetch locations from backend
             if (response.ok) {
-                const json = await response.json();
-                const data = await JSON.parse(json);
-
+                const data = await response.json();
                 if (Array.isArray(data) && data.length > 0) { // check data format / if location data exists
                     this.#locationsData = data; // save location data
                     return data;
 
                 } else {
-                    throw new Error("no locations found");
+                    throw new Error("data is not an array, or no locations in array");
                 }
             } else {
                 throw new Error(response.status);
@@ -111,7 +116,29 @@ export class LocationBrowsingComponent extends BaseComponent {
 
         } catch (error) { // error handling
             console.log(`Error fetching location data: ${error}`);
-        }        
+        }  
+        
+        // previous implementation with mock server (local JSON file)
+        // try {
+        //     const response = await fetch("http://localhost:3000/lib/data/MockLocations.json");
+        //     if (response.ok) {
+        //         const json = await response.json();
+        //         const data = await JSON.parse(json);
+
+        //         if (Array.isArray(data) && data.length > 0) { // check data format / if location data exists
+        //             this.#locationsData = data; // save location data
+        //             return data;
+
+        //         } else {
+        //             throw new Error("no locations found");
+        //         }
+        //     } else {
+        //         throw new Error(response.status);
+        //     }
+
+        // } catch (error) { // error handling
+        //     console.log(`Error fetching location data: ${error}`);
+        // }        
     }
 
     // filter and re-render location cards based on given query (string)
@@ -164,6 +191,9 @@ export class LocationBrowsingComponent extends BaseComponent {
     // hide element
     #hideElement(element) {
         element.style.display = "none";
+
+        if (element === this.#reportModal) {localStorage.removeItem("crowding")}; // clear selection
+        // TODO: determine if it's cleaner to split dimmer and report modal functions into two again
     }
 
     // set up report modal element & button event listeners
@@ -190,13 +220,15 @@ export class LocationBrowsingComponent extends BaseComponent {
 
             // attach event listener for each button to save crowding score locally
             button.addEventListener("click", (event) => {
-                console.log(i+1)
+                // console.log(i+1);
                 localStorage.setItem("crowding", (i+1).toString()); // save/overwrite crowding score selection to localstorage
                 event.stopPropagation(); // prevent bubble up
             });
         })
         
         reportModal.style.display = "none"; // hide by default
+        localStorage.removeItem("crowding"); // clear previous crowding score data, if any
+        // TODO: move this somewhere more intuitive?
         return reportModal;
     }
 
@@ -267,20 +299,30 @@ export class LocationBrowsingComponent extends BaseComponent {
         // attach event listener for crowding score modal submit button click
         const reportSubmitButton = document.getElementById("report-submit");
         reportSubmitButton.addEventListener("click", (event) => {
+            event.stopPropagation(); // prevent any bubble up (should be find regardless, report modal itself has no events on click)
+
             const reportSubject = document.getElementById("report-location-name").innerText // "LocationName" or "LocationName Floor FloorName"
                 .split(" Floor ") // should be ["LocationName"] or ["LocationName", "FloorName"]
             // console.log(reportSubject);
 
+            // check if no selection made
+            if (localStorage.getItem("crowding") === null) {
+                alert("Please select a crowding score level.");
+                return;
+            }
+
             // construct data for add report
             const data = {
-                score: localStorage.getItem("crowding"),
-                timestamp: Date.now()
+                report: {
+                    location: reportSubject,
+                    score: Number(localStorage.getItem("crowding")), // convert to number
+                    timestamp: Date.now()
+                }    
             };
 
             hub.publish(Events.AddReport, data); // alert event hub -> trigger backend action
-            // TODO: maybe get location/floor data in a less spaghetti way
-
-            event.stopPropagation(); // prevent any bubble up (should be find regardless, report modal itself has no events on click)
+            this.#hideElement(this.#reportModal); // close modal after attempt 
+            // TODO: tie this to successful storage
         })
     }
 }
