@@ -122,7 +122,8 @@ header {
     background-color: #dedede;
     padding: 0.7rem;
     right: 0;
-    width: 3.4rem;
+    font-weight: 450;
+    width: 2.8rem;
     z-index: 1;
     border-radius: 0.5rem;
     box-shadow: 0 2px 2px rgba(0,0,0,0.2);
