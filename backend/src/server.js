@@ -8,6 +8,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import ReportRoutes from "../reports/routes.js"
 import LocationRoutes from "../locations/routes.js"
+import PostRoutes from "./routes/PostRoutes.js";
 
 const app = express();
 const PORT = 3000;
@@ -28,6 +29,9 @@ app.use("/", ReportRoutes); // mount on app
 
 // set up routes for imported LocationRoutes
 app.use("/locations", LocationRoutes); // mount on app
+
+// set up routes for imported PostRoutes
+app.use("/v1", PostRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -6,13 +6,12 @@ export class PostBrowsingComponent extends BaseComponent {
     #allPosts = [];
 
     constructor(service) {
-        console.log("Loading all Posts...");
         super();
+        this.loadCSS('PostBrowsingComponent');
         this.#service = service;
     }
-
+ 
     async render() {
-        console.log("Creating new feed");
         document.title = 'Post Feed | Study on Campus';
 
         this.#container = document.createElement('div');
@@ -31,6 +30,12 @@ export class PostBrowsingComponent extends BaseComponent {
         this.#searchQueryListener();
     }
 
+    #openPost(postId) {
+        const postUrl = new URL('/pages/PostViewing/index.html', window.location.origin);
+        postUrl.searchParams.set('id', postId);
+        window.location.href = postUrl.href;
+    }
+
     #searchQueryListener() { 
         document.getElementById("search-bar").addEventListener("input", (search) => {
             this.filterPosts(search.target.value)
@@ -46,10 +51,14 @@ export class PostBrowsingComponent extends BaseComponent {
             this.#container.appendChild(msg);
         } // else :
         posts.forEach(post => {
-            console.log(post)
             const postView = document.createElement('div');
             postView.classList.add('post', 'can-click');
             postView.setAttribute('id', post.postId);
+
+            postView.addEventListener('click', () => {
+                this.#openPost(post.postId)
+            });
+
             const postHalf = document.createElement('div');
             postHalf.classList.add('post-half');
             const title = document.createElement('h2');
@@ -81,14 +90,10 @@ export class PostBrowsingComponent extends BaseComponent {
         });
     }
 
-    filterPosts(searchQuery) {
-       const filteredPosts = this.#allPosts.filter(post => {
-        const sQLower = searchQuery.toLowerCase();
-        return (post.title.toLowerCase().includes(sQLower) || 
-        post.description.toLowerCase().includes(sQLower) || 
-        post.tags.some(tag => tag.tag.toLowerCase().includes(sQLower)) || 
-        post.location.toLowerCase().includes(sQLower)); 
-       }); //next milestone will use isExpired as well to check if post is too old.
-       this.#renderPosts(filteredPosts);
-       }
+    async filterPosts(searchQuery = "") {
+        const posts = await this.#service.filterPosts(searchQuery);
+        this.#renderPosts(posts);
+
+    }
+
 }

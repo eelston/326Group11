@@ -1,56 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-#body {
-    background: #fefefe;
-}
-
-#app-logo {
-    font-weight: bold;
-    font-size: 2rem;
-}
-
-.user-icon {
-    background: #5ad8cc;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 25px;
-
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.user-icon:hover {
-    cursor: pointer;
-    background: #fefefe;
-    box-shadow: 3px 3px #602dcf;
-}
-
 .can-click:hover {
     cursor: pointer;
     color: #602dcf
-}
-
-.nav-button {
-    font-size: 1rem;
-    font-weight: bold;
-    font-style: italic;
-}
-
-header {
-    background: #dcccff;
-    padding: 1rem;
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .back-button {
@@ -96,6 +46,37 @@ header {
     align-items: center;
     gap: 10px;
 }
+
+.settings-container, .comment-settings {
+    position: relative;
+    display: inline-block;
+}
+
+.settings-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #dedede;
+    padding: 0.7rem;
+    right: 0;
+    width: 5rem;
+    z-index: 1;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+}
+
+.comment-dropdown {
+    display: none;
+    position: absolute;
+    background-color: #dedede;
+    padding: 0.7rem;
+    right: 0;
+    font-weight: 450;
+    width: 2.8rem;
+    z-index: 1;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+}
+
 
 /* POST CSS ABOVE, COMMENT CSS BELOW*/
 
