@@ -1,5 +1,6 @@
 import { BaseComponent } from '../BaseComponent/BaseComponent.js'
 import { LocationCardComponent } from '../LocationCardComponent/LocationCardComponent.js';
+import { CrowdingHints } from '../LocationCardComponent/CrowdingHints.js'
 import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/Events.js';
 import { fetch } from "../../utility/fetchLocations.js"
@@ -8,6 +9,7 @@ export class LocationBrowsingComponent extends BaseComponent {
     #container = null; // private variable to store the container element
     #locationsData; // private variable for location data from server
     #dimmerElement; // private variable for background dimmer element
+    #reportModal; // private variable for crowding score report modal
 
     constructor() {
         super();
@@ -23,8 +25,8 @@ export class LocationBrowsingComponent extends BaseComponent {
         this.#createContainer(); // create location-browsing div element, set this.#container
         this.#renderCards(); // render a card element for every location
         this.#dimmerElement = this.#createDimmerElement(); // element to dim screen when a card is expanded
-        this.#attachEventListeners(); // attach relevant event listeners
-
+        this.#reportModal = this.#createReportModal(); // element to report crowding score for expanded card
+        this.#attachEventListeners(); // attach relevant event listeners   
         // add container to main component
         document.getElementsByTagName('main')[0].appendChild(this.#container); 
     }
@@ -141,7 +143,7 @@ export class LocationBrowsingComponent extends BaseComponent {
         // cover full window
         dim.style.height = "100%"; // extra percentage for safety
         dim.style.width = "100%";
-        dim.style.position = "absolute";
+        dim.style.position = "fixed"; // always cover full screen (fixes cutoff issue with smaller screen widths)
         dim.style.background = "rgba(0,0,0,0.5)"; // black & mostly transparent
         // begin div in top left of screen
         dim.style.top = 0;
@@ -154,14 +156,48 @@ export class LocationBrowsingComponent extends BaseComponent {
         return dim; // return element
     }
 
-    // dim window
-    #showDimmerElement() {
-        this.#dimmerElement.style.display = "block";
+    // show element 
+    #showElement(element) {
+        element.style.display = "flex";
     }
 
-    // revert/un-dim window
-    #hideDimmerElement() {
-        this.#dimmerElement.style.display = "none";
+    // hide element
+    #hideElement(element) {
+        element.style.display = "none";
+    }
+
+    // set up report modal element & button event listeners
+    #createReportModal() {
+        const reportModal = document.createElement('div'); // create new element for report modal
+        reportModal.setAttribute('id', 'report-modal');
+
+        document.getElementsByTagName("main")[0].appendChild(reportModal); // add to main div
+        
+        reportModal.innerHTML = `
+            <p>How crowded is <strong id="report-location-name"></strong>?</p>
+
+            <button id="level1"></button>
+            <button id="level2"></button>
+            <button id="level3"></button>
+            <button id="level4"></button>
+            <button id="level5"></button>
+
+            <button id="report-submit" type="submit" value="Submit">Submit</button>
+        `
+        CrowdingHints.forEach((hint, i) => {
+            const button = document.querySelector(`button#level${i+1}`); // get each button
+            button.innerText = `${i+1}: ${hint}` // add corresponding hint to button text
+
+            // attach event listener for each button to save crowding score locally
+            button.addEventListener("click", (event) => {
+                console.log(i+1)
+                localStorage.setItem("crowding", (i+1).toString()); // save/overwrite crowding score selection to localstorage
+                event.stopPropagation(); // prevent bubble up
+            });
+        })
+        
+        reportModal.style.display = "none"; // hide by default
+        return reportModal;
     }
 
     #attachEventListeners() {
@@ -169,15 +205,15 @@ export class LocationBrowsingComponent extends BaseComponent {
 
         // related to expanded card view
         hub.subscribe(Events.ExpandLocationCard, () => {
-            this.#showDimmerElement(); // dim background when a card is expanded
+            this.#showElement(this.#dimmerElement); // dim background when a card is expanded
         })
 
         // related to minimizing expanded card view
         hub.subscribe(Events.MinimizeLocationCard, () => {
-            this.#hideDimmerElement(); // hide dimmer element when a card is minimized/returned to normal view
+            this.#hideElement(this.#dimmerElement); // hide dimmer element when a card is minimized/returned to normal view
         })
 
-        // alert eventhub to minimize expanded card view if area outside of card (i.e., dimmer element) is clicked
+        // alert event hub to minimize expanded card view if area outside of card (i.e., dimmer element) is clicked
         this.#dimmerElement.addEventListener("click", () => {
             hub.publish(Events.MinimizeLocationCard); // minimize expanded location card if clicked
         })
@@ -191,5 +227,60 @@ export class LocationBrowsingComponent extends BaseComponent {
         // attach event listener for 'Sort by' dropdown/select
         const sortByElement = document.getElementById("sort-by-select");
         sortByElement.addEventListener("change", (event) => this.#sortLocationCards(event.target.value)); // update on changed selection
+
+        // subscribe event listener for opening report modal
+        hub.subscribe(Events.OpenReportModal, (data) => { // data is { name: string, floor: null || string } (depends on single or multi-floor) 
+            this.#showElement(this.#reportModal); // open report modal
+
+            const locationNameElement = document.getElementById("report-location-name"); // get element for location name in "How busy is ... ?"
+            locationNameElement.innerText = data.name; // add primary location name
+
+            if (data.floor !== null) { // if multi-floor
+                const floorName = data.floor.substring(data.floor.indexOf("-") + 1); // get rid of "floor-" substring, leave floor code (e.g. "floor-2" -> "2")
+                locationNameElement.innerText += ` Floor ${floorName}`; // add floor name to question
+            };
+        });
+        
+        // close report modal if area outside modal is clicked
+        document.addEventListener("click", (event) => {
+            if (this.#reportModal.style.display !== "none" && !this.#reportModal.contains(event.target)) {
+                // ref for .contains() usage: https://johnsonkow.medium.com/event-listener-for-outside-click-75226f5c8ce0
+                this.#hideElement(this.#reportModal);
+                console.log("clicked outside")
+            }
+        });
+
+        // attach event listener for Escape key press
+        // if report modal is open, minimize report modal
+        // otherwise, minimize expanded location card (still check if card is in expanded card view)
+        document.addEventListener("keyup", (event) => {
+            if (event.code === "Escape") { // escape key press
+                if (this.#reportModal.style.display !== "none") { // report modal visible
+                    this.#hideElement(this.#reportModal); // minimize report modal
+                    event.stopPropagation(); // shouldn't matter, but just to be safe
+                } else if (document.querySelector(".expanded") !== undefined) { // otherwise, escape expanded card if applicable
+                    hub.publish(Events.MinimizeLocationCard); // minimize expanded card (via event hub subscription)
+                }
+            }
+        });
+
+        // attach event listener for crowding score modal submit button click
+        const reportSubmitButton = document.getElementById("report-submit");
+        reportSubmitButton.addEventListener("click", (event) => {
+            const reportSubject = document.getElementById("report-location-name").innerText // "LocationName" or "LocationName Floor FloorName"
+                .split(" Floor ") // should be ["LocationName"] or ["LocationName", "FloorName"]
+            // console.log(reportSubject);
+
+            // construct data for add report
+            const data = {
+                score: localStorage.getItem("crowding"),
+                timestamp: Date.now()
+            };
+
+            hub.publish(Events.AddReport, data); // alert event hub -> trigger backend action
+            // TODO: maybe get location/floor data in a less spaghetti way
+
+            event.stopPropagation(); // prevent any bubble up (should be find regardless, report modal itself has no events on click)
+        })
     }
 }
