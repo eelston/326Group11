@@ -1,4 +1,4 @@
-import fs from 'fs'; // file system module for interacting with local JSON files (ref: https://www.w3schools.com/nodejs/nodejs_filesystem.asp and https://www.geeksforgeeks.org/how-to-update-data-in-json-file-using-javascript/)
+import * as fs from 'fs'; // file system module for interacting with local JSON files (ref: https://www.w3schools.com/nodejs/nodejs_filesystem.asp and https://www.geeksforgeeks.org/how-to-update-data-in-json-file-using-javascript/)
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -37,7 +37,7 @@ class LocationController {
       if (!req.body) {throw new Error("issue with body of request for updating locations JSON")}
   
       // write updated data to file
-      fs.writeFile(this.jsonPath, JSON.stringify(req.body, null, 4), (error) => { // JSON stringify formatting ref: https://stackoverflow.com/a/5670892
+      await fs.writeFile(this.jsonPath, JSON.stringify(req.body), (error) => { // JSON stringify formatting ref: https://stackoverflow.com/a/5670892
         if (error) {throw new Error(`issue writing to locations JSON: ${error}`)}
       });
       // ref: https://www.geeksforgeeks.org/node-js-fs-writefilesync-method/

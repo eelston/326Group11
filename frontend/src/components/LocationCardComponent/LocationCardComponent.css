@@ -74,32 +74,33 @@
 }
 
 /* loading bar gradients, with fallback color */
-#level1 {
+.level1 {
     background: var(--bright-green) linear-gradient(to right, var(--dark-green), var(--bright-green));
     width: 20%;
 }
 
-#level2 {
+.level2 {
     background: var(--bright-blue) linear-gradient(to right, var(--dark-blue), var(--bright-blue));
 
     width: 40%;
 }
 
-#level3 {
+.level3 {
     background: var(--bright-yellow) linear-gradient(to right, var(--dark-yellow), var(--bright-yellow));
     width: calc(3*var(--crowding-bar-width)/5);
     width: 60%;
 }
 
-#level4 {
+.level4 {
     background: var(--bright-orange) linear-gradient(to right, var(--dark-orange), var(--bright-orange));
     width: 80%;
 }
 
-#level5 {
+.level5 {
     background: linear-gradient(to right, var(--dark-red), var(--bright-red));
     width: 100%;
 }
+
 /* TODO: reorganize/label everything below to correct categories */
 /* expanded card styling */
 .expanded {

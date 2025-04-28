@@ -22,17 +22,18 @@ export class LocationBrowsingComponent extends BaseComponent {
         if (this.#container) {
             return;
         }
+
         this.#locationsData = await this.#getLocations();
 
         this.#renderSearchOptions(); // render search bar and sort dropdown
         
         this.#createContainer(); // create location-browsing div element, set this.#container
-        this.#renderCards(); // render a card element for every location
+        await this.#renderCards(); // render a card element for every location
         this.#dimmerElement = this.#createDimmerElement(); // element to dim screen when a card is expanded
         this.#reportModal = this.#createReportModal(); // element to report crowding score for expanded card
         this.#attachEventListeners(); // attach relevant event listeners   
         // add container to main component
-        document.getElementsByTagName('main')[0].appendChild(this.#container); 
+        document.getElementsByTagName('main')[0].appendChild(this.#container);
     }
 
     #renderSearchOptions() {
@@ -65,7 +66,7 @@ export class LocationBrowsingComponent extends BaseComponent {
     }
 
     // render each location card
-    #renderCards(locations = this.#locationsData, sortOption = "Recently Updated") { // render method defaults to rendering locations data from server (currently JSON) and by recently updated
+    async #renderCards(locations = this.#locationsData, sortOption = "Recently Updated") { // render method defaults to rendering locations data from server (currently JSON) and by recently updated
         const locationBrowsingContainer = this.#container;
         locationBrowsingContainer.innerHTML = ""; // clear any pre-existing HTML
 
@@ -85,9 +86,9 @@ export class LocationBrowsingComponent extends BaseComponent {
                 break;
         }
 
-        toBeRendered.forEach(location => { // render each location in given order
+        toBeRendered.forEach(async location => { // render each location in given order
             const locationCard = new LocationCardComponent(location); // create new component for each location
-            locationBrowsingContainer.appendChild(locationCard.render()); // add location card to location browsing container
+            locationBrowsingContainer.appendChild(await locationCard.render()); // add location card to location browsing container
         })
     }
 
@@ -349,12 +350,14 @@ export class LocationBrowsingComponent extends BaseComponent {
         })
 
         // attach event listeners for successful crowding score report
-        hub.subscribe(Events.AddReportSuccess, () => {
-            this.#hideElement(this.#reportModal); // close modal after successful report submission
-            hub.publish(Events.MinimizeLocationCard);
-            alert("Your report has been saved. Thank you.") // TODO: make this a modal? (less intrusive) 
+        hub.subscribe(Events.AddReportSuccess, async () => {
+            alert("Your report has been saved. Thank you."); // TODO: make this a modal? (less intrusive)
+            // TODO: bug fix: this triggers twice
 
-            this.#renderCards(); // TODO: maybe render only the card that changed
+            this.#hideElement(this.#reportModal); // close modal after successful report submission
+            hub.publish(Events.MinimizeLocationCard); // close modal
+            this.#locationsData = await this.#getLocations(); // update location data attribute 
+            await this.#renderCards(); // TODO: maybe render only the card that changed
         })
     }
 }

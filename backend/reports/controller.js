@@ -42,6 +42,31 @@ class ReportController {
     return res;
   }
 
+  async getReport(req, res) {
+    try {
+      if (!req || !req.query.id) {
+        return res.status(400).json({ error: "Bad request, crowding report id is required." });
+      }
+
+      const id = new URL(req.host+req.url).searchParams.get("id"); // ref: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
+      const report = await this.model.read(id);
+      console.log(report)
+
+      // Log for debugging
+      console.log(`Read report ${report.id} for ${report.location[0]}, score: ${report.score} `)
+
+      // Send back the created report as response
+      return res.status(201).json({ ok: true, body: report });
+
+    } catch (error) {
+      // Log any unexpected errors and send a server error response
+      console.error("Error read report:", error);
+      return res
+        .status(500)
+        .json({ error: "Failed to add report. Please try again." });
+    }
+  }
+
   // Add a new task
   async addReport(req, res) {
     try {

@@ -43,47 +43,48 @@ class _ReportModel {
      * @returns added report
      */
     async create(report) {
-      console.log("input:", report)
       report.id = _ReportModel.report_id++; // assign report id (and increment model id var)
-      this.reports.push(report); // add report to in memory "storage"
+      if (!this.reports.includes(report)) { // prevent duplicates
+        this.reports.push(report); // add report to in memory "storage"
 
-      // add report id to corresponding location 'reports' array (ref: https://www.geeksforgeeks.org/how-to-update-data-in-json-file-using-javascript/)
-      const GETresponse = await fetch("http://localhost:3000/locations"); // GET method for locations JSON
-      if (!GETresponse.ok) {return new Error("Failed to fetch locations.json")};
-      
-      const jsonData = await GETresponse.json(); // location JSON data
-      // doesn't need to be parsed again, ref: https://stackoverflow.com/a/77786334
+        // add report id to corresponding location 'reports' array (ref: https://www.geeksforgeeks.org/how-to-update-data-in-json-file-using-javascript/)
+        const GETresponse = await fetch("http://localhost:3000/locations"); // GET method for locations JSON
+        if (!GETresponse.ok) {return new Error("Failed to fetch locations.json")};
+        
+        const jsonData = await GETresponse.json(); // location JSON data
+        // doesn't need to be parsed again, ref: https://stackoverflow.com/a/77786334
 
-      const locationInfo = report.location; // this should be an array: ["LocationName"] or ["LocationName", "FloorName"]
-      const location = jsonData.find(location => location.name === locationInfo[0]); // get matching location object
-      switch (locationInfo.length) {
-        case 1: // single floor
-          location.reports.push(report.id); // add report id to location's 'reports' array
-          break;
-        case 2: // multi floor
-          const floor = location.floors.find(floor => floor.name === locationInfo[1]); // get matching floor object
-          floor.reports.push(report.id); // add report id to floor's 'reports' array
-          break;
-        default: // else, something wrong with location data array
-          throw new Error("Issue with location data. Should be an array of length 1 or 2");
+        const locationInfo = report.location; // this should be an array: ["LocationName"] or ["LocationName", "FloorName"]
+        const location = jsonData.find(location => location.name === locationInfo[0]); // get matching location object
+        switch (locationInfo.length) {
+          case 1: // single floor
+            location.reports.push(report.id); // add report id to location's 'reports' array
+            break;
+          case 2: // multi floor
+            const floor = location.floors.find(floor => floor.name === locationInfo[1]); // get matching floor object
+            floor.reports.push(report.id); // add report id to floor's 'reports' array
+            break;
+          default: // else, something wrong with location data array
+            throw new Error("Issue with location data. Should be an array of length 1 or 2");
+        }
+
+        const PUTresponse = await fetch("http://localhost:3000/locations/update", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonData),
+        });
+        if (!PUTresponse.ok) {throw new Error("Failed to update locations.json")};
+
+        console.log("Report created:", report); // print to console for confirmation
+        return report;
       }
-
-      const PUTresponse = await fetch("http://localhost:3000/locations/update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(jsonData),
-      });
-      if (!PUTresponse.ok) {throw new Error("Failed to update locations.json")};
-
-      console.log("Report created:", report); // print to console for confirmation
-      return report;
     }
   
     async read(id = null) {
       if (id) { // if id is provided
-        return this.reports.find((report) => report.id === id); // return report with matching id 
+        return await this.reports.find((report) => report.id === Number(id)); // return report with matching id 
         // find() returns the first element in the provided array that satisfies the provided testing function
       }
 
@@ -153,8 +154,11 @@ class _ReportModel {
   
   // For testing/verification - initialize model with sample reports.
   ReportModel.create({ location: ["Courtside Cafe"], score: 1, timestamp: Date.now()});
-  // ReportModel.create({ location: ["Student Union", "2"], score: 2, timestamp: Date.now()});
-  // ReportModel.create({ location: ["Student Union", "3"], score: 3, timestamp: Date.now()});
-  
+  ReportModel.create({ location: ["Student Union", "2"], score: 2, timestamp: Date.now()});
+  ReportModel.create({ location: ["Student Union", "3"], score: 3, timestamp: Date.now()});
+  ReportModel.create({ location: ["Science & Engineering Library", "2"], score: 1, timestamp: Date.now()});
+  ReportModel.create({ location: ["Science & Engineering Library", "3"], score: 2, timestamp: Date.now()});
+  ReportModel.create({ location: ["Integrated Learning Center", "2"], score: 3, timestamp: Date.now()});
+
   export default ReportModel;
   

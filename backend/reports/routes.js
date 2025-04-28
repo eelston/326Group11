@@ -49,6 +49,10 @@ class ReportRoutes {
       await ReportController.getAllReports(req, res);
     });
 
+    this.router.get("/report", async (req, res) => {
+      await ReportController.getReport(req, res);
+    })
+
     // DESCRIPTION
     //   Add a new report. This endpoint creates a new report with the provided
     //   crowding score and timestamp. The endpoint returns the created report.

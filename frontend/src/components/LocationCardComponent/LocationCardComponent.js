@@ -15,7 +15,7 @@ export class LocationCardComponent extends BaseComponent {
         this.loadCSS('LocationCardComponent');
     }
 
-    render() {
+    async render() {
         console.log(`Rendering ${this.#locationData.name}`); // printing to console for confirmation
         if (this.#container) {
             return this.#container;
@@ -29,7 +29,7 @@ export class LocationCardComponent extends BaseComponent {
             this.#renderMultiFloor();
         }
 
-        this.#renderCrowdingScore();
+        await this.#renderCrowdingScore();
 
         this.#renderAddress(); // render location address
 
@@ -46,8 +46,8 @@ export class LocationCardComponent extends BaseComponent {
     }
 
     // render card for location with one floor
-    #renderSingleFloor() {
-        const locationReports = this.#locationData.reports; // get crowding score reports
+    async #renderSingleFloor() {
+        const locationReports = await this.#locationData.reports; // get crowding score reports
 
         const lastUpdatedTimestamp = locationReports.length > 0 ? locationReports[0].timestamp : null; // get timestamp for most recent report (or assign null, if no reports)
         
@@ -102,11 +102,11 @@ export class LocationCardComponent extends BaseComponent {
     }
 
     // gets crowding score and updates crowding score bar and hint text
-    #renderCrowdingScore() {
+    async #renderCrowdingScore() {
         // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace in location name with hyphen for styling tag
 
         if (this.#locationData.type === "Single-Floor") {
-            const averageCrowdingScore = this.#calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
+            const averageCrowdingScore = await this.#calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
             const level = averageCrowdingScore !== null ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
             const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-hint`); // get hint div
@@ -117,14 +117,15 @@ export class LocationCardComponent extends BaseComponent {
             const className = crowdingScoreBar.classList.values().find((className) => /level./.test(className)); // get current level/styling tag
             if (className) {crowdingScoreBar.classList.remove(className)}; // remove previous level tag, if exists
 
-            crowdingScoreBar.classList.add(`level${level}`) // replace with updated level
-
+            if (level !== null) {
+                crowdingScoreBar.classList.add(`level${level}`) // replace with updated level
+            }
+        
         } else if (this.#locationData.type === "Multi-Floor") {
-            this.#locationData.floors.forEach(floor => { 
-                const averageCrowdingScore = this.#calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
+            this.#locationData.floors.forEach(async floor => { 
+                const averageCrowdingScore = await this.#calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
                 const level = averageCrowdingScore ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
-                // console.log(`#${this.#nameTag}-${floor.name}-bar`)
                 const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-${floor.name}-hint`); // get hint div
                 crowdingScoreHint.innerText = level ? CrowdingHints[level-1] : "No data"; // set/reset hint text
 
@@ -132,8 +133,10 @@ export class LocationCardComponent extends BaseComponent {
 
                 const className = crowdingScoreBar.classList.values().find((className) => /level./.test(className)); // get current level/styling tag
                 if (className) {crowdingScoreBar.classList.remove(className)}; // remove previous level tag, if exists
-
-                crowdingScoreBar.classList.add(`level${level}`) // replace with updated level
+                
+                if (level !== null) {
+                    crowdingScoreBar.classList.add(`level${level}`) // replace with updated level
+                }
             });
         }
 
@@ -150,10 +153,17 @@ export class LocationCardComponent extends BaseComponent {
         this.#container.appendChild(address);
     }
 
-    // calculate average crowding score from given array of reports
-    #calculateAverageCrowdingScore(reports) {
-        const crowdingScores = reports.map(report => report.score); // get array of scores
-        return crowdingScores.length > 0 ? crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length : null; // calculate average, or null if no reports
+    // calculate average crowding score from given array of report ids
+    async #calculateAverageCrowdingScore(reportIds) {
+        const crowdingScores = await Promise.all(reportIds.map(async id => { // get array of scores
+            const GETurl = '/report?' + new URLSearchParams({"id": id}).toString(); // e.g., /report?id=1
+            const response = await fetch(GETurl); // GET report by id
+            const report = await response.json(); // { body: (report), ok: boolean }
+            return report.body.score; // crowding score
+        }));
+
+        const average = crowdingScores.length > 0 && crowdingScores.every(x => typeof x === "number") ? crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length : null; // calculate average, or null if no reports
+        return average;
     }
 
     // convert number to string
