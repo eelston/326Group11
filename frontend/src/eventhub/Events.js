@@ -48,6 +48,7 @@ export const Events = {
 
     // Crowding Score Reporting
     AddReport: 'AddReport', // trigger html post method
+    AddReportSuccess: 'AddReportSuccess', // for UI updates
     DeleteReport: 'DeleteReport', // trigger html delete method for deletion of singular report
     DeleteReportSuccess: 'DeleteReportSuccess', // for UI updates
 }

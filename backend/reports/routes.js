@@ -22,7 +22,7 @@
 
 import express from "express";
 // import TaskController from "../controller/TaskController.js";
-import ReportController from "./controller.js"
+import ReportController from "../reports/controller.js"
 
 class ReportRoutes {
   constructor() {

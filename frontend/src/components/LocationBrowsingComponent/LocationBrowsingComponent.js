@@ -321,8 +321,15 @@ export class LocationBrowsingComponent extends BaseComponent {
             };
 
             hub.publish(Events.AddReport, data); // alert event hub -> trigger backend action
-            this.#hideElement(this.#reportModal); // close modal after attempt 
-            // TODO: tie this to successful storage
+        })
+
+        // attach event listeners for successful crowding score report
+        hub.subscribe(Events.AddReportSuccess, () => {
+            this.#hideElement(this.#reportModal); // close modal after successful report submission
+            hub.publish(Events.MinimizeLocationCard);
+            alert("Your report has been saved. Thank you.") // TODO: make this a modal? (less intrusive) 
+
+            this.#renderCards(); // TODO: maybe render only the card that changed
         })
     }
 }

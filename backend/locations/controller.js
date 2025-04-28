@@ -42,7 +42,8 @@ class LocationController {
       });
       // ref: https://www.geeksforgeeks.org/node-js-fs-writefilesync-method/
       // ref for callback cb error: https://stackoverflow.com/a/72432465
-  
+      
+      return res.status(200).json({ok: true}); // successful update
     } catch (error) {
       console.log(`Error updating locations JSON ${error}`)
       return res

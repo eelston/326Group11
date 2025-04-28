@@ -28,35 +28,36 @@ import ReportModel from "./report.js";
 
 class ReportController {
   constructor() {
-    this.model = ReportModel; // get report model instance   
+    this.model = ReportModel; // get report model instance  
   }
 
-  // Get all tasks
+  // Get all reports
   async getAllReports(req, res) {
-    const tasks = await this.model.read();
-    // The response is an object with a 'tasks' property containing an array of
-    // tasks. This could be anything, but we define it as an object with a
-    // 'tasks' property to keep the response consistent across different
+    const reports = await this.model.read();
+    // The response is an object with a 'reports' property containing an array of
+    // reports. This could be anything, but we define it as an object with a
+    // 'reports' property to keep the response consistent across different
     // endpoints.
-    res.json({ tasks });
+    res.json({ reports: reports });
+    return res;
   }
 
   // Add a new task
   async addReport(req, res) {
     try {
-      // Check if 'task' is provided in the request body
-      if (!req.body || !req.body.score) {
-        return res.status(400).json({ error: "Crowding report score is required." });
+      // Check if 'report' is provided in the request body
+      if (!req.body.report || !req.body.report.score) {
+        return res.status(400).json({ error: "Bad request, crowding report score is required." });
       }
 
-      // Create the new task object with a unique ID
-      const report = await this.model.create(req.body);
+      // Create the new report object with a unique ID
+      const report = await this.model.create(req.body.report);
 
       // Log full report for debugging
-      console.log(`New report: ${report.id} - ${report.score} - ${report.timestamp} ms`);
+      console.log(`New report created for ${report.location[0]}: id ${report.id}, score ${report.score}, timestamp ${report.timestamp} ms`);
 
-      // Send back the created task as the response
-      return res.status(201).json(report);
+      // Send back the created report as the response
+      return res.status(201).json({ ok: true, body: report });
     } catch (error) {
       // Log any unexpected errors and send a server error response
       console.error("Error adding report:", error);

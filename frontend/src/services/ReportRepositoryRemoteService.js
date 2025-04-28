@@ -1,5 +1,6 @@
 import Service from "./Service.js"
 import { Events } from "../eventhub/Events.js";
+import { EventHub } from "../eventhub/EventHub.js";
 
 export class ReportRepositoryRemoteService extends Service {
   constructor() {
@@ -42,8 +43,21 @@ export class ReportRepositoryRemoteService extends Service {
       // What is cool is that we do not care about the UI here. We just publish
       // the event and let the UI components handle the update or whatever part
       // of this application is interested in the task data.
-      this.publish(Events.StoreReport, report);
+      // this.publish(Events.AddReport, report);
     });
+  }
+
+  async getAllReports() {
+    // const response = await fetch("/reports"); // GET request
+    // console.log("get all reports test")
+    // console.log(response)
+    
+    // if (!response.ok) {
+    //   throw new Error("Failed to fetch reports");
+    // }
+
+    // const data = await response.json();
+    // return data; 
   }
 
   async addReport(reportData) {
@@ -56,10 +70,11 @@ export class ReportRepositoryRemoteService extends Service {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to store report");
+      throw new Error(`Bad response (${response.status}): ${response.statusText}`);
     }
 
     const data = await response.json();
+    EventHub.getInstance().publish(Events.AddReportSuccess, data);
     return data;
   }
 
@@ -71,10 +86,10 @@ export class ReportRepositoryRemoteService extends Service {
       const data = await response.json();
   
       if (!response.ok) {
-        throw new Error("Failed to clear task");
+        throw new Error("Failed to clear report");
       }
   
-      // Notify subscribers that tasks have been cleared from the server.
+      // Notify subscribers that report has been cleared from the server.
       // This is likely needed to update the UI.
       this.publish(Events.DeleteReportSuccess);
   
@@ -88,12 +103,12 @@ export class ReportRepositoryRemoteService extends Service {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error("Failed to clear tasks");
+      throw new Error("Failed to clear reports");
     }
 
-    // Notify subscribers that tasks have been cleared from the server.
+    // Notify subscribers that reports have been cleared from the server.
     // This is likely needed to update the UI.
-    this.publish(Events.ClearAllReportsSuccess);
+    this.publish(Events.DeleteReportSuccess);
 
     return data;
   }
