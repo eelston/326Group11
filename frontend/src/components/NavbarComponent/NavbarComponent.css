@@ -1,0 +1,132 @@
+/******************************
+*********** HEADER ************
+******************************/
+header {
+    background: var(--navbar-purple);
+
+    height: 65px; /* TODO: maybe use relative units later on? */
+    box-sizing: border-box; /* don't want padding to affect height */
+    padding: 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* vertical alignment */
+}
+
+/* Study on Campus "logo" text */
+#app-logo {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+#app-logo:hover {
+    cursor: pointer;
+    color: #602dcf;
+}
+
+/* site navigation options */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+nav a {
+    color: black;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.nav-button {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--navbar-purple);
+    outline: none;
+    border-radius: 20rem;
+
+    color: var(--grey-500);
+    background: var(--light-purple);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.nav-button:hover {
+    cursor: pointer;
+
+    color: black; /* button text */
+    background: greenyellow; /* this color will probably change */
+
+    border-color: var(--level1);
+    outline: var(--grey-500) solid 1px;
+}
+
+/* nav modal */
+#navbar-dropdown-menu {
+    /* hidden by default */
+    display: none;
+
+    position: absolute;
+    top: 75px; 
+    right: 10px;
+    /* right: 0;
+    top: 0; */
+    
+    width: 10rem;
+
+    background-color: var(--navbar-purple);
+    box-shadow: var(--grey-400) 0 1px 3px; 
+    border-radius: 4px;
+
+
+    overflow-y: auto;
+    z-index: 998;
+    padding: 1rem;
+}
+
+.user-subsection {
+    display: flex;
+    align-items: center;
+    /* align-items: center; */
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: var(--grey-400) 1px solid;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+    align-items: left;
+}
+
+.user-info .user-id {
+    font-size: smaller;
+}
+
+#close-button {
+    position: absolute;
+    top: 0.2rem;
+    right: 1rem;
+    font-size: 24px;
+}
+
+#close-button:hover {
+    cursor: pointer;
+    color: var(--light-purple);
+}
+
+#nav-options {
+    list-style: none;
+}
+
+#nav-options li {
+    margin: 0.2rem
+}
+
+#nav-options li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
