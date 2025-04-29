@@ -3,10 +3,14 @@
 // 'npm install'
 // 'node backend/src/server.js'
 // and navigate to http://localhost:3000/pages/FOLDERNAME
+
+
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+
 import PostRoutes from "./routes/PostRoutes.js";
+import settingsRouter from './routes/settings.js';
 
 const app = express();
 const PORT = 3000;
@@ -19,11 +23,23 @@ const url = path.join(__dirname, "../../frontend/src"); // ref: https://stackove
 app.use(express.static(url)); 
 console.log(`Serving static files from ${url}`);
 
-// setup middleware to parse incoming JSON data & add new data
 app.use(express.json());
 
+// set up routes for imported settings router
+app.use('/api', settingsRouter);
+
+app.get('/pages/:page', (req, res) => {
+    res.sendFile(path.join(frontendDir, 'pages', req.params.page, 'index.html'));
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something broke!' });
+});
+
+// set up routes for imported PostRoutes
 app.use("/v1", PostRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
