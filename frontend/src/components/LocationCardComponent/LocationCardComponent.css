@@ -74,34 +74,33 @@
 }
 
 /* loading bar gradients, with fallback color */
-/* TODO: add secondary colors to main.css, name/rename all accent colors more intuitively */
-#level1 {
-    background: var(--level1) linear-gradient(to right, #15a36d, var(--level1));
+.level1 {
+    background: var(--bright-green) linear-gradient(to right, var(--dark-green), var(--bright-green));
     width: 20%;
 }
 
-#level2 {
-    background: var(--level2) linear-gradient(to right, #5591df, var(--level2));
+.level2 {
+    background: var(--bright-blue) linear-gradient(to right, var(--dark-blue), var(--bright-blue));
 
     width: 40%;
 }
 
-#level3 {
-    background: var(--level3) linear-gradient(to right, #e69926, var(--level3));
+.level3 {
+    background: var(--bright-yellow) linear-gradient(to right, var(--dark-yellow), var(--bright-yellow));
     width: calc(3*var(--crowding-bar-width)/5);
     width: 60%;
 }
 
-#level4 {
-    background: var(--level4) linear-gradient(to right, #e66326, var(--level4));
+.level4 {
+    background: var(--bright-orange) linear-gradient(to right, var(--dark-orange), var(--bright-orange));
     width: 80%;
 }
 
-#level5 {
-    /* background: var(--level5); */
-    background: linear-gradient(to right, #a80a67, var(--level5));
+.level5 {
+    background: linear-gradient(to right, var(--dark-red), var(--bright-red));
     width: 100%;
 }
+
 /* TODO: reorganize/label everything below to correct categories */
 /* expanded card styling */
 .expanded {
@@ -169,7 +168,7 @@
 
 /* TODO: rework hover styling? (just colors) */
 .report-button:hover {
-    /* outline: var(--level1) solid 2px; */
+    /* outline: var(--bright-green) solid 2px; */
     border: 1px solid var(--grey-300);
     background: var(--grey-300);
     cursor: pointer;

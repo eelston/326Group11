@@ -9,34 +9,14 @@
 
     <link rel="stylesheet" href="../../main.css">
     <link rel="stylesheet" href="style.css">
+
+    <script>
+        /*to prevent Firefox FOUC, this must be here*/
+        let FF_FOUC_FIX;
+      </script>
 </head>
 
 <body>
-    <header>
-        <div id="app-logo">Study on Campus</div>
-        <div class="user-icon can-click"><span class="icon-content">:3</span></div>
-        <!-- TODO: (after navbar modal is done) copy & paste header across all pages again,
-        or figure out a component file to make consistent! -->
-    </header>
-
     <main>
-        <!-- SORT OPTIONS -->
-        <div id="search-option-container">
-            <div id="search-bar-container">
-                <input type="text" id="search-bar" placeholder="Enter keywords...">
-                <!-- <input type="button" id="search-button" value="Search"/> -->
-            </div>
-
-            <div id="sort-by-container">
-                <label for="sort-by-select">Sort by</label>
-                <select id="sort-by-select" autocomplete="off">
-                    <option value="Recently Updated" selected="selected">Recently Updated</option>
-                    <option value="Ascending Crowd Score">Ascending Crowd Score</option>
-                    <option value="Descending Crowd Score">Descending Crowd Score</option>
-                </select>
-            </div>
-        </div>
-
-       
     </main>
 </body>

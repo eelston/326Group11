@@ -1,61 +1,7 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-#body {
-    background: #fefefe;
-}
-
-#app-logo {
-    font-weight: bold;
-    font-size: 2rem;
-}
-
-/** CSS NAV BAR START **/
-.user-icon {
-    background: #5ad8cc;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 25px;
-
-    display:flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-.user-icon:hover {
-    cursor: pointer;
-    background: #fefefe;
-    box-shadow: 3px 3px #602dcf;
-}
-
 .can-click:hover {
     cursor: pointer;
     color: #602dcf
 }
-
-.nav-button {
-    font-size: 1rem;
-    font-weight: bold;
-    font-style: italic;
-}
-
-header {
-    background: #dcccff;
-    padding: 1rem;
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/** END OF CSS NAV BAR **/
 
 #search-bar {
     display: block;
@@ -68,7 +14,7 @@ header {
     border-color: #dedede;
     border-width: 3px;
 
-    font-size: 20px;
+    font-size: 1.15rem;
     color:#602dcf;
     outline: none;
 }
@@ -123,7 +69,7 @@ header {
     text-overflow: ellipsis;
     overflow: hidden;
     font-weight: bold;
-    font-size: 1.25rem;
+    font-size: 1.08rem;
     margin-top: 5px;
     align-self: center;
     white-space: nowrap;
@@ -140,7 +86,7 @@ header {
     max-width: 100%;
     border-radius: 6px;
 
-    font-size: 1rem;
+    font-size: 0.9rem;
     flex-wrap: nowrap;
     overflow: hidden;
 }
@@ -158,7 +104,7 @@ header {
 
 .post-text {
     padding: 1px 5px;
-    font-size: 1rem;
+    font-size: 0.88rem;
     text-overflow: ellipsis;
     overflow: hidden;
     width:100%;
@@ -170,8 +116,8 @@ header {
 }
 
 .location {
-    font-size: 1.1 rem;
-    font-weight: 600;
+    font-size: 0.95rem;
+    font-weight: 550;
     font-style: italic;
     text-align: center;
     margin-top: 3px;

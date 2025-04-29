@@ -1,6 +1,219 @@
+/* content container */
 #location-browsing {
     margin: 1rem 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 1rem;
+}
+
+/********* SORT OPTIONS *********/
+#search-option-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* search bar */
+#search-bar-container {
+    width: max-content;
+    display: flex;
+
+    flex-shrink: 0; /* should shrink in width before sort-by-container*/
+    flex-grow: 1;
+
+    margin-right: 1rem
+}
+
+#search-bar {
+    box-sizing: border-box;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+
+    max-width: 450px;
+    width: 100%;
+}
+
+#search-button {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+
+    color: var(--grey-500);
+    background: var(--grey-200);
+    font-weight: 600;
+}
+
+#search-button:hover {
+    outline: var(--grey-500) solid 2px;
+    background: var(--grey-300);
+    cursor: pointer;
+}
+
+/* card sorting */
+#sort-by-container {
+    display: flex;
+
+    flex-shrink: 1; 
+    flex-grow: 0;
+
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap; /* keep label text to one line */
+}
+
+#sort-by-select {
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid var(--grey-300);
+    border-radius: 4px;
+}
+
+#sort-by-select:hover {
+    cursor: pointer;
+}
+
+/******************************
+******** MEDIA QUERIES ********
+******************************/
+@media screen and (max-width: 35rem) {
+    /*  window width small enough for single card rows,
+        e.g., mobile devices in portrait mode, most likely */
+    
+    /**** search options ****/
+    #search-option-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #search-bar-container {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        
+    }
+
+    #search-bar {
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+        max-width: none;
+    }
+
+    #search-button {
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+    }
+
+    #sort-by-container {
+        align-self: flex-end;
+    }
+
+    #sort-by-select  {
+    /*  unfortunately, option font size cannot be styled using css:
+        https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Advanced_form_styling */
+        padding: 0.25rem;
+        font-size: smaller; /* relative */
+    }
+
+    label[for=sort-by-select] {
+        font-size: smaller;
+    }
+}
+
+/**** report modal ****/
+#report-modal { /* note: same styling as location card, for now */
+    background: var(--grey-100);
+    box-shadow: var(--grey-400) 0 1px 3px;
+
+    z-index: 1000; /* bring to top (higher than expanded card, if overlap occurs) */
+    position: absolute;
+
+    height: fit-content;
+    padding: 1em;
+    border-radius: 10px;
+    max-width: 15rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}
+
+#report-modal button {
+    font-size: 1rem;
+    width: 100%;
+    margin: 0.25rem 0;
+
+    /* generally the same as other buttons */
+    box-sizing: border-box;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10rem;
+
+    color: var(--grey-500);
+    font-weight: 600;
+}
+
+#report-modal button:hover {
+    cursor: pointer;
+}
+
+button#report-submit {
+    width: fit-content;
+    background: var(--navbar-purple);
+    border: 1px solid var(--navbar-purple);
+}
+
+button#report-submit:hover {
+    border: 1px solid var(--grey-300);
+    background: var(--grey-300);
+}
+
+button#level1 {
+    background: var(--light-green);
+    border: 1px solid var(--light-green);
+}
+
+button#level1:hover {
+    color: black;
+    background: var(--bright-green)
+}
+
+button#level2 {
+    background: var(--light-blue);
+    border: 1px solid var(--light-blue);
+}
+
+button#level2:hover {
+    color: black;
+    background: var(--bright-blue);
+}
+
+button#level3 {
+    background: var(--light-yellow);
+    border: 1px solid var(--light-yellow);
+}
+
+button#level3:hover {
+    color: black;
+    background: var(--bright-yellow);
+}
+
+button#level4 {
+    background: var(--light-orange);
+    border: 1px solid var(--light-orange);
+}
+
+button#level4:hover {
+    color: black;
+    background: var(--bright-yellow);
+}
+
+button#level5 {
+    background: var(--light-red);
+    border: 1px solid var(--light-red);
+}
+
+button#level5:hover {
+    color: black;
+    background: var(--bright-red);
 }
