@@ -3,12 +3,14 @@
 // 'npm install'
 // 'node backend/src/server.js'
 // and navigate to http://localhost:3000/pages/FOLDERNAME
+
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import ReportRoutes from "../reports/routes.js"
 import LocationRoutes from "../locations/routes.js"
 import PostRoutes from "./routes/PostRoutes.js";
+import settingsRouter from './routes/settings.js';
 
 const app = express();
 const PORT = 3000;
@@ -21,7 +23,6 @@ const url = path.join(__dirname, "../../frontend/src"); // construct absolute pa
 app.use(express.static(url)); 
 console.log(`Serving static files from ${url}`);
 
-// setup middleware to parse incoming JSON data & add new data
 app.use(express.json());
 
 // set up routes by using imported ReportRoutes
@@ -30,9 +31,21 @@ app.use("/", ReportRoutes); // mount on app
 // set up routes for imported LocationRoutes
 app.use("/locations", LocationRoutes); // mount on app
 
+// set up routes for imported settings router
+app.use('/api', settingsRouter);
+
+app.get('/pages/:page', (req, res) => {
+    res.sendFile(path.join(frontendDir, 'pages', req.params.page, 'index.html'));
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something broke!' });
+});
+
 // set up routes for imported PostRoutes
 app.use("/v1", PostRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

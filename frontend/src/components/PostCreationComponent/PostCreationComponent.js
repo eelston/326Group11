@@ -1,13 +1,11 @@
 import { BaseComponent } from "../BaseComponent/BaseComponent.js";
 import { EventHub } from "../../eventhub/EventHub.js";
 import { Events } from "../../eventhub/Events.js";
-import { IndexedDB } from '../../utility/indexeddb.js';
  
 export class PostCreationComponent extends BaseComponent { 
     #container = null; // init component container element
     #tags = [];
     #datetime = null;
-    #db = IndexedDB;
 
     constructor() {
         super();
@@ -154,21 +152,23 @@ export class PostCreationComponent extends BaseComponent {
         const tagText = e.target.value.trim();
         const tagList = this.#container.querySelector('#tag-list');
 
-        const tag = document.createElement('div');
-        tag.classList.add('tag');
+        if (!this.#tags.includes(tagText)){
+            const tag = document.createElement('div');
+            tag.classList.add('tag');
 
-        const tagLabel = document.createElement('span');
-        tagLabel.textContent = tagText;
+            const tagLabel = document.createElement('span');
+            tagLabel.textContent = tagText;
 
-        const removeBtn = document.createElement('span');
-        removeBtn.textContent = '✕';
-        removeBtn.classList.add('remove');
+            const removeBtn = document.createElement('span');
+            removeBtn.textContent = '✕';
+            removeBtn.classList.add('remove');
 
-        tag.appendChild(removeBtn);
-        tag.appendChild(tagLabel);
-        tagList.appendChild(tag);
+            tag.appendChild(removeBtn);
+            tag.appendChild(tagLabel);
+            tagList.appendChild(tag);
 
-        this.#tags.push(tagText);
+            this.#tags.push(tagText);
+        }
         e.target.value = '';
     }
 
@@ -273,20 +273,24 @@ export class PostCreationComponent extends BaseComponent {
             comments: null
         };
 
-        this.#db.savePost(post).then((post) => {
-            this.#publishPost(post);
-            this.#clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList);
-            window.location.href = "/frontend/src/pages/PostBrowsing/index.html";
-        });
+        this.#publishPost(post);
+        this.#clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList);
+        window.location.href = "/pages/PostBrowsing/index.html"
     }
 
     #handleCancelPost() {
-        window.location.href = "/frontend/src/pages/PostBrowsing/index.html";
+        const titleInput = this.#container.querySelector('#post-title');
+        const locationInput = this.#container.querySelector('#post-location');
+        const bodyInput = this.#container.querySelector('#post-body');
+        const tagList = this.#container.querySelector('#tag-list');
+        const datetimeList = this.#container.querySelector('#datetime-list');
+
+        this.#clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList);
+        window.location.href = "/pages/PostBrowsing/index.html";
     }
 
     #publishPost(post) {
         const hub = EventHub.getInstance();
-        hub.publish(Events.NewPost, { post });
         hub.publish(Events.StorePost, { post });
     }
 
@@ -297,7 +301,7 @@ export class PostCreationComponent extends BaseComponent {
         tagList.innerHTML = '';
         datetimeList.innerHTML = '';
         this.#tags = [];
-        this.datetime = null;
+        this.#datetime = null;
     }
 
 }

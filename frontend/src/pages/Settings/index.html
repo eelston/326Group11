@@ -8,9 +8,13 @@
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" type="module"></script>
 </head>
-
 <body>
     <main>
+        <div id="settings-messages">
+            <div id="settings-error" class="error-message" style="display: none"></div>
+            <div id="settings-success" class="success-message" style="display: none"></div>
+        </div>
+
         <div class="settings-sections-container">
             <div class="left-column">
 
@@ -47,26 +51,21 @@
                     <textarea id="bio" placeholder="Current biography"></textarea>
                     <h4>Current classes</h4>
                     <div class="current-classes">
-                      <div class="add-btn-container">
-                        <button class="add-btn">+</button>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-group">
-                                <label for="subject-select">Subject:</label>
-                                <select id="subject-select">
-                                    <option value="">-- Select a subject --</option>
-                                </select>
+                        <div class="add-btn-container">
+                            <button class="add-btn">+</button>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-group">
+                                    <label for="subject-select">Subject:</label>
+                                    <select id="subject-select">
+                                        <option value="">-- Select a subject --</option>
+                                    </select>
+                                </div>
+                                <div class="dropdown-group">
+                                    <label for="course-number-select">Number:</label>
+                                    <!-- course-number-select will be added by JavaScript -->
+                                </div>
                             </div>
-                            
-                            <div class="dropdown-group">
-                                <label for="course-number-select">Course Number:</label>
-                                <select id="course-number-select" disabled>
-                                    <option value="">-- Select a number --</option>
-                                </select>
-                            </div>
-                            
-                            <button class="dropdown-add-btn" disabled>Add Class</button>
                         </div>
-                      </div>
                     </div>
                     <button class="save-btn">Save changes</button>
                 </section>
