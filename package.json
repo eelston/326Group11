@@ -1,7 +1,7 @@
 {
   "name": "study-on-campus",
-  "version": "0.0.5",
-  "description": "",
+  "version": "0.0.6",
+  "description": "Study on Campus is a web app designed to help students connect with each other, organize study groups, and find study spots",
   "main": "index.js",
   "type": "module",
   "license": "AGPL-version-3.0",
@@ -10,7 +10,7 @@
     "node": ">= 14.0.0",
     "npm": ">= 6.0.0"
   },
-  "homepage": "",
+  "homepage": "http://localhost:3000/pages/PostBrowsing/",
   "repository": {
     "type": "git",
     "url": ""
@@ -23,11 +23,14 @@
   "contributors": [],
   "scripts": {
     "start-server": "http-server ./frontend/src -p 3000",
+    "start": "node backend/src/server.js",
     "dev": "",
     "test": ""
   },
   "dependencies": {
     "express": "^5.1.0",
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
   }
 }
