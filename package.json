@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
   }
 }
