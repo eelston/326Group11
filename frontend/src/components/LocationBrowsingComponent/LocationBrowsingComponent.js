@@ -241,14 +241,39 @@ export class LocationBrowsingComponent extends BaseComponent {
             <button id="report-submit" type="submit" value="Submit">Submit</button>
         `
         CrowdingHints.forEach((hint, i) => {
-            const button = document.querySelector(`button#level${i+1}`); // get each button
-            button.innerText = `${i+1}: ${hint}` // add corresponding hint to button text
+            const level = i+1; // index corresponds to button
 
-            // attach event listener for each button to save crowding score locally
+            const button = document.querySelector(`button#level${level}`); // get each button
+            button.innerText = `${level}: ${hint}` // add corresponding hint to button text
+
+            const colors = ["green", "blue", "yellow", "orange", "red"]; // for button styling
+
+            // attach event listener for each button to save crowding score locally and update styling
             button.addEventListener("click", (event) => {
-                // console.log(i+1);
-                localStorage.setItem("crowding", (i+1).toString()); // save/overwrite crowding score selection to localstorage
-                event.stopPropagation(); // prevent bubble up
+                // get previous selection from local storage
+                const prevSelection = Number(localStorage.getItem("crowding")); // convert from string
+                if (prevSelection !== 0) { // if value is not null
+                    // get previously selected button element
+                    const prevButton = document.querySelector(`button#level${prevSelection}`);
+                    
+                    // revert styling
+                    const prevButtonColor = colors[prevSelection-1]
+                    prevButton.style.background = `var(--light-${prevButtonColor})`;
+                    prevButton.style.border = `1px solid var(--light-${prevButtonColor})`;
+                    prevButton.style.color = "var(--grey-500)"
+                }
+
+                // update selected button's styling
+                const newButtonColor = colors[level-1];
+                button.style.background = `var(--bright-${newButtonColor})`;
+                button.style.border = `1px solid var(--dark-${newButtonColor})`;
+                button.style.color = "black"; // text color
+
+                // save/overwrite crowding score selection to localstorage
+                localStorage.setItem("crowding", level.toString());
+
+                // prevent event bubble up
+                event.stopPropagation();
             });
         })
         
