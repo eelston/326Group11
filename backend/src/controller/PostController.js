@@ -50,7 +50,7 @@ class PostController {
 
     async getPost(req, res) {
         try {
-            const postId = req.query.id;
+            const postId = req.params.id;
             const post = await this.model.read(postId);
             if (!post) {
                 return res.status(404).json({ error: "Post not found." });
@@ -102,7 +102,7 @@ class PostController {
 
     async deletePost(req, res) { 
         try {
-            const postId = req.query.id;
+            const postId = req.params.id;
             if (!postId) {
                 return res.status(400).json({ error: "PostId is required!"})
             }
@@ -119,7 +119,7 @@ class PostController {
     }
 
     // for comments 
-    async updatePost(req, res) {
+    async updatePost(req, res) { // should be fine? but if any errors maybe i gotta debug... -julia
         try {
             if (!req.body) {
                 return res.status(400).json({ error: "Post description required "});
@@ -131,7 +131,7 @@ class PostController {
             return res.status(500).json({error: "Failed to update post. Please try again."})
         }
     }
-
+ 
     async clearPosts(req, res) {
         await this.model.delete();
         res.json(await this.model.read());

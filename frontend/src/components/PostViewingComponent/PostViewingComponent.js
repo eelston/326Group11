@@ -237,8 +237,6 @@ export class PostViewingComponent extends BaseComponent {
 
     #deleteCommentListener(commentId) {
         const deleteButton = document.getElementById(`commentId${commentId}`)
-        console.log(commentId);
-        console.log(deleteButton);
             deleteButton.addEventListener('click', async () => {
                 if (confirm("Are you sure you want to delete your comment? This action CANNOT be undone.")) {
                     const index = this.#post.postComments.findIndex(c => c.commentId === commentId);

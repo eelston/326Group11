@@ -59,7 +59,7 @@ export class PostRepositoryRemoteService extends Service {
     }
 
     async loadPost(postId) {
-        const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postId)}`);
+        const response = await fetch(`http://localhost:3000/v1/posts/${encodeURIComponent(postId)}`);
         console.log("Response status: " + response.status);
         if (!response.ok) {
             throw new Error(`Failed to fetch post with postId ${postId}`);
@@ -69,7 +69,7 @@ export class PostRepositoryRemoteService extends Service {
     }
 
     async updatePost(postData) {
-        const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postData.postId)}`, {
+        const response = await fetch(`http://localhost:3000/v1/posts/${encodeURIComponent(postData.postId)}`, {
             method: "PATCH",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(postData)
@@ -82,7 +82,7 @@ export class PostRepositoryRemoteService extends Service {
     }
 
     async deletePost(postId) {
-        const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postId)}`, {
+        const response = await fetch(`http://localhost:3000/v1/posts/${encodeURIComponent(postId)}`, {
             method: "DELETE"
         });
         const data = await response.json();
@@ -95,7 +95,7 @@ export class PostRepositoryRemoteService extends Service {
     }
 
     async storePost(postData) {
-        const response = await fetch("http://localhost:3000/v1/post", {
+        const response = await fetch("http://localhost:3000/v1/posts", {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(postData)
