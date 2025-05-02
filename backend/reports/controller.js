@@ -1,56 +1,36 @@
-// The controller pattern is a design pattern commonly used in software
-// engineering to separate the business logic of an application from its
-// presentation layer. It organizes the code in a way that keeps the
-// handling of user requests, business rules, and data processing separate
-// from the user interface and data models. This pattern is especially
-// useful in applications that involve handling HTTP requests, such as
-// web applications, where different types of requests need distinct
-// processing workflows.
+/**
+ * Controller design pattern from CS 326 task list web app example
+ * Keeps user requests and data processing separate from UI and data model(s)
+ * 
+ * Takes user input (HTTP request) and sends response
+ * Each method handles a specific functionality 
+ */
 
-// In the controller pattern, a "controller" is responsible for taking user
-// input (e.g., an HTTP request), processing it according to the business
-// logic, and sending a response. By using this pattern, each controller
-// method manages a specific functionality, like adding a task or updating
-// a user profile, which keeps the logic modular and reusable. Controllers
-// interact with models (for data) and views (for user feedback) without
-// knowing the internal details of each, promoting low coupling.
-
-// The controller pattern also improves maintainability by isolating
-// different concerns in the codebase. Changes to business logic or data
-// processing can be made within the controller without affecting other
-// parts of the application. Additionally, this pattern allows for easier
-// testing, as each controller can be tested in isolation to verify that it
-// handles input and output correctly, without dependencies on the
-// application's interface or data storage layers.
-
-// import ModelFactory from "../model/ModelFactory.js";
-import ReportModel from "./report.js";
+import SQLiteReportModel from "./report.js";
 
 class ReportController {
   constructor() {
-    this.model = ReportModel; // get report model instance  
+    this.model = SQLiteReportModel; // get report model instance
+    this.model.init();
   }
 
   // Get all reports
   async getAllReports(req, res) {
     const reports = await this.model.read();
     // The response is an object with a 'reports' property containing an array of
-    // reports. This could be anything, but we define it as an object with a
-    // 'reports' property to keep the response consistent across different
-    // endpoints.
-    res.json({ reports: reports });
-    return res;
+    // reports, defined this way to keep the response consistent across endpoints.
+    return res.json({ reports: reports });
   }
 
+  // Get a single report
   async getReport(req, res) {
     try {
       if (!req || !req.query.id) {
         return res.status(400).json({ error: "Bad request, crowding report id is required." });
       }
 
-      const id = new URL(req.host+req.url).searchParams.get("id"); // ref: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
+      const id = new URL(req.host+req.url).searchParams.get("id"); // get id from request, ref: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
       const report = await this.model.read(id);
-      console.log(report)
 
       // Log for debugging
       console.log(`Read report ${report.id} for ${report.location[0]}, score: ${report.score} `)
@@ -60,26 +40,35 @@ class ReportController {
 
     } catch (error) {
       // Log any unexpected errors and send a server error response
-      console.error("Error read report:", error);
+      console.error("Error getting report:", error);
       return res
         .status(500)
-        .json({ error: "Failed to add report. Please try again." });
+        .json({ error: "Failed to get report. Please try again." });
     }
   }
 
-  // Add a new task
+  // Add a new report
   async addReport(req, res) {
+    console.log("controller addreport called")
+    console.log("with", req.method, req.originalUrl); 
+    console.trace() 
+
     try {
       // Check if 'report' is provided in the request body
-      if (!req.body.report || !req.body.report.score) {
+      if (!req.body || !req.body.score) {
         return res.status(400).json({ error: "Bad request, crowding report score is required." });
       }
 
       // Create the new report object with a unique ID
-      const report = await this.model.create(req.body.report);
+      const report = await this.model.create(req.body);
 
       // Log full report for debugging
-      console.log(`New report created for ${report.location[0]}: id ${report.id}, score ${report.score}, timestamp ${report.timestamp} ms`);
+      const floor = report.floor
+        ? `Floor ${report.floor}` 
+        : ""
+
+      const timestamp = Date.parse(report.createdAt)
+      console.log(`[New Report] ${report.location} ${floor} - score ${report.score} @ timestamp ${timestamp} ms - id ${report.id}`);
 
       // Send back the created report as the response
       return res.status(201).json({ ok: true, body: report });

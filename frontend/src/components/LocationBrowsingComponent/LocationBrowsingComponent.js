@@ -15,7 +15,6 @@ export class LocationBrowsingComponent extends BaseComponent {
     constructor() {
         super();
         this.loadCSS('LocationBrowsingComponent');
-        this.service = new ReportRepositoryRemoteService();
     }
 
     async render() {
@@ -87,7 +86,21 @@ export class LocationBrowsingComponent extends BaseComponent {
         }
 
         toBeRendered.forEach(async location => { // render each location in given order
-            const locationCard = new LocationCardComponent(location); // create new component for each location
+            const locationObject = {
+                name: location.name,
+                address: location.address,
+                type: location.type,
+            }
+
+            // parse report or floors attribute depending on building type
+            if (location.type === "Single-Floor") { 
+                locationObject.reports = JSON.parse(location.reports);
+
+            } else if (location.type === "Multi-Floor") {
+                locationObject.floors = JSON.parse(location.floors);
+            }
+
+            const locationCard = new LocationCardComponent(locationObject); // create new component for each location
             locationBrowsingContainer.appendChild(await locationCard.render()); // add location card to location browsing container
         })
     }
@@ -96,11 +109,13 @@ export class LocationBrowsingComponent extends BaseComponent {
     #getMostRecentTimestamp(location) {
         if (location.type === "Single-Floor") {
             // check if there are reports
-            if (location.reports.length === 0) {return null}; // no reports stored for location (null ~= 0)
+            const reports = JSON.parse(location.reports);
+            if (reports.length === 0) {return null}; // no reports stored for location (null ~= 0)
 
-            return location.reports[0].timestamp; // return most recent timestamp
+            return reports[0].timestamp; // return most recent timestamp
         } else if (location.type === "Multi-Floor") {
-            const allReports = location.floors.map(floor => floor.reports); // get array of report arrays
+            const floors = JSON.parse(location.floors);
+            const allReports = floors.map(floor => floor.reports); // get array of report arrays
             if (allReports.length === 0) {return null}; // no reports stored for location
 
             const allTimestamps = allReports.map(reports => reports.map(report => report.timestamp)); // get array of all timestamps
@@ -112,12 +127,14 @@ export class LocationBrowsingComponent extends BaseComponent {
     // returns the average crowding score for an entire location
     #getAverageCrowdingScore(location) {
         if (location.type === "Single-Floor") {
-            const crowdingScores = location.reports.map(report => report.score) // get array of scores
+            const reports = JSON.parse(location.reports);
+            const crowdingScores = reports.map(report => report.score) // get array of scores
             return crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length // calculate average crowding score
 
         } else if (location.type === "Multi-Floor") {
             // TODO: determine if average across entire building is ideal
-            const allReports = location.floors.map(floor => floor.reports); // get array of report arrays
+            const floors = JSON.parse(location.floors);
+            const allReports = floors.map(floor => floor.reports); // get array of report arrays
             const crowdingScores = allReports.map(reports => reports.map(report => report.score)); // get array of all scores
             return crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length // calculate average crowding score
         }
@@ -128,13 +145,14 @@ export class LocationBrowsingComponent extends BaseComponent {
         try {
             const response = await fetch("/locations"); // fetch locations from backend
             if (response.ok) {
-                const data = await response.json();
+                const json = await response.json();
+                const data = await json.locations;
                 if (Array.isArray(data) && data.length > 0) { // check data format / if location data exists
                     this.#locationsData = data; // save location data
                     return data;
 
                 } else {
-                    throw new Error("data is not an array, or no locations in array");
+                    throw new Error("Locations data is not an array, or no locations in array.");
                 }
             } else {
                 throw new Error(response.status);
@@ -142,29 +160,7 @@ export class LocationBrowsingComponent extends BaseComponent {
 
         } catch (error) { // error handling
             console.log(`Error fetching location data: ${error}`);
-        }  
-        
-        // previous implementation with mock server (local JSON file)
-        // try {
-        //     const response = await fetch("http://localhost:3000/lib/data/MockLocations.json");
-        //     if (response.ok) {
-        //         const json = await response.json();
-        //         const data = await JSON.parse(json);
-
-        //         if (Array.isArray(data) && data.length > 0) { // check data format / if location data exists
-        //             this.#locationsData = data; // save location data
-        //             return data;
-
-        //         } else {
-        //             throw new Error("no locations found");
-        //         }
-        //     } else {
-        //         throw new Error(response.status);
-        //     }
-
-        // } catch (error) { // error handling
-        //     console.log(`Error fetching location data: ${error}`);
-        // }        
+        }        
     }
 
     // filter and re-render location cards based on given query (string)
@@ -217,9 +213,22 @@ export class LocationBrowsingComponent extends BaseComponent {
     // hide element
     #hideElement(element) {
         element.style.display = "none";
+    }
 
-        if (element === this.#reportModal) {localStorage.removeItem("crowding")}; // clear selection
-        // TODO: determine if it's cleaner to split dimmer and report modal functions into two again
+    #minimizeReportModal() {
+        // return button stylings to default
+        this.#reportModal.querySelectorAll(".score-select").forEach(button => {
+            // will default to stylesheet, ref: https://stackoverflow.com/a/2028029
+            button.style.background = "";
+            button.style.border = "";
+            button.style.color = "";
+        })
+
+        // hide modal
+        this.#hideElement(this.#reportModal);
+
+        // clear user selection from local storage if possible
+        localStorage.removeItem("crowding"); 
     }
 
     // set up report modal element & button event listeners
@@ -232,11 +241,11 @@ export class LocationBrowsingComponent extends BaseComponent {
         reportModal.innerHTML = `
             <p>How crowded is <strong id="report-location-name"></strong>?</p>
 
-            <button id="level1"></button>
-            <button id="level2"></button>
-            <button id="level3"></button>
-            <button id="level4"></button>
-            <button id="level5"></button>
+            <button id="level1" class="score-select"></button>
+            <button id="level2" class="score-select"></button>
+            <button id="level3" class="score-select"></button>
+            <button id="level4" class="score-select"></button>
+            <button id="level5" class="score-select"></button>
 
             <button id="report-submit" type="submit" value="Submit">Submit</button>
         `
@@ -328,7 +337,7 @@ export class LocationBrowsingComponent extends BaseComponent {
         document.addEventListener("click", (event) => {
             if (this.#reportModal.style.display !== "none" && !this.#reportModal.contains(event.target)) {
                 // ref for .contains() usage: https://johnsonkow.medium.com/event-listener-for-outside-click-75226f5c8ce0
-                this.#hideElement(this.#reportModal);
+                this.#minimizeReportModal();
                 console.log("clicked outside")
             }
         });
@@ -339,7 +348,7 @@ export class LocationBrowsingComponent extends BaseComponent {
         document.addEventListener("keyup", (event) => {
             if (event.code === "Escape") { // escape key press
                 if (this.#reportModal.style.display !== "none") { // report modal visible
-                    this.#hideElement(this.#reportModal); // minimize report modal
+                    this.#minimizeReportModal(); // minimize report modal
                     event.stopPropagation(); // shouldn't matter, but just to be safe
                 } else if (document.querySelector(".expanded") !== undefined) { // otherwise, escape expanded card if applicable
                     hub.publish(Events.MinimizeLocationCard); // minimize expanded card (via event hub subscription)
@@ -354,7 +363,6 @@ export class LocationBrowsingComponent extends BaseComponent {
 
             const reportSubject = document.getElementById("report-location-name").innerText // "LocationName" or "LocationName Floor FloorName"
                 .split(" Floor ") // should be ["LocationName"] or ["LocationName", "FloorName"]
-            // console.log(reportSubject);
 
             // check if no selection made
             if (localStorage.getItem("crowding") === null) {
@@ -364,12 +372,13 @@ export class LocationBrowsingComponent extends BaseComponent {
 
             // construct data for add report
             const data = {
-                report: {
-                    location: reportSubject,
-                    score: Number(localStorage.getItem("crowding")), // convert to number
-                    timestamp: Date.now()
-                }    
-            };
+                location: reportSubject[0],
+                score: Number(localStorage.getItem("crowding")), // convert to number
+            }
+
+            if (reportSubject.length === 2) { // multi floor
+                data.floor = reportSubject[1]; // add floor name
+            }
 
             hub.publish(Events.AddReport, data); // alert event hub -> trigger backend action
         })
@@ -377,10 +386,9 @@ export class LocationBrowsingComponent extends BaseComponent {
         // attach event listeners for successful crowding score report
         hub.subscribe(Events.AddReportSuccess, async () => {
             alert("Your report has been saved. Thank you."); // TODO: make this a modal? (less intrusive)
-            // TODO: bug fix: this triggers twice
 
-            this.#hideElement(this.#reportModal); // close modal after successful report submission
-            hub.publish(Events.MinimizeLocationCard); // close modal
+            this.#minimizeReportModal();; // close modal after successful report submission
+            hub.publish(Events.MinimizeLocationCard); // close location card
             this.#locationsData = await this.#getLocations(); // update location data attribute 
             await this.#renderCards(); // TODO: maybe render only the card that changed
         })
