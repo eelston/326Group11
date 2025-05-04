@@ -2,8 +2,6 @@ import { Sequelize, DataTypes } from "sequelize";
 import { fileURLToPath } from "url";
 import path from "path";
 import * as fs from 'fs'; // file system module (ref: https://www.w3schools.com/nodejs/nodejs_filesystem.asp and https://www.geeksforgeeks.org/how-to-update-data-in-json-file-using-javascript/)
-import Report from "../reports/report.js"
-
 
 // get folder name for current file
 const __filename = fileURLToPath(import.meta.url);
@@ -16,7 +14,7 @@ const sequelize = new Sequelize({
 });
 
 // define location model
-const Location = sequelize.define("Location", {
+export const Location = sequelize.define("Location", {
     id: { // unique universal identifier
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
@@ -48,10 +46,6 @@ const Location = sequelize.define("Location", {
         allowNull: true
     }
 })
-
-// define associations
-// Location.hasMany(Report); // one Location has many Reports
-// Report.belongsTo(Location); // each Report belongs to a single Location
 
 // define SQLite model
 class _SQLiteLocationModel {

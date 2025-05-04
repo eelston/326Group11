@@ -1,6 +1,8 @@
 import { Sequelize, DataTypes } from "sequelize";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { Location } from "../locations/locations.js";
+import SQLiteLocationModel from "../locations/locations.js";
 
 // get folder name for current file
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +41,12 @@ export const Report = sequelize.define("Report", {
     // using Date.parse to convert createdAt value to timestamp where needed
 });
 
+// define associations (ref: https://sequelize.org/docs/v6/advanced-association-concepts/creating-with-associations/)
+// Location.Report = Location.hasMany(Report, { // one Location has many Reports
+//     sourceKey: "location" // foreignKey will reference the 'location' attribute of the Location model
+// });
+// Report.Location = Report.belongsTo(Location); // each Report belongs to a single Location
+
 class _SQLiteReportModel {
     constructor() {}
 
@@ -73,7 +81,23 @@ class _SQLiteReportModel {
     }
 
     async create(report) {
-        return await Report.create(report); // build and save report
+        // update corresponding location
+        const location = await SQLiteLocationModel.read(report.location); // get location corresponding to report
+
+        const newReport = await Report.create(report); // build and save report
+
+        // // update reports array (depending on building type), .update() ref: https://sequelize.org/docs/v7/querying/update/
+        if (location.type === "Single-Floor") {
+            location.update({ reports: [...location.reports, newReport.id] }); // add report id to reports array
+
+        } else if (location.type === "Multi-Floor") {
+            const floors = JSON.parse(location.floors); // get floors array of objects (convert JSON -> array)
+            const index = floors.findIndex(floor => floor.name === newReport.floor) // get index of floor corresponding to report
+            floors[index].reports.push(newReport.id); // add id to floor's reports array
+            location.update({ floors: JSON.stringify(floors) }); // update location floors array (as JSON)
+        }
+
+        return newReport; 
     }
 
     async read(id = null) {
