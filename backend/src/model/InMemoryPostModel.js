@@ -45,7 +45,7 @@ class _InMemoryPostModel {
         return null;
     }
 
-    async deleteAll(post = null) { // TODO UPDATE?
+    async deleteAll() { // TODO UPDATE?
         this.posts = [];
         return;
     }

@@ -5,13 +5,83 @@ const sequelize = new Sequelize({
     storage: "database.sqlite"
 });
 
+const Tag = sequelize.define("Tag", {
+    color: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue:"#ffd7d7"
+    },
+    tag: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
+
 const Comment = sequelize.define("Comment", {
-    //TODO
+    commentId: {
+        type: DataTypes.NUMBER,
+        allowNull: false,
+        primaryKey: true,
+    },
+    postId: {
+        type: DataTypes.NUMBER,
+        allowNull: false, 
+    },
+    userId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    message: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    timeStamp: {
+        type: DataTypes.NUMBER,
+        allowNull: false
+    },
 });
 
 const Post = sequelize.define("Post", {
-    //TODO
+    postId: {
+        type: DataTypes.NUMBER,
+        primaryKey: true,
+        allowNull: false,
+    },
+    userId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    location: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    startTime: {
+        type: DataTypes.STRING, 
+        allowNull: false,
+    },
+    timeStamp: {
+        type: DataTypes.NUMBER, // Might not matter , might be deleted
+        allowNull: false,
+    },
+    isExpired: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    }
+    // comments and tags to add in with the relation
 });
+
+Post.hasMany(Comment, {foreignKey: "postId", as: "postComments"}); // post has many comments
+Comment.belongsTo(Post, {foreignKey: "postId", as: "post"});; // comment can only belong to 1 post
+Post.hasMany(Tag, {foreignKey: "postId", as: "tags"}); // post can have many tags, but tags dont store
+// which posts they're in.
 
 class _SQLitePostModel {
     constructor() {}
@@ -37,23 +107,37 @@ class _SQLitePostModel {
     }
 
     async create(post) {
-        //TODO
+        return await Post.create(post);
     }
 
     async read(id = null) {
-        //TODO
+        if (id) {
+            return await Post.findByPk(id);
+        }
+        return await Post.findAll();
     }
 
     async update(post) {
-        //TODO
+        const postu = await Post.findByPk(post.postId);
+        if (!postu) {
+            return null;
+        }
+        await postu.update(post);
+        return postu; // should return updated post.
     }
 
-    async delete(task = null) {
-        //TODO
+    async delete(postIdDel = null) {
+        if (!postIdDel) {
+            return null;
+        }
+        const postDel = await Post.findByPk(postIdDel);
+        await Post.destroy({where: {postId: postIdDel}});
+        return postDel;
     }
 
-    async deleteAll(post = null) {
-        //TODO 
+    async deleteAll() {
+        await Post.destroy({truncate: true});
+        return;
     }
 }
 
