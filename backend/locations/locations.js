@@ -72,7 +72,6 @@ class _SQLiteLocationModel {
         // create new from template
         if (fresh || pullFromJSON) {
             await this.delete();
-            console.log("Loading location database content from locations.json template")
 
             // pull from template JSON
             const __filename = fileURLToPath(import.meta.url); // get current file path
@@ -80,29 +79,31 @@ class _SQLiteLocationModel {
             const dataPath = path.join(__dirname, "..", "src/data/locations.json"); // absolute path, go up one folder then down to src (ref: https://stackoverflow.com/a/9856725)
 
             // read from JSON
-            fs.readFile(dataPath, (error, data) => { // callback run with file contents or error
-                if (error) throw error;
+            console.log(`Loading location database content from template at "${dataPath}"`);
+            const data = fs.readFileSync(dataPath); // blocks rest of the program from executing until the file has been completely read 
+            // ref: https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/
+            // this prevents other operations from occurring (e.g., read calls) before all the locations have been loaded from the JSON file
 
-                const dataArray = JSON.parse(data); // data from JSON
-                dataArray.forEach(async location => { // for each location object
-                    const locationToCreate = {
-                        name: location.name,
-                        address: location.address,
-                        type: location.type,
-                    }
+            const dataArray = JSON.parse(data); // data from JSON
 
-                    // add report or floors attribute depending on building type
-                    if (location.type === "Single-Floor") { 
-                        locationToCreate.reports = JSON.stringify(location.reports);
+            dataArray.forEach(async location => { // for each location object
+                const locationToCreate = {
+                    name: location.name,
+                    address: location.address,
+                    type: location.type,
+                }
 
-                    } else if (location.type === "Multi-Floor") {
-                        locationToCreate.floors = JSON.stringify(location.floors);
-                    }
+                // add report or floors attribute depending on building type
+                if (location.type === "Single-Floor") { 
+                    locationToCreate.reports = JSON.stringify(location.reports);
 
-                    // add to database
-                    await this.create(locationToCreate);
-                })
-            });
+                } else if (location.type === "Multi-Floor") {
+                    locationToCreate.floors = JSON.stringify(location.floors);
+                }
+
+                // add to database
+                await this.create(locationToCreate);
+            })
         }
     }
 

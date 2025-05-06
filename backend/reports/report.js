@@ -50,14 +50,14 @@ export const Report = sequelize.define("Report", {
 class _SQLiteReportModel {
     constructor() {}
 
-    async init(fresh = false) {
+    async init(demo = false) {
         await sequelize.authenticate(); // check connection
         await sequelize.sync(); // sync model with database
         // { force: true } overwrites existing database table to match model
 
         console.log("Report database synchronized successfully"); // no exceptions from above thrown
 
-        if (fresh) { // create new
+        if (demo) { // create new with mock data for demo day
             await this.delete();
 
             // mock/default report data
@@ -77,10 +77,66 @@ class _SQLiteReportModel {
                 floor: "3",
                 score: 2,
             });
+
+            await this.create({
+                location: "Science & Engineering Library",
+                floor: "3",
+                score: 4,
+            });
+
+            await this.create({
+                location: "Student Union",
+                floor: "2",
+                score: 4,
+            });
+
+            await this.create({
+                location: "Student Union",
+                floor: "3",
+                score: 2,
+            });
+
+            await this.create({
+                location: "Integrated Learning Center",
+                floor: "1",
+                score: 3,
+            });
+
+            await this.create({
+                location: "Integrated Learning Center",
+                floor: "2",
+                score: 4,
+            });
+
+            
+            await this.create({
+                location: "Integrated Learning Center",
+                floor: "3",
+                score: 2,
+            });
+
+            await this.create({
+                location: "DuBois Quiet Study",
+                floor: "2",
+                score: 3,
+            });
+
+            await this.create({
+                location: "DuBois Quiet Study",
+                floor: "5",
+                score: 5,
+            });
+
+            await this.create({
+                location: "DuBois Quiet Study",
+                floor: "8",
+                score: 2,
+            });
         }
     }
 
     async create(report) {
+        console.log("Received report to create:", report)
         // update corresponding location
         const location = await SQLiteLocationModel.read(report.location); // get location corresponding to report
 

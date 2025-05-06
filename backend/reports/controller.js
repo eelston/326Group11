@@ -7,11 +7,12 @@
  */
 
 import SQLiteReportModel from "./report.js";
+import { useDemoData } from "../src/data/demo.js";
 
 class ReportController {
   constructor() {
     this.model = SQLiteReportModel; // get report model instance
-    this.model.init();
+    this.model.init(useDemoData);
   }
 
   // Get all reports
@@ -33,7 +34,7 @@ class ReportController {
       const report = await this.model.read(id);
 
       // Log for debugging
-      console.log(`Read report ${report.id} for ${report.location[0]}, score: ${report.score} `)
+      console.log(`Read report ${report.id} for ${report.location}, score: ${report.score} `)
 
       // Send back the created report as response
       return res.status(201).json({ ok: true, body: report });
@@ -49,10 +50,6 @@ class ReportController {
 
   // Add a new report
   async addReport(req, res) {
-    console.log("controller addreport called")
-    console.log("with", req.method, req.originalUrl); 
-    console.trace() 
-
     try {
       // Check if 'report' is provided in the request body
       if (!req.body || !req.body.score) {

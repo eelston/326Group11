@@ -1,10 +1,11 @@
 import * as fs from 'fs'; // file system module for interacting with local JSON files (ref: https://www.w3schools.com/nodejs/nodejs_filesystem.asp and https://www.geeksforgeeks.org/how-to-update-data-in-json-file-using-javascript/)
 import SQLiteLocationModel from './locations.js';
+import { useDemoData } from '../src/data/demo.js';
 
 class LocationController {
   constructor() {
     this.model = SQLiteLocationModel; // get location model
-    this.model.init();
+    this.model.init(useDemoData);
 
     // const __filename = fileURLToPath(import.meta.url); // get current file path
     // const __dirname = path.dirname(__filename); // get current file folder
