@@ -65,18 +65,18 @@ export class RegisterComponent extends BaseComponent {
     }
 
     #attachEventListeners() {
-        this.#attachEmailMessageListener();
-        this.#attachPasswordMessageListener();
         this.#attachToggleFormListener();
+        this.#attachEmailListener();
+        this.#attachPasswordListener();
         this.#attachFormSubmitListener();
     }
 
-    #attachEmailMessageListener() {
+    #attachEmailListener() {
         const emailInput = this.#container.querySelector("#email");
         emailInput.addEventListener("input", () => this.#showErrorMessage(emailInput, "email-error-message", true));
     }
 
-    #attachPasswordMessageListener() {
+    #attachPasswordListener() {
         const passwordInput = this.#container.querySelector("#password");
         passwordInput.addEventListener("input", () => this.#showErrorMessage(passwordInput, "password-error-message", false));
     }
@@ -89,6 +89,12 @@ export class RegisterComponent extends BaseComponent {
     #attachFormSubmitListener() {
         const submitButton = this.#container.querySelector("#submit");
         submitButton.addEventListener("submit", (e) => this.#handleFormSubmit(e));
+    }
+
+    #toggleFormState(e) {
+        e.preventDefault();
+        this.#isLoginMode = !this.#isLoginMode;
+        this.#updateForm();
     }
 
     #showErrorMessage(inputElement, messageClass, isEmail) {
@@ -105,21 +111,11 @@ export class RegisterComponent extends BaseComponent {
         return emailRegex.test(email);
     }
 
-    #toggleFormState(e) {
-        e.preventDefault();
-        this.#isLoginMode = !this.#isLoginMode;
-        this.#updateForm();
-    }
-
     #handleFormSubmit(e) {
-        e.preventDefault();
         const emailInput = this.#container.querySelector("#email");
         const passwordInput = this.#container.querySelector("#password");
 
-        const emailValid = this.#validateEmail(emailInput.value);
-        const passwordValid = passwordInput.value.length >= 8;
-
-        if (!emailValid || !passwordValid) return;
+        if (!this.#validateEmail(emailInput.value) || passwordInput.value < 8) return;
 
         const payload = {
             email: emailInput.value,
