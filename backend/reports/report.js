@@ -52,7 +52,7 @@ class _SQLiteReportModel {
 
     async init(fresh = false) {
         await sequelize.authenticate(); // check connection
-        await sequelize.sync({ force: true }); // sync model with database
+        await sequelize.sync(); // sync model with database
         // { force: true } overwrites existing database table to match model
 
         console.log("Report database synchronized successfully"); // no exceptions from above thrown
