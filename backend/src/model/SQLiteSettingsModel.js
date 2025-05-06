@@ -72,6 +72,10 @@ const Class = sequelize.define("Class", {
     number: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    course_name: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 });
 
@@ -220,6 +224,7 @@ class _SQLiteSettingsModel {
         if (!classData.userId) throw new Error('User ID is required');
         if (!classData.subject) throw new Error('Subject is required');
         if (!classData.number) throw new Error('Course number is required');
+        // course_name is optional
         return true;
     }
 
@@ -250,7 +255,8 @@ class _SQLiteSettingsModel {
                 id: Date.now().toString(),
                 userId: classData.userId,
                 subject: classData.subject,
-                number: classData.number
+                number: classData.number,
+                course_name: classData.course_name || null
             });
 
             console.log('Model: Class created successfully, getting settings');
