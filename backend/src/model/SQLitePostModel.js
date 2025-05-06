@@ -19,12 +19,14 @@ const Tag = sequelize.define("Tag", {
 
 const Comment = sequelize.define("Comment", {
     commentId: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
+        unique: true,
+        autoIncrement: true,
     },
     postId: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false, 
     },
     userId: {
@@ -36,16 +38,18 @@ const Comment = sequelize.define("Comment", {
         allowNull: false,
     },
     timeStamp: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
 });
 
 const Post = sequelize.define("Post", {
     postId: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
+        unique: true,
+        autoIncrement: true,
     },
     userId: {
         type: DataTypes.STRING,
@@ -68,7 +72,7 @@ const Post = sequelize.define("Post", {
         allowNull: false,
     },
     timeStamp: {
-        type: DataTypes.NUMBER, // Might not matter , might be deleted
+        type: DataTypes.INTEGER, // Might not matter , might be deleted
         allowNull: false,
     },
     isExpired: {
