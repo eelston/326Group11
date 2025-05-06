@@ -89,7 +89,7 @@ class _SQLiteReportModel {
         // // update reports array (depending on building type), .update() ref: https://sequelize.org/docs/v7/querying/update/
         if (location.type === "Single-Floor") {
             let reportsArr = JSON.parse(location.reports); // get reports array
-            reportsArr = [...reportsArr, newReport.id]
+            reportsArr = [newReport.id, ...reportsArr];  // add report id to BEGINNING of reports array
             location.update({ reports: JSON.stringify(reportsArr) }); // add report id to reports array
 
         } else if (location.type === "Multi-Floor") {
