@@ -1,5 +1,5 @@
 import express from 'express';
-import { SettingsController } from '../controllers/settings.js';
+import { SettingsController } from './settingsController.js';
 
 const router = express.Router();
 const controller = new SettingsController();

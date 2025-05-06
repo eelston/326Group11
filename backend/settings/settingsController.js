@@ -1,4 +1,4 @@
-import { SettingsModel } from '../models/settings.js';
+import { SettingsModel } from './settingsModel.js';
 
 export class SettingsController {
     constructor() {

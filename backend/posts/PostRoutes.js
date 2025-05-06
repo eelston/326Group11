@@ -24,7 +24,7 @@
 
 //TODO ADD THE RESPONSE INFO AT TOP EMULATE THE GIVEN
 import express from "express";
-import PostController from "../controller/PostController.js";
+import PostController from "./PostController.js";
 
 class PostRoutes {
     constructor() {

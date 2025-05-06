@@ -25,7 +25,7 @@
 // handles input and output correctly, without dependencies on the
 // application's interface or data storage layers.
 
-import ModelPostFactory from "../model/ModelPostFactory.js";
+import ModelPostFactory from "../users/ModelFactory.js";
 
 class PostController {
     constructor() {

@@ -9,8 +9,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import ReportRoutes from "../reports/routes.js"
 import LocationRoutes from "../locations/routes.js"
-import PostRoutes from "./routes/PostRoutes.js";
-import settingsRouter from './routes/settings.js';
+import PostRoutes from "../posts/PostRoutes.js";
+import settingsRouter from '../settings/settingsRoutes.js';
 
 const app = express();
 const PORT = 3000;
