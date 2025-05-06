@@ -1,6 +1,6 @@
 import { RegisterComponent } from "../../components/RegisterComponent/RegisterComponent.js";
 
-const page = document.getElementById("page");
+const body = document.body;
 
 const register = new RegisterComponent();
-page.appendChild(register.render());
+body.appendChild(register.render());

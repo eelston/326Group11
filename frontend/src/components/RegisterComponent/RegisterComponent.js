@@ -13,13 +13,12 @@ export class RegisterComponent extends BaseComponent {
 
     render() {
         this.#createContainer();
-        this.#attachEventListeners();
         return this.#container;
     }
 
     #createContainer() {
         this.#container = document.createElement("div");
-        this.#container.classList.add('register-container');
+        this.#container.classList.add('page');
         this.#updateForm();
     }
 
@@ -42,6 +41,7 @@ export class RegisterComponent extends BaseComponent {
             : "Have an account? Log In Here!";
 
         return `
+            <div id="register-container">
             <h1 id="form-title" class="form-title"></h1>
             <form id="${prefix}-form">
                 <div class="email">
@@ -60,6 +60,7 @@ export class RegisterComponent extends BaseComponent {
                     <button type="button" id="toggle-form">${toggleText}</button>
                 </div>
             </form>
+            </div>
         `;
     }
 

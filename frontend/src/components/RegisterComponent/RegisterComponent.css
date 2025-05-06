@@ -1,14 +1,46 @@
-body {
-    background: #E8E1FD;
+/******************************
+*********** HEADER ************
+******************************/
+header {
+    background: var(--navbar-purple);
+
+    height: 65px;
+    box-sizing: border-box;
+    padding: 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.register-container{
-    margin: 2vw;
+/* Study on Campus "logo" text */
+#app-logo {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+#app-logo:hover {
+    cursor: pointer;
+    color: #602dcf;
+}
+
+/****** REGISTER CONTENT *******/
+
+body {
+    background: #E8E1FD;
+    height: 100vh;
+}
+
+.page {
+    min-height: calc(100% - 90px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-title{
     margin: 1vw;
-    font-size: 2rem;
+    font-size: 5rem;
     text-align: center;
 }
 
@@ -76,4 +108,59 @@ form{
     background-color: #5ad8cc;
     border-color: #5ad8cc;
     color: #ffffff;
+}
+
+/* Media Queries for Phone Screens */
+
+@media (max-width: 768px) {
+    #register-container {
+        width: 75%;
+    }
+
+    .form-title {
+        font-size: 4rem;
+    }
+
+    .email input,
+    .password input,
+    #submit,
+    #toggle-form {
+        font-size: 1.2rem;
+    }
+
+    .email label,
+    .password label {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #register-container {
+        width: 75%;
+    }
+
+    .form-title {
+        font-size: 3.5rem;
+    }
+
+    form {
+        padding: 1rem;
+    }
+
+    .email input,
+    .password input,
+    #submit,
+    #toggle-form {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+
+    .email label,
+    .password label {
+        font-size: 1rem;
+    }
+
+    #app-logo {
+        font-size: 1rem;
+    }
 }
