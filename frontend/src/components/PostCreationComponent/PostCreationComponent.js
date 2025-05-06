@@ -270,7 +270,7 @@ export class PostCreationComponent extends BaseComponent {
             startTime: new Date(this.#datetime),
             timeStamp: new Date(),
             isExpired: false,
-            comments: null
+            comments: []
         };
 
         this.#publishPost(post);
@@ -278,7 +278,7 @@ export class PostCreationComponent extends BaseComponent {
         window.location.href = "/pages/PostBrowsing/index.html"
     }
 
-    #handleCancelPost() {
+    #handleCancelPost() { //TODO UPDATE?
         const titleInput = this.#container.querySelector('#post-title');
         const locationInput = this.#container.querySelector('#post-location');
         const bodyInput = this.#container.querySelector('#post-body');
@@ -291,7 +291,7 @@ export class PostCreationComponent extends BaseComponent {
 
     #publishPost(post) {
         const hub = EventHub.getInstance();
-        hub.publish(Events.StorePost, { post });
+        hub.publish(Events.StorePost, post);
     }
 
     #clearInputs(titleInput, locationInput, bodyInput, tagList, datetimeList) {

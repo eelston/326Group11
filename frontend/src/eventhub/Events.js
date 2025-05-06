@@ -6,6 +6,11 @@ export const Events = {
     // Post Creation 
     NewPost: 'NewPost',
 
+    // Post Browsing
+    FilterPosts: 'FilterPosts',
+    FilterPostsSuccess: 'FilterPostsSuccess',
+    FilterPostsFailure: 'FilterPostsFailure',
+
     // Post Browsing 
     LoadPosts: 'LoadPosts',
     LoadPostsSuccess: 'LoadPostsSuccess',
@@ -35,10 +40,6 @@ export const Events = {
     UnStorePost: 'UnStorePost',
     UnStorePostSuccess: 'UnStoreFullPostSuccess',
     UnStorePostFailure: 'UnStoreFullPostFailure',
-
-    // View Switching Events
-    SwitchToPostBrowsingView: 'SwitchToPostBrowsingView',
-    SwitchToPostViewingView: 'SwitchToPostViewingView',
 
     // Location Browsing
     ExpandLocationCard: 'ExpandLocationCard',

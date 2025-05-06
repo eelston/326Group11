@@ -8,7 +8,7 @@ navbarComponent.render();
 
 const service = PostRepositoryFactory.get("remote");
 
-const component = new PostViewingComponent(service); 
+const component = new PostViewingComponent(); 
 
 const params = new URLSearchParams(window.location.search);
 const postId = params.get('id');

@@ -45,14 +45,9 @@ class _InMemoryPostModel {
         return null;
     }
 
-    async deleteAll(post = null) {
-        if (post === null) {
-            this.posts = [];
-            return;
-        }
-        const index = this.posts.findIndex((p) => p.postId === post.postId);
-        this.posts.splice(index, 1);
-        return post;
+    async deleteAll(post = null) { // TODO UPDATE?
+        this.posts = [];
+        return;
     }
 }
 // Creating a singleton instance of the InMemoryPostModel.
