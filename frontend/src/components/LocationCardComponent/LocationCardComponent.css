@@ -105,12 +105,14 @@
 /* expanded card styling */
 .expanded {
     /* bring card to center of window */
-    position: absolute;
-    margin: 0 30vw; /* TODO: adjust to center better */
+    position: fixed;
+
+    /* center div, ref: https://stackoverflow.com/a/25919090 */
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, 0);
 
     z-index: 999; /* bring to top */
-    /* width: 33%; */
-    /* TODO: figure out issue with varying bar width (understand inherit better) */
 }
 /* TODO: add media query for mobile width and/or decide if dim functionality is appropriate for mobile */ 
 /* i.e., consider potentially implementing different expand appearance for mobile */
