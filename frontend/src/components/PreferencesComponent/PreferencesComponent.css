@@ -1,0 +1,50 @@
+.preferences-section {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.preferences-section label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.preferences-section input[type="checkbox"] {
+    margin: 0;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.preferences-section input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.save-btn {
+    background-color: #b388eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 20px;
+    align-self: flex-end;
+    width: fit-content;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.save-btn:hover {
+    background-color: #6b2c94;
+}
+
+.save-btn:active {
+    transform: scale(0.95);
+}

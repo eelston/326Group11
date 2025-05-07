@@ -5,72 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Study on Campus</title>
     <link rel="stylesheet" href="../../main.css" />
-    <link rel="stylesheet" href="style.css" />
     <script src="script.js" type="module"></script>
 </head>
 <body>
     <main>
-        <div id="settings-messages">
-            <div id="settings-error" class="error-message" style="display: none"></div>
-            <div id="settings-success" class="success-message" style="display: none"></div>
-        </div>
-
-        <div class="settings-sections-container">
-            <div class="left-column">
-
-                <h3>Account</h3>
-
-                <section class="account-section">
-                    <label>User ID <input type="user_id" placeholder="user_id" disabled /></label>
-                    <label>Email <input type="email" placeholder="email address" disabled /><button class="edit-btn">Edit</button></label>
-                    <label>Password <input type="password" id="password-input" value="123456789" disabled /><button class="edit-btn">Edit</button></label>
-                    <div class="show-password-container">
-                        <input type="checkbox" id="show-password-checkbox">
-                        <small>Show Password</small>
-                    </div>
-                    <button class="save-btn">Save changes</button>
-                </section>
-                
-                <h3>Preferences</h3>
-
-                <section class="preferences-section">
-                    <label>Display major on posts <input type="checkbox" /></label>
-                    <label>Display pronouns on posts <input type="checkbox" /></label>
-                    <label>Receive email notifications <input type="checkbox" /></label>
-                    <button class="save-btn">Save changes</button>
-                </section>
-            </div>
-            
-            <div class="right-column">
-                <h3>User Profile</h3>
-                <section class="profile-section">
-                    <label>Display name <input type="text" placeholder="Current display name" /></label>
-                    <label>Pronouns <input type="text" placeholder="Current pronouns" /></label>
-                    <label>Major <input type="text" placeholder="Current major" /></label>
-                    <label for="bio">Bio</label>
-                    <textarea id="bio" placeholder="Current biography"></textarea>
-                    <h4>Current classes</h4>
-                    <div class="current-classes">
-                        <div class="add-btn-container">
-                            <button class="add-btn">+</button>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-group">
-                                    <label for="subject-select">Subject:</label>
-                                    <select id="subject-select">
-                                        <option value="">-- Select a subject --</option>
-                                    </select>
-                                </div>
-                                <div class="dropdown-group">
-                                    <label for="course-number-select">Number:</label>
-                                    <!-- course-number-select will be added by JavaScript -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="save-btn">Save changes</button>
-                </section>
-            </div>
-        </div>
+        <settings-component></settings-component>
     </main>
 </body>
 </html>

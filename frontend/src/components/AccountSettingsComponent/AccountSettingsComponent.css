@@ -1,0 +1,92 @@
+.account-section {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.account-section label {
+    display: grid;
+    grid-template-columns: 150px 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.account-section input {
+    width: auto;
+    min-width: 100px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.account-section input:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+    border-color: #ddd;
+    color: #666;
+}
+
+.account-section button {
+    margin-left: 10px;
+    align-self: flex-end;
+    order: 1;
+}
+
+.account-section .edit-btn {
+    margin-left: auto;
+    width: fit-content;
+    background-color: #d6b3ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.account-section .edit-btn:hover {
+    background-color: #b388eb;
+}
+
+.account-section .edit-btn:active {
+    transform: scale(0.95);
+}
+
+.show-password-container {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+.show-password-container input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.save-btn {
+    background-color: #b388eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 20px;
+    align-self: flex-end;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.save-btn:hover {
+    background-color: #6b2c94;
+}
+
+.save-btn:active {
+    transform: scale(0.95);
+}

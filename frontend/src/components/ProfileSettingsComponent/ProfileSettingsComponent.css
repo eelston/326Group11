@@ -1,0 +1,243 @@
+.profile-section {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-section label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.profile-section input[type="text"] {
+    margin-left: 10px;
+    width: 72%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.profile-section textarea[id="bio"] {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 80px;
+    max-height: 200px;
+    margin-bottom: 20px;
+}
+
+.current-classes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.class-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.class-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+.class-item button {
+    margin: 0;
+    padding: 4px 8px;
+    background-color: transparent;
+    color: #666;
+    border: none;
+    font-size: 1.2em;
+    transition: color 0.2s ease;
+}
+
+.class-item button:hover {
+    color: #d32f2f;
+}
+
+/* Add class button styles */
+.add-btn-container {
+    position: relative;
+    display: inline-block;
+    z-index: 1000;
+}
+
+.add-btn {
+    background-color: #8e44ad;
+    color: white;
+    font-size: 16px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0;
+    line-height: 1;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.add-btn:hover {
+    background-color: #6b2c94;
+}
+
+.add-btn:active {
+    transform: scale(0.95);
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f2f2f2;
+    padding: 15px;
+    border-radius: 8px;
+    width: 250px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: rgba(242, 242, 242, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.dropdown-menu[style*="display: block"] {
+    opacity: 1;
+    animation: float-up 0.2s ease-out forwards;
+}
+
+.dropdown-group {
+    margin-bottom: 10px;
+}
+
+.dropdown-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.dropdown-group select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+select:disabled {
+    background-color: #e9e9e9;
+    cursor: not-allowed;
+}
+
+.dropdown-add-btn {
+    background-color: #b388eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-add-btn:hover {
+    background-color: #6b2c94;
+}
+
+.dropdown-add-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.save-btn {
+    background-color: #b388eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 20px;
+    align-self: flex-end;
+    width: fit-content;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.save-btn:hover {
+    background-color: #6b2c94;
+}
+
+.save-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes float-up {
+    from {
+        transform: translate(-50%, 10px);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    textarea[id="bio"] {
+        max-height: 150px;
+    }
+
+    .dropdown-menu {
+        position: fixed;
+        bottom: auto;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: calc(100% - 40px);
+        max-width: 300px;
+        max-height: 80vh;
+    }
+
+    @keyframes float-up {
+        from {
+            transform: translate(-50%, -45%);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+    }
+}
