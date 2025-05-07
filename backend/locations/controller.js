@@ -18,17 +18,6 @@ class LocationController {
     const locations = await this.model.read();
 
     return res.json({ locations: locations });
-    // try {
-    //   res.sendFile(this.jsonPath, (error) => {
-    //     if (error) {throw new Error(`issue with sendFile for locations JSON: ${error}`)};
-    //   });
-    
-    // } catch (error) {
-    //   console.log("Issue fetching locations JSON:", error)
-    //   return res
-    //       .status(500)
-    //       .json({ error: "Failed to get locations JSON." });
-    // }
   }
 
   // Update locations JSON

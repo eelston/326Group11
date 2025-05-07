@@ -113,10 +113,10 @@ class _SQLiteLocationModel {
 
     async read(name = null) {
         if (name) { // if location name is provided
-            return await Location.findByPk(name);
+            return await Location.findByPk(name); // return specific location
         }
 
-        return await Location.findAll(); // otherwise, return all locations
+        return await Location.findAll({ order: sequelize.literal('updatedAt DESC') }); // otherwise, return all locations in "last updated" order by default
     }
 
     async update(location = null) { // update location information
