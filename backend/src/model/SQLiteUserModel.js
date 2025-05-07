@@ -44,7 +44,7 @@ const User = sequelize.define("User", {
     pronouns: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: "",
+        defaultValue: "No Assigned Pronouns",
     },
     iconContent: {
         type: DataTypes.STRING,
@@ -127,7 +127,7 @@ class _SQLiteUserModel {
             userId: user.userId,
             email: user.email,
             password: user.password,
-            name: user.userId,
+            name: user.name || user.userId,
         };
         const newUser = await User.create(userc);
         return await this.read({ userId: newUser.userId });

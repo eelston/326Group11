@@ -75,8 +75,8 @@ export class PostViewingComponent extends BaseComponent {
 
     async #renderPost() { 
         const posted = this.#createTimeObj(this.#post.createdAt);
-        const tmrw = this.#isEventTmrw(posted);
         const start = this.#createTimeObj(this.#post.startTime);
+        const tmrw = this.#isEventTmrw(start);
         const userData = await this.#getUserData(this.#post.userId);
         this.#container.innerHTML = `
     <div class="user-post-info">
@@ -125,10 +125,11 @@ export class PostViewingComponent extends BaseComponent {
             c.appendChild(cInfo);
             const cIcon = document.createElement("div");
             cIcon.classList.add("commenter-icon");
+            cIcon.style.backgroundColor = comment.color;
             cInfo.appendChild(cIcon);
             const iconContent = document.createElement("span");
             const userData = await this.#getUserData(comment.userId);
-            console.log("USER DATA BELOW")
+            console.log("Post user's data below")
             console.log(userData);
             iconContent.textContent = userData.user.iconContent;
             cIcon.appendChild(iconContent);
@@ -213,6 +214,7 @@ export class PostViewingComponent extends BaseComponent {
                     postId: this.#post.postId,
                     userId: "User3", // AUTH NEEDED IN THE FUTURE - julia
                     message: box.value,
+                    color: this.#randomColor(),
                 }
                 this.#post.postComments.push(newComment);
                 const hub = EventHub.getInstance();
@@ -226,21 +228,27 @@ export class PostViewingComponent extends BaseComponent {
         })
     }
     #createTimeObj(timeStamp) {
-        console.log(timeStamp);
         const time = new Date(timeStamp);
         const hours = String(time.getHours()).padStart(2, '0');
         const mins = String(time.getMinutes()).padStart(2, '0');
         const month = time.getMonth();
         const day = time.getDate();
         const year = time.getFullYear();
-        return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+        if (year < new Date().getFullYear()) {
+            return {time: `${hours}:${mins}`, date:`TBD`};
+        } else {
+            return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+        }
     }
 
     #isEventTmrw(timeObj) {
-        const [month, day, year] = timeObj.date.split("/");
+        if (timeObj.date === "TBD") {
+            return "TBD"
+        }
+        const [month, day, year] = timeObj.date.split("/").map(num => parseInt(num));
         const userTime = new Date(Date.now());
         const currTime = [userTime.getMonth(), userTime.getDate(), userTime.getFullYear()];
-        if (year !== currTime[2] && month !== currTime[0] && (currTime[1] - day === 1)) {
+        if (year === currTime[2] && month === currTime[0] && (day - currTime[1] === 1)) {
             return "Tomorrow"
         }
         return timeObj.date;
@@ -279,5 +287,11 @@ export class PostViewingComponent extends BaseComponent {
             hub.subscribe(Events.LoadUserDataFailure, failure)
             hub.publish(Events.LoadUserData, userId);
         })
+    }
+
+    #randomColor() { // Function for random colors 
+        const colors = ["#5ad8cc", "#62e366", "#f0ed69", "#ffb963", "#ff8175", "#e6e6e6"];
+        const index = Math.floor(Math.random() * colors.length);
+        return colors[index];
     }
 }

@@ -103,7 +103,11 @@ export class PostBrowsingComponent extends BaseComponent {
         const month = time.getMonth();
         const day = time.getDate();
         const year = time.getFullYear();
-        return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+        if (year < new Date().getFullYear()) {
+            return {time: `${hours}:${mins}`, date:`TBD`};
+        } else {
+            return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+        }
     }
 
     async filterPosts(searchQuery = "") {

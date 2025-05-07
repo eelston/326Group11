@@ -37,6 +37,10 @@ const Comment = sequelize.define("Comment", {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    color: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 });
 
 const Post = sequelize.define("Post", {
@@ -105,6 +109,7 @@ class _SQLitePostModel {
                     postId: 1,
                     CommentId: 1,
                     message: "Test message comment.",
+                    color: "#4AD4CC"
                 }],
             })
             await this.create({

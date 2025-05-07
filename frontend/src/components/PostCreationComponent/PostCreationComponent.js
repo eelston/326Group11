@@ -172,12 +172,6 @@ export class PostCreationComponent extends BaseComponent {
         e.target.value = '';
     }
 
-    #randomColor() {
-        const colors = ['#c6faf6', "#cdf4d3", "#9cffd1", "#ffecbd", "#ffe0c2", "#66d575", "#5ad8cc", "#ffc943", "#ff9e42", "#f24822", "#15a36d", "#5591df", "#e66326", "#ff9c9c"];
-        const index = Math.floor(Math.random() * colors.length);
-        return colors[index];
-    }
-
     #handleRemoveTag(e) {
         if (!e.target.classList.contains('remove')) return;
 
@@ -308,6 +302,12 @@ export class PostCreationComponent extends BaseComponent {
         datetimeList.innerHTML = '';
         this.#tags = [];
         this.#datetime = null;
+    }
+
+    #randomColor() {
+        const colors = ['#c6faf6', "#cdf4d3", "#9cffd1", "#ffecbd", "#ffe0c2", "#66d575", "#5ad8cc", "#ffc943", "#ff9e42", "#f24822", "#15a36d", "#5591df", "#e66326", "#ff9c9c"];
+        const index = Math.floor(Math.random() * colors.length);
+        return colors[index];
     }
 
 }
