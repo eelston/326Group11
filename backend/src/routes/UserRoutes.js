@@ -17,12 +17,12 @@ class UserRoutes {
             await UserController.getAllUsers(req, res);
         })
 
-        this.router.get("/user", async (req, res) => {
+        this.router.get("/:userId", async (req, res) => {
             await UserController.getUser(req, res);
         })
 
-        this.router.post("/user", async (req, res) => {
-            await UserController.addUser(req, res);
+        this.router.post("/users", async (req, res) => {
+            await UserController.addUser(req, res); //upgrade this and bottom one later potentially
         })
 
         this.router.put("/user", async (req, res) => {

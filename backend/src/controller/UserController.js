@@ -39,14 +39,15 @@ class UserController {
 
     async getUser(req, res) {
         try {
-            if (!req.body || !req.body.userId){
+            if (!req.params){
                 return res.status(400).json({error: "User ID required to get account."});
             }
-            const user = await this.model.read(req.body);
+            const userId = req.params.userId
+            const user = await this.model.read({userId});
             if (!user) {
                 return res.status(400).json({ error: "User not found."})
             }
-            res.json({ user });
+            res.status(200).json({ user });
         } catch (error) {
             console.error("Error getting user:", error);
             return res
@@ -55,7 +56,7 @@ class UserController {
         }
     }
 
-    async addUser(req, res) {
+    async addUser(req, res) { //NEED AN UPDATE
         try {
             if (!req.body || !req.body.email || !req.body.password) {
                 return res.status(400).json({ error: "Email and password required to make account."})
@@ -70,7 +71,7 @@ class UserController {
         }
     }
 
-    async updateUser(req, res) {
+    async updateUser(req, res) { // NEED UPDATE IN FUTURE after course
         try {
             if (!req.body || !req.body.userId) {
                 return res.status(400).json({ error: "User ID required to update account."})

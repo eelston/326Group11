@@ -166,10 +166,16 @@ export class PostCreationComponent extends BaseComponent {
             tag.appendChild(removeBtn);
             tag.appendChild(tagLabel);
             tagList.appendChild(tag);
-
-            this.#tags.push(tagText);
+            const colorR = this.#randomColor();
+            this.#tags.push({color: colorR, tag: tagText});
         }
         e.target.value = '';
+    }
+
+    #randomColor() {
+        const colors = ['#c6faf6', "#cdf4d3", "#9cffd1", "#ffecbd", "#ffe0c2", "#66d575", "#5ad8cc", "#ffc943", "#ff9e42", "#f24822", "#15a36d", "#5591df", "#e66326", "#ff9c9c"];
+        const index = Math.floor(Math.random() * colors.length);
+        return colors[index];
     }
 
     #handleRemoveTag(e) {
@@ -263,12 +269,12 @@ export class PostCreationComponent extends BaseComponent {
         titleInput.classList.remove('input-error');
 
         const post = {
+            userId: "User1", //AUTHENTICATION REQUIRED TODO ONE DAY!!!! place holder for now :) - julia
             title: titleInput.value.trim(),
             location: locationInput.value.trim(),
             description: bodyInput.value.trim(),
             tags: this.#tags,
-            startTime: new Date(this.#datetime),
-            timeStamp: new Date(),
+            startTime: new Date(this.#datetime).toISOString(),
             isExpired: false,
             comments: []
         };

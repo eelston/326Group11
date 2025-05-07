@@ -158,17 +158,17 @@ class _SQLitePostModel {
         const {postComments = [], tags = [], ...otherPostData} = post;
         const postU = await Post.findByPk(post.postId);
         if (!postU) {
-            return null;
+            throw new Error(`Post with ID ${post.postId} not found.`);
         }
-        await postU.update(postData);
+        await postU.update(otherPostData);
         // Destroy old comments in case any were deleted
         await Comment.destroy({where: {postId: post.postId}});
         await Tag.destroy({where: {postId: post.postId}});
         // Rewrite into database the new comments and tags 
         await Promise.all(postComments.map(com => {
-            Comment.create(com)
+            Comment.create({...com, postId: post.postId})
         }));
-        await Promise.all(tags.map(t => Tag.create({...t, postId: newPost.postId})));
+        await Promise.all(tags.map(t => Tag.create({...t, postId: post.postId})));
         return await this.read(post.postId) // should return updated post.
     }
 

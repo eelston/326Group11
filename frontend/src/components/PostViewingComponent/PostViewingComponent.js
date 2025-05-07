@@ -15,7 +15,7 @@ export class PostViewingComponent extends BaseComponent {
     async render(postId) {
         console.log("loading a post with id: " + postId)
         const hub = EventHub.getInstance();
-        hub.subscribe(Events.LoadPostSuccess, (post) => {
+        hub.subscribe(Events.LoadPostSuccess, async (post) => {
             this.#post = post;
             document.title = `${this.#post.title} | Study on Campus`;
             console.log(this.#post);
@@ -23,7 +23,7 @@ export class PostViewingComponent extends BaseComponent {
             this.#container = document.createElement('div');
             this.#container.setAttribute('class', 'post-container');
             document.querySelector('main').appendChild(this.#container);
-            this.#renderPost(); 
+            await this.#renderPost(); 
             this.#comments = document.createElement('div');
             this.#comments.setAttribute('class', 'comment-container');
             document.querySelector('main').appendChild(this.#comments);
@@ -73,14 +73,16 @@ export class PostViewingComponent extends BaseComponent {
         })
     }
 
-    #renderPost() { 
-        const posted = this.#createTimeObj(this.#post.timeStamp);
-        const tmrw = this.#isEventTmrw(this.#post.startTime);
+    async #renderPost() { 
+        const posted = this.#createTimeObj(this.#post.createdAt);
+        const tmrw = this.#isEventTmrw(posted);
+        const start = this.#createTimeObj(this.#post.startTime);
+        const userData = await this.#getUserData(this.#post.userId);
         this.#container.innerHTML = `
     <div class="user-post-info">
         <div class="info-subgroup user">
-            <span class="post-user can-click"><b>${this.#post.name}</b></span>
-            <p>(${this.#post.pronouns})</p>
+            <span class="post-user can-click"><b>${userData.user.name}</b></span>
+            <p>(${userData.user.pronouns})</p>
         </div>
         <div class="info-subgroup date">
             <p>${posted.time}</p>
@@ -97,7 +99,7 @@ export class PostViewingComponent extends BaseComponent {
     <div class="post-content">
         <h1 class="title"><b>${this.#post.title}</b></h1>
         <div class="tag-container"></div>
-        <span class="time data"><b>Starts At: </b>${this.#post.startTime.time}, ${tmrw}</span>
+        <span class="time data"><b>Starts At: </b>${start.time}, ${tmrw}</span>
         <span class="location data"><b>Location: </b>${this.#post.location}</span>
         <p class="post-desc">${this.#post.description}</p>
     </div>
@@ -114,7 +116,7 @@ export class PostViewingComponent extends BaseComponent {
 
     #renderComments() {
         this.#comments.innerHTML = '';
-        this.#post.postComments.forEach(comment => {
+        this.#post.postComments.forEach(async comment => {
             const c = document.createElement("div");
             c.classList.add("comment");
             this.#comments.appendChild(c);
@@ -125,7 +127,10 @@ export class PostViewingComponent extends BaseComponent {
             cIcon.classList.add("commenter-icon");
             cInfo.appendChild(cIcon);
             const iconContent = document.createElement("span");
-            iconContent.textContent = comment.iconContent;
+            const userData = await this.#getUserData(comment.userId);
+            console.log("USER DATA BELOW")
+            console.log(userData);
+            iconContent.textContent = userData.user.iconContent;
             cIcon.appendChild(iconContent);
             const cData = document.createElement('div');
             cInfo.appendChild(cData);
@@ -137,11 +142,11 @@ export class PostViewingComponent extends BaseComponent {
             cInfo.appendChild(pro);
             cInfo.appendChild(timeCommented);
             user.classList.add("comment-user", "can-click");
-            user.textContent = `${comment.name}`;
+            user.textContent = `${userData.user.name}`;
             pro.style.color = "#745faa";
             timeCommented.style.color = "#745faa";
-            pro.textContent = `(${comment.pronouns})`;
-            const timeFormat = this.#createTimeObj(comment.timeStamp);
+            pro.textContent = `(${userData.user.pronouns})`;
+            const timeFormat = this.#createTimeObj(comment.createdAt);
             timeCommented.textContent = `${timeFormat.time}, ${timeFormat.date}`;
 
             const settings = document.createElement("div");
@@ -204,16 +209,10 @@ export class PostViewingComponent extends BaseComponent {
         commentBox.appendChild(submitC);
         submitC.addEventListener("click", () => {
             if (box.value.length > 0) {
-                const currentTime = Date.now();
                 const newComment = {
-                    commentId: (this.#post.postComments.length + 1).toString(),
-                    userId: "1111111",
-                    name: "You",
+                    postId: this.#post.postId,
+                    userId: "User3", // AUTH NEEDED IN THE FUTURE - julia
                     message: box.value,
-                    timeStamp: currentTime,
-                    iconContent: ":Y",
-                    iconBgColor: "#5ad8cc",
-                    pronouns: "they/them"
                 }
                 this.#post.postComments.push(newComment);
                 const hub = EventHub.getInstance();
@@ -227,6 +226,7 @@ export class PostViewingComponent extends BaseComponent {
         })
     }
     #createTimeObj(timeStamp) {
+        console.log(timeStamp);
         const time = new Date(timeStamp);
         const hours = String(time.getHours()).padStart(2, '0');
         const mins = String(time.getMinutes()).padStart(2, '0');
@@ -264,5 +264,20 @@ export class PostViewingComponent extends BaseComponent {
                     hub.publish(Events.UpdatePost, this.#post);
                 }
             })
+    }
+
+    #getUserData(userId) {
+        const hub = EventHub.getInstance();
+        return new Promise((resolve, reject) => {
+            const returnData = (user) => {
+                resolve(user);
+            }
+            const failure = (error) => {
+                reject(new Error("Failed to fetch user data"));
+            }
+            hub.subscribe(Events.LoadUserDataSuccess, returnData);
+            hub.subscribe(Events.LoadUserDataFailure, failure)
+            hub.publish(Events.LoadUserData, userId);
+        })
     }
 }
