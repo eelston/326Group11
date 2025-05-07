@@ -37,10 +37,6 @@ const Comment = sequelize.define("Comment", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    timeStamp: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
 });
 
 const Post = sequelize.define("Post", {
@@ -54,7 +50,7 @@ const Post = sequelize.define("Post", {
     userId: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
+    }, 
     title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -71,10 +67,6 @@ const Post = sequelize.define("Post", {
         type: DataTypes.STRING, 
         allowNull: false,
     },
-    timeStamp: {
-        type: DataTypes.INTEGER, // Might not matter , might be deleted
-        allowNull: false,
-    },
     isExpired: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -85,7 +77,7 @@ const Post = sequelize.define("Post", {
 Post.hasMany(Comment, {foreignKey: "postId", as: "postComments"}); // post has many comments
 Comment.belongsTo(Post, {foreignKey: "postId", as: "post"});; // comment can only belong to 1 post
 Post.hasMany(Tag, {foreignKey: "postId", as: "tags"}); // post can have many tags, but tags dont store
-// which posts they're in.
+Tag.belongsTo(Post, {foreignKey: "postId", as: "post"});
 
 class _SQLitePostModel {
     constructor() {}
@@ -96,38 +88,88 @@ class _SQLitePostModel {
         // Exception will be thrown if either one of these operations fail.
 
         if (fresh) {
-            await this.delete();
+            await this.deleteAll();
 
             await this.create({
-                //TODO POST 1
+                postId: 1,
+                userId: "User1",
+                title: "Try Deleting Me!",
+                description: "Hopefully You Can!",
+                location: "Campus Library",
+                isExpired: false,
+                startTime: "A date string goes here.",
+                tags: [{color: "#f76e60", tag: "CourseName"}, 
+                    {color: "#5235ed", tag: "Example"}],
+                postComments: [{
+                    userId: "User2",
+                    postId: 1,
+                    CommentId: 1,
+                    message: "Test message comment.",
+                }],
             })
             await this.create({
-                //TODO POST 2
+                postId: 2,
+                userId: "User2",
+                title: "Mock 2",
+                description: "Hopefully You Can!",
+                location: "Campus Library",
+                isExpired: false,
+                startTime: "A date string goes here.",
+                tags: [{color: "#f76e60", tag: "CourseName"}],
+                postComments: []
             })
             await this.create({
-                //TODO POST 3
+                postId: 3,
+                userId: "User3",
+                title: "Mock 3 -- A little more wordy.",
+                description: "Hopefully You Can! And hopefully the user loads fine with the right DB calls.",
+                location: "Campus Library",
+                isExpired: false,
+                startTime: "A date string goes here.",
+                tags: [{color: "#f76e60", tag: "CourseName"}],
+                postComments: []
             })
         }
     }
 
     async create(post) {
-        return await Post.create(post);
+        const {postComments = [], tags = [], ...otherPostData} = post;
+        const newPost = await Post.create(otherPostData);
+
+        await Promise.all(postComments.map(com => {
+            Comment.create(com)
+        }));
+        await Promise.all(tags.map(t => Tag.create({...t, postId: newPost.postId})));
+        return await this.read(post.postId)
     }
 
     async read(id = null) {
+        const commsAndTagsToo = {include: [
+            {model: Comment, as: "postComments"},
+            {model: Tag, as: "tags"}
+        ]};
         if (id) {
-            return await Post.findByPk(id);
+            return await Post.findByPk(id, commsAndTagsToo);
         }
-        return await Post.findAll();
+        return await Post.findAll(commsAndTagsToo);
     }
 
     async update(post) {
-        const postu = await Post.findByPk(post.postId);
-        if (!postu) {
+        const {postComments = [], tags = [], ...otherPostData} = post;
+        const postU = await Post.findByPk(post.postId);
+        if (!postU) {
             return null;
         }
-        await postu.update(post);
-        return postu; // should return updated post.
+        await postU.update(postData);
+        // Destroy old comments in case any were deleted
+        await Comment.destroy({where: {postId: post.postId}});
+        await Tag.destroy({where: {postId: post.postId}});
+        // Rewrite into database the new comments and tags 
+        await Promise.all(postComments.map(com => {
+            Comment.create(com)
+        }));
+        await Promise.all(tags.map(t => Tag.create({...t, postId: newPost.postId})));
+        return await this.read(post.postId) // should return updated post.
     }
 
     async delete(postIdDel = null) {
@@ -135,11 +177,18 @@ class _SQLitePostModel {
             return null;
         }
         const postDel = await Post.findByPk(postIdDel);
+        if (!postDel) {
+            return null;
+        }
+        await Comment.destroy({where: {postId: postIdDel}});
+        await Tag.destroy({where: {postId: postIdDel}});
         await Post.destroy({where: {postId: postIdDel}});
         return postDel;
     }
 
     async deleteAll() {
+        await Comment.destroy({where: {}})
+        await Tag.destroy({where: {}})
         await Post.destroy({truncate: true});
         return;
     }

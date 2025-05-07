@@ -92,6 +92,33 @@ class _SQLiteUserModel {
         await sequelize.sync({ force: true});
         if(fresh){
             await this.delete();
+
+            await this.create({
+                userId: "User1",
+                password: "12345678Ab",
+                email: "example1@gmail.com",
+                name: "Dana",
+                pronouns: "she/her",
+                iconContent: ":D"
+            });
+
+            await this.create({
+                userId: "User2",
+                password: "12345678Ab",
+                email: "example2@gmail.com",
+                name: "Sarah",
+                pronouns: "she/her",
+                iconContent: ":S"
+            });
+
+            await this.create({
+                userId: "User3",
+                password: "12345678Ab",
+                email: "example3@gmail.com",
+                name: "Eliya",
+                pronouns: "he/him",
+                iconContent: ":E"
+            });
         }
     }
 

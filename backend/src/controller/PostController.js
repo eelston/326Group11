@@ -29,9 +29,9 @@ import ModelPostFactory from "../model/ModelPostFactory.js";
 
 class PostController {
     constructor() {
-        ModelPostFactory.getModel("in-memory").then((model) => {
+        ModelPostFactory.getModel("sqlite-fresh").then((model) => {
             this.model = model;
-        }) //TODO, To change for next milestone
+        })
     }
 
     // Get all Posts:
