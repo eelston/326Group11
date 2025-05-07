@@ -2,7 +2,7 @@ import { Sequelize, DataTypes } from "sequelize";
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
-    storage: "database.sqlite"
+    storage: "src/data/settings.sqlite"
 });
 
 // Preferences model for user settings preferences
