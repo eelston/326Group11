@@ -106,13 +106,24 @@
 .expanded {
     /* bring card to center of window */
     position: fixed;
+    width: 25%;
 
     /* center div, ref: https://stackoverflow.com/a/25919090 */
-    top: 25%;
+    top: 5%;
     left: 50%;
     transform: translate(-50%, 0);
 
-    z-index: 999; /* bring to top */
+    max-height: 85vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dark-purple) var(--navbar-purple);
+
+    z-index: 999; /* bring to top layer */
+}
+/* TODO: could adjust with inner/outer divs so scrollbar is also rounded, but low prio */
+
+.expanded .floor-info {
+    margin-bottom: 2.25rem;
 }
 /* TODO: add media query for mobile width and/or decide if dim functionality is appropriate for mobile */ 
 /* i.e., consider potentially implementing different expand appearance for mobile */

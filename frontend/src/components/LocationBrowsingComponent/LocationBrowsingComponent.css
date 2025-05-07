@@ -128,8 +128,8 @@
     z-index: 1000; /* bring to top (higher than expanded card, if overlap occurs) */
     position: fixed;
 
-    top: 25%;
-    left: 75%;
+    top: 5%;
+    left: 78%;
     transform: translate(-50%, 0);
 
     height: fit-content;
