@@ -5,6 +5,7 @@
 export const Events = {
     // Post Creation 
     NewPost: 'NewPost',
+    NewUser: 'NewUser',
 
     // Post Browsing
     FilterPosts: 'FilterPosts',
@@ -15,6 +16,10 @@ export const Events = {
     LoadPosts: 'LoadPosts',
     LoadPostsSuccess: 'LoadPostsSuccess',
     LoadPostsFailure: 'LoadPostsFailure',
+
+    LoadUserData: "LoadUserData",
+    LoadUserDataSuccess: "LoadUserDataSuccess",
+    LoadUserDataFailure: "LoadUserDataFailure",
 
     // Post Viewing
     LoadPost: 'LoadPost',

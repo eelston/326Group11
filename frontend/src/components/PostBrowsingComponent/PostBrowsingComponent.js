@@ -86,13 +86,24 @@ export class PostBrowsingComponent extends BaseComponent {
             postHalf.appendChild(title);
             postHalf.appendChild(tagContainer);
             postHalf.appendChild(desc);
-            const location = document.createElement('p');
+            const location = document.createElement('p'); 
             location.classList.add('location');
-            location.textContent = `${post.location} at ${post.startTime.time}, ${post.startTime.date}`;
+            const start = this.createTimeObj(post.startTime);
+            location.textContent = `${post.location} at ${start.time}, ${start.date}`;
             postView.appendChild(postHalf);
             postView.appendChild(location);
             this.#container.appendChild(postView);
         });
+    }
+
+    createTimeObj(dateStr) {
+        const time = new Date(dateStr);
+        const hours = String(time.getHours()).padStart(2, '0');
+        const mins = String(time.getMinutes()).padStart(2, '0');
+        const month = time.getMonth();
+        const day = time.getDate();
+        const year = time.getFullYear();
+        return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
     }
 
     async filterPosts(searchQuery = "") {

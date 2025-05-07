@@ -19,7 +19,7 @@ const Tag = sequelize.define("Tag", {
 
 const Comment = sequelize.define("Comment", {
     commentId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER, 
         allowNull: false,
         primaryKey: true,
         unique: true,
@@ -97,7 +97,7 @@ class _SQLitePostModel {
                 description: "Hopefully You Can!",
                 location: "Campus Library",
                 isExpired: false,
-                startTime: "A date string goes here.",
+                startTime: "2025-05-26T10:00:00",
                 tags: [{color: "#f76e60", tag: "CourseName"}, 
                     {color: "#5235ed", tag: "Example"}],
                 postComments: [{
@@ -114,7 +114,7 @@ class _SQLitePostModel {
                 description: "Hopefully You Can!",
                 location: "Campus Library",
                 isExpired: false,
-                startTime: "A date string goes here.",
+                startTime: "2025-05-21T09:25:00",
                 tags: [{color: "#f76e60", tag: "CourseName"}],
                 postComments: []
             })
@@ -125,7 +125,7 @@ class _SQLitePostModel {
                 description: "Hopefully You Can! And hopefully the user loads fine with the right DB calls.",
                 location: "Campus Library",
                 isExpired: false,
-                startTime: "A date string goes here.",
+                startTime: "2025-05-22T12:30:00",
                 tags: [{color: "#f76e60", tag: "CourseName"}],
                 postComments: []
             })
