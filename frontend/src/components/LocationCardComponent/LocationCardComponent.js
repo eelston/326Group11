@@ -2,6 +2,7 @@ import { BaseComponent } from '../BaseComponent/BaseComponent.js'
 import { CrowdingHints } from './CrowdingHints.js'
 import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/Events.js';
+import { calculateAverageCrowdingScore } from '../../utility/reportUtils.js';
 
 export class LocationCardComponent extends BaseComponent {
     #container = null; // private variable to store location card container element
@@ -11,7 +12,6 @@ export class LocationCardComponent extends BaseComponent {
     constructor(locationData = {}) {
         super();
         this.#locationData = locationData;
-        console.log(this.#locationData)
         this.#nameTag = this.#locationData.name.replaceAll(/[^\w]/g, ""); // used repeatedly for styling, easier to define up here -> location name without spaces or punctuation
         this.loadCSS('LocationCardComponent');
     }
@@ -50,7 +50,6 @@ export class LocationCardComponent extends BaseComponent {
     async #renderSingleFloor() {
         const locationReports = await this.#locationData.reports; // get crowding score reports
 
-        // const lastUpdatedTimestamp = locationReports.length > 0 ? locationReports[0].timestamp : null; // get timestamp for most recent report (or assign null, if no reports)
         const lastUpdatedTimestamp = await this.#getLastUpdatedTimestamp(locationReports);
 
         this.#container.innerHTML = `
@@ -105,7 +104,7 @@ export class LocationCardComponent extends BaseComponent {
     // gets crowding score and updates crowding score bar and hint text
     async #renderCrowdingScore() {
         if (this.#locationData.type === "Single-Floor") {
-            const averageCrowdingScore = await this.#calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
+            const averageCrowdingScore = await calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
             const level = averageCrowdingScore !== null ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
             const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-hint`); // get hint div
@@ -122,7 +121,7 @@ export class LocationCardComponent extends BaseComponent {
         
         } else if (this.#locationData.type === "Multi-Floor") {
             this.#locationData.floors.forEach(async floor => { 
-                const averageCrowdingScore = await this.#calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
+                const averageCrowdingScore = await calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
                 const level = averageCrowdingScore ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
                 const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-${floor.name}-hint`); // get hint div
@@ -138,7 +137,6 @@ export class LocationCardComponent extends BaseComponent {
                 }
             });
         }
-
     }
 
     // adds address to bottom of card
@@ -150,19 +148,6 @@ export class LocationCardComponent extends BaseComponent {
 
         address.classList.add("show-on-expand"); // for styling
         this.#container.appendChild(address);
-    }
-
-    // calculate average crowding score from given array of report ids
-    async #calculateAverageCrowdingScore(reportIds) {
-        const crowdingScores = await Promise.all(reportIds.map(async id => { // get array of scores
-            const GETurl = '/report?' + new URLSearchParams({"id": id}).toString(); // e.g., /report?id=1
-            const response = await fetch(GETurl); // GET report by id
-            const report = await response.json(); // { body: (report), ok: boolean }
-            return report.body.score; // crowding score
-        }));
-
-        const average = crowdingScores.length > 0 && crowdingScores.every(x => typeof x === "number") ? crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length : null; // calculate average, or null if no reports
-        return average;
     }
 
     async #getLastUpdatedTimestamp(reports) {
@@ -180,9 +165,9 @@ export class LocationCardComponent extends BaseComponent {
         }
     }
 
-    // convert number to string
+    // convert number to string for location card
     #timestampToString(timestamp) {
-        if (!timestamp) {return "N/A"}; // TODO: determine if this is acceptable, visually/understanding-wise
+        if (!timestamp) {return "N/A"};
 
         const date = new Date(Date.parse(timestamp)); // convert to Date object
         // TODO: consider moving this to src/lib for use with post timestamps
@@ -205,7 +190,6 @@ export class LocationCardComponent extends BaseComponent {
             return "Today at " + str.substring(str.indexOf(":")-2); // e.g., Today at 15:30 ET or Today at 03:30 PM ET (substring starts two digits before the colon in the time!)
         } 
 
-        console.log(str)
         return str; // otherwise, return full date (e.g., Fri, 12/19/2025, 12:24 ET)
     }
 
@@ -226,7 +210,7 @@ export class LocationCardComponent extends BaseComponent {
         
         cardContainer.classList.remove("expanded"); // remove expanded card styling tag
         
-        if (document.querySelectorAll(".expanded").length === 0) {console.log(`card minimized`);} // printing for confirmation
+        // if (document.querySelectorAll(".expanded").length === 0) {console.log(`card minimized`);} // printing for confirmation
     }
 
     #attachEventListeners() {
