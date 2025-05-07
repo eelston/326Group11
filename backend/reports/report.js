@@ -67,6 +67,21 @@ class _SQLiteReportModel {
             });
 
             await this.create({
+                location: "CEI Hub",
+                score: 2
+            });
+
+            await this.create({
+                location: "Isenberg Hub",
+                score: 5
+            });
+
+            await this.create({
+                location: "Engineering Graduate Hub",
+                score: 2
+            });
+
+            await this.create({
                 location: "Science & Engineering Library",
                 floor: "2",
                 score: 3,
@@ -116,19 +131,19 @@ class _SQLiteReportModel {
             });
 
             await this.create({
-                location: "DuBois Quiet Study",
+                location: "DuBois Library Quiet Study",
                 floor: "2",
                 score: 3,
             });
 
             await this.create({
-                location: "DuBois Quiet Study",
+                location: "DuBois Library Quiet Study",
                 floor: "5",
                 score: 5,
             });
 
             await this.create({
-                location: "DuBois Quiet Study",
+                location: "DuBois Library Quiet Study",
                 floor: "8",
                 score: 2,
             });

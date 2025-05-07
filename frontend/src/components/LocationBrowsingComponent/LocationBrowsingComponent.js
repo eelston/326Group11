@@ -85,7 +85,7 @@ export class LocationBrowsingComponent extends BaseComponent {
                 break;
         }
 
-        toBeRendered.forEach(async location => { // render each location in given order
+        for (let location of toBeRendered) { // render each location in given order
             const locationObject = {
                 name: location.name,
                 address: location.address,
@@ -102,7 +102,8 @@ export class LocationBrowsingComponent extends BaseComponent {
 
             const locationCard = new LocationCardComponent(locationObject); // create new component for each location
             locationBrowsingContainer.appendChild(await locationCard.render()); // add location card to location browsing container
-        })
+
+        }
     }
 
     // returns the most recent report timestamp from given location

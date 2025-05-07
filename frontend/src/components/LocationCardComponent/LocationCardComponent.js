@@ -11,6 +11,7 @@ export class LocationCardComponent extends BaseComponent {
     constructor(locationData = {}) {
         super();
         this.#locationData = locationData;
+        console.log(this.#locationData)
         this.#nameTag = this.#locationData.name.replaceAll(/[^\w]/g, ""); // used repeatedly for styling, easier to define up here -> location name without spaces or punctuation
         this.loadCSS('LocationCardComponent');
     }
@@ -24,9 +25,9 @@ export class LocationCardComponent extends BaseComponent {
 
         // call render method corresponding to building type
         if (this.#locationData.type === "Single-Floor") {
-            this.#renderSingleFloor();
+            await this.#renderSingleFloor();
         } else if (this.#locationData.type === "Multi-Floor") {
-            this.#renderMultiFloor();
+            await this.#renderMultiFloor();
         }
 
         await this.#renderCrowdingScore();
@@ -49,9 +50,8 @@ export class LocationCardComponent extends BaseComponent {
     async #renderSingleFloor() {
         const locationReports = await this.#locationData.reports; // get crowding score reports
 
-        const lastUpdatedTimestamp = locationReports.length > 0 ? locationReports[0].timestamp : null; // get timestamp for most recent report (or assign null, if no reports)
-        
-        // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace with hyphen for styling tag
+        // const lastUpdatedTimestamp = locationReports.length > 0 ? locationReports[0].timestamp : null; // get timestamp for most recent report (or assign null, if no reports)
+        const lastUpdatedTimestamp = await this.#getLastUpdatedTimestamp(locationReports);
 
         this.#container.innerHTML = `
                 <span class="exit-expanded show-on-expand">Minimize</span>
@@ -69,7 +69,7 @@ export class LocationCardComponent extends BaseComponent {
     }
 
     // render card for location with multiple floors
-    #renderMultiFloor() {
+    async #renderMultiFloor() {
         // add location name and minimize "button"
         this.#container.innerHTML = `
             <div class="location-name">${this.#locationData.name}</div>
@@ -78,11 +78,12 @@ export class LocationCardComponent extends BaseComponent {
         // TODO: fix minimize button appearing below location title when expanded
 
         // render information for each floor under location
-        this.#locationData.floors.forEach(floor => { 
+        for (let floor of this.#locationData.floors) { // forEach results in floors rendering out of order (async) :(
             const floorInfo = document.createElement('div'); // create new div for floor information
             floorInfo.classList.add("floor-info"); // add tag for styling
 
-            const lastUpdatedTimestamp = floor.reports.length > 0 ? floor.reports[0].timestamp : null; // get timestamp for most recent report (or null, if no reports)
+            const reports = floor.reports; // get crowding score reports
+            const lastUpdatedTimestamp = await this.#getLastUpdatedTimestamp(reports);
 
             floorInfo.innerHTML = `
                 <div class="location-info">
@@ -98,13 +99,11 @@ export class LocationCardComponent extends BaseComponent {
             `
 
             this.#container.appendChild(floorInfo);
-        });
+        }
     }
 
     // gets crowding score and updates crowding score bar and hint text
     async #renderCrowdingScore() {
-        // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace in location name with hyphen for styling tag
-
         if (this.#locationData.type === "Single-Floor") {
             const averageCrowdingScore = await this.#calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
             const level = averageCrowdingScore !== null ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
@@ -166,11 +165,26 @@ export class LocationCardComponent extends BaseComponent {
         return average;
     }
 
+    async #getLastUpdatedTimestamp(reports) {
+        const lastUpdatedReportId = reports[0]; // get most recent report id
+
+        if (lastUpdatedReportId) { // TODO: error handling...
+            const GETurl = "/report?" + new URLSearchParams({"id": lastUpdatedReportId}).toString();
+            const response = await fetch(GETurl);
+            const json = await response.json();
+            const lastUpdatedReport = json.body;
+
+            return lastUpdatedReport.createdAt; // get timestamp for most recent report (or assign null, if no reports)        
+        } else {
+            return null
+        }
+    }
+
     // convert number to string
     #timestampToString(timestamp) {
-        if (timestamp === null) {return "N/A"}; // TODO: determine if this is acceptable, visually/understanding-wise
+        if (!timestamp) {return "N/A"}; // TODO: determine if this is acceptable, visually/understanding-wise
 
-        const date = new Date(timestamp); // convert to Date object
+        const date = new Date(Date.parse(timestamp)); // convert to Date object
         // TODO: consider moving this to src/lib for use with post timestamps
         const options = { // timestamp format options (ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString#examples)
             hourCycle: "h24", // TODO: add user setting for 24hr vs 12hr time once server sessions are implemented
@@ -191,6 +205,7 @@ export class LocationCardComponent extends BaseComponent {
             return "Today at " + str.substring(str.indexOf(":")-2); // e.g., Today at 15:30 ET or Today at 03:30 PM ET (substring starts two digits before the colon in the time!)
         } 
 
+        console.log(str)
         return str; // otherwise, return full date (e.g., Fri, 12/19/2025, 12:24 ET)
     }
 

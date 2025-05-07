@@ -65,7 +65,7 @@
     border-radius: 1rem;
 
     /* width: var(--crowding-bar-width); */
-    width: inherit
+    /* width: inherit */
 }
 
 .crowding-score-bar {
