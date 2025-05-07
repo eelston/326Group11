@@ -57,7 +57,7 @@ const User = sequelize.define("User", {
             iconColor: "#5ad8cc",
             displayPronouns: false,
             displayMajor: false,
-            recieveEmailNotifications: false,
+            receiveEmailNotifications: false,
         },
     },
     profileContent: {

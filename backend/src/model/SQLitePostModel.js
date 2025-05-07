@@ -83,7 +83,7 @@ class _SQLitePostModel {
     constructor() {}
 
     async init(fresh = false) {
-        await sequelize.authenticate(0);
+        await sequelize.authenticate();
         await sequelize.sync({force: true});
         // Exception will be thrown if either one of these operations fail.
 
