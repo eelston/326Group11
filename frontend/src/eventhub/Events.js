@@ -5,11 +5,21 @@
 export const Events = {
     // Post Creation 
     NewPost: 'NewPost',
+    NewUser: 'NewUser',
+
+    // Post Browsing
+    FilterPosts: 'FilterPosts',
+    FilterPostsSuccess: 'FilterPostsSuccess',
+    FilterPostsFailure: 'FilterPostsFailure',
 
     // Post Browsing 
     LoadPosts: 'LoadPosts',
     LoadPostsSuccess: 'LoadPostsSuccess',
     LoadPostsFailure: 'LoadPostsFailure',
+
+    LoadUserData: "LoadUserData",
+    LoadUserDataSuccess: "LoadUserDataSuccess",
+    LoadUserDataFailure: "LoadUserDataFailure",
 
     // Post Viewing
     LoadPost: 'LoadPost',
@@ -35,10 +45,6 @@ export const Events = {
     UnStorePost: 'UnStorePost',
     UnStorePostSuccess: 'UnStoreFullPostSuccess',
     UnStorePostFailure: 'UnStoreFullPostFailure',
-
-    // View Switching Events
-    SwitchToPostBrowsingView: 'SwitchToPostBrowsingView',
-    SwitchToPostViewingView: 'SwitchToPostViewingView',
 
     // Location Browsing
     ExpandLocationCard: 'ExpandLocationCard',

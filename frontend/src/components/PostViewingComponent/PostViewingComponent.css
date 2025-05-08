@@ -86,7 +86,7 @@
 }
 
 .commenter-icon {
-    background-color: #5ad8cc;
+    /*background-color: #5ad8cc; */
     color: black;
     width: 40px;
     min-width: 40px;
@@ -199,18 +199,6 @@
 
 /* MEDIA CSS FOR MOBILE */
 @media (max-width: 625px) {
-    #app-logo {
-        font-size: 1.5rem;
-    }
-    .user-icon{
-        width: 30px;
-        height: 30px;
-        font-size: 15px;
-        font-weight: 475;
-    }
-    .nav-button {
-        text-align: center;
-    }
     .posts-container {
         max-width: 100%;
     }
@@ -233,16 +221,5 @@
     .comment-add {
         font-size: 20px;
         padding: 12px 0;
-    }
-    header {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    .nav-button {
-        text-align: center;
-        font-size: 1.4rem;
-        margin: 0.1rem;
     }
 }

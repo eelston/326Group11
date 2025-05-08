@@ -1,14 +1,14 @@
 import { BaseComponent } from "../BaseComponent/BaseComponent.js"
+import { EventHub } from "../../eventhub/EventHub.js";
+import { Events } from "../../eventhub/Events.js";
  
 export class PostBrowsingComponent extends BaseComponent { 
     #container = null; 
-    #service;
     #allPosts = [];
 
-    constructor(service) {
+    constructor() {
         super();
         this.loadCSS('PostBrowsingComponent');
-        this.#service = service;
     }
  
     async render() {
@@ -18,15 +18,20 @@ export class PostBrowsingComponent extends BaseComponent {
         this.#container.setAttribute('class', 'posts-container');
         document.querySelector('main').appendChild(this.#container);
 
-        this.#allPosts = await this.#service.loadAllPosts();
-        if (this.#allPosts.length === 0) {
-            const msg = document.createElement('p');
-            msg.setAttribute('class', "empty");
-            msg.textContent = 'No posts to display. Be the first to post!';
-            this.#container.appendChild(msg);
-        } else {
-            this.#renderPosts(this.#allPosts);
-        }
+        const hub = EventHub.getInstance();
+        hub.subscribe(Events.LoadPostsSuccess, (posts) => {
+            this.#allPosts = posts;
+            console.log(this.#allPosts);
+            if (this.#allPosts.length === 0) {
+                const msg = document.createElement('p');
+                msg.setAttribute('class', "empty");
+                msg.textContent = 'No posts to display. Be the first to post!';
+                this.#container.appendChild(msg);
+            } else {
+                this.#renderPosts(this.#allPosts);
+            }
+        })
+        hub.publish(Events.LoadPosts);
         this.#searchQueryListener();
     }
 
@@ -81,19 +86,36 @@ export class PostBrowsingComponent extends BaseComponent {
             postHalf.appendChild(title);
             postHalf.appendChild(tagContainer);
             postHalf.appendChild(desc);
-            const location = document.createElement('p');
+            const location = document.createElement('p'); 
             location.classList.add('location');
-            location.textContent = `${post.location} at ${post.startTime.time}, ${post.startTime.date}`;
+            const start = this.createTimeObj(post.startTime);
+            location.textContent = `${post.location} at ${start.time}, ${start.date}`;
             postView.appendChild(postHalf);
             postView.appendChild(location);
             this.#container.appendChild(postView);
         });
     }
 
-    async filterPosts(searchQuery = "") {
-        const posts = await this.#service.filterPosts(searchQuery);
-        this.#renderPosts(posts);
-
+    createTimeObj(dateStr) {
+        const time = new Date(dateStr);
+        const hours = String(time.getHours()).padStart(2, '0');
+        const mins = String(time.getMinutes()).padStart(2, '0');
+        const month = time.getMonth();
+        const day = time.getDate();
+        const year = time.getFullYear();
+        if (year < new Date().getFullYear()) {
+            return {time: `${hours}:${mins}`, date:`TBD`};
+        } else {
+            return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+        }
     }
 
+    async filterPosts(searchQuery = "") {
+        const hub = EventHub.getInstance();
+        hub.subscribe(Events.FilterPostsSuccess, (posts) => {
+            this.#allPosts = posts;
+            this.#renderPosts(this.#allPosts);
+        })
+        await hub.publish(Events.FilterPosts, searchQuery);
+    }
 }
