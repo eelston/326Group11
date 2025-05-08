@@ -10,11 +10,11 @@ import { fileURLToPath } from "url";
 import ReportRoutes from "../reports/routes.js"
 import LocationRoutes from "../locations/routes.js"
 import PostRoutes from "./routes/PostRoutes.js";
+import UserRoutes from "./routes/UserRoutes.js";
 import settingsRouter from './routes/settings.js';
 import session from "express-session";
 import passport from "./auth/passport.js";
 import env from "./auth/env.js";
-import RegisterRoutes from "../routes/RegisterRoutes.js";
 
 const app = express();
 const PORT = 3000;
@@ -42,8 +42,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", RegisterRoutes);
-
 // set up routes by using imported ReportRoutes
 app.use("/", ReportRoutes); // mount on app
 
@@ -64,6 +62,8 @@ app.use((err, req, res, next) => {
 
 // set up routes for imported PostRoutes
 app.use("/v1", PostRoutes);
+
+app.use("/users", UserRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

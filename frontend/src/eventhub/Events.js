@@ -54,15 +54,15 @@ export const Events = {
 
     //Register Events
     Signup: 'Signup',
-    SignupSucces: 'SignupSuccess',
+    SignupSuccess: 'SignupSuccess',
     SignupFailure: 'SignupFailure',
 
     Login: 'Login',
-    LoginSucces: 'LoginSuccess',
+    LoginSuccess: 'LoginSuccess',
     LoginFailure: 'LoginFailure',
     
     Logout: 'Logout',
-    LogoutSucces: 'LogoutSuccess',
+    LogoutSuccess: 'LogoutSuccess',
     LogoutFailure: 'LogoutFailure',
 }
   

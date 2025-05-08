@@ -108,8 +108,8 @@ export class RegisterComponent extends BaseComponent {
     }
 
     #attachFormSubmitListener() {
-        const submitButton = this.#container.querySelector("#submit");
-        submitButton.addEventListener("submit", (e) => this.#handleFormSubmit(e));
+        const form = this.#container.querySelector("form");
+        form.addEventListener("submit", (e) => this.#handleFormSubmit(e));
     }
 
     #toggleFormState(e) {
@@ -163,5 +163,24 @@ export class RegisterComponent extends BaseComponent {
             payload.userId = userIdInput.value.trim();
         }
 
+        this.#register(payload);
+        this.#clearInputs(emailInput, passwordInput, userIdInput);
+        window.location.href = "/pages/PostBrowsing/index.html"
+    }
+
+    #register(payload) {
+        const hub = EventHub.getInstance();
+        if (this.#isLoginMode) {
+            hub.publish(Events.Login, payload );
+        }
+        else {
+            hub.publish(Events.Signup, payload );
+        }
+    }
+
+    #clearInputs(email, password, id){
+        email.value = '';
+        password.value = '';
+        id.value = '';
     }
 }

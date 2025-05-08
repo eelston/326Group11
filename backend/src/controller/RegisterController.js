@@ -1,69 +1,77 @@
-import bcrypt from "bcryptjs";
 import { hashEmailHMAC } from "../auth/hmac.js";
 import dotenv from "dotenv";
-import User from "../models/settings.js";
+import ModelFactory from "../model/ModelFactory.js";
 
 dotenv.config();
 
-const factoryResponse = (status, message) => ({ status, message });
+class RegisterController {
 
-const existsUsername = async (username) => {
-  const user = await User.findOne({ where: { userId: username } });
-  return user;
-};
-
-const existsEmail = async (email) => {
-    const emailHash = hashEmailHMAC(email);
-    const user = await User.findOne({ where: { email: emailHash } });
-    return user;
-  };
-
-// Registration route
-export const signup = async (req, res) => {
-    const { username, email, password } = req.body;
-
-    if (await existsUsername(username))
-        return res.status(400).json(factoryResponse(400, "Username already taken."));
-  
-    if (await existsEmail(email))
-        return res.status(400).json(factoryResponse(400, "Account with email already exists."));
-
-    const hashedEmail = hashEmailHMAC(email);
-    const hashPassword = await bcrypt.hash(password, 10);
-
-    await User.create({ 
-        userId: username, 
-        email: hashedEmail, 
-        password: hashPassword 
-    });
-
-    res.json(factoryResponse(200, "Registration successful"));
-    console.log("User registered successfully");
-};
-
-//Login route
-export const login = async (req, res) => {
-    const { email, password } = req.body;
-    const hashedEmail = hashEmailHMAC(email);
-
-    const user = await User.findOne({ where: { email: hashedEmail } });
-
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json(factoryResponse(401, "Invalid credentials"));
+    constructor() {
+        ModelFactory.getModel("sqlite").then((model) => {
+            this.model = model;
+        });
     }
     
-    req.login(user, (err) =>
-        err ? next(err) : res.json(factoryResponse(200, "Login successful"))
-    );
-};
+    async signup(req, res) {
+        try {
+            const { userId, email, password } = req.body;
 
-//Logout route
-export const logout = (req, res) => {
-    req.logout(function (err) {
-        if (err) {
-            res.json(factoryResponse(500, "Logout failed"));
-            return;
+            if (!userId || !email || !password) {
+                return res.status(400).json({ status: 400, message: "All fields are required." });
+            }
+
+            const existingUserById = await this.model.findOne({ where: { userId } });
+            if (existingUserById) {
+                return res.status(400).json({ status: 400, message: "Username already taken." });
+            }
+
+            const hashedEmail = hashEmailHMAC(email);
+            const existingUserByEmail = await this.model.findOne({ where: { email: hashedEmail } });
+            if (existingUserByEmail) {
+                return res.status(400).json({ status: 400, message: "Account with email already exists." });
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const newUser = await this.model.create({
+                userId: userId,
+                email: hashedEmail,
+                password: hashedPassword
+            });
+
+            return res.status(200).json({
+                status: 200,
+                message: "Signup successful",
+                user: { userId: newUser.userId }
+            });
+        } catch (error) {
+            console.error("Signup error:", error);
+            return res.status(500).json({ status: 500, message: "Signup failed. Please try again." });
         }
-        res.json(factoryResponse(200, "Logout successful"));
-    });
-};
+    }
+
+    async login(req, res) {
+        try {
+            const { email, password } = req.body;
+
+            if (!email || !password) {
+                return res.status(400).json({ status: 400, message: "Email and password are required." });
+            }
+
+            const hashedEmail = hashEmailHMAC(email);
+            const user = await this.model.findOne({ where: { email: hashedEmail } });
+
+            if (!user || !(await bcrypt.compare(password, user.password))) {
+                return res.status(401).json({ status: 401, message: "Invalid credentials." });
+            }
+
+            return res.status(200).json({ status: 200, message: "Login successful" });
+        } catch (error) {
+            console.error("Login error:", error);
+            return res.status(500).json({ status: 500, message: "Login failed. Please try again." });
+        }
+    }
+
+}
+
+export default new RegisterController();

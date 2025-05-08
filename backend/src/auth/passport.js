@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import User from "../models/user.js";
+import User from "../model/SQLiteUserModel.js";
 import env from "./env.js"
 
 console.log("GOOGLE_CLIENT_ID:", env.GOOGLE_CLIENT_ID);
