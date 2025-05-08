@@ -30,10 +30,15 @@ export class RegisterRemoteService extends Service {
             body: JSON.stringify(data)
         });
         const responseData = await response.json();
+        console.log("Response Data:", responseData);
+        console.log("Error Status:", responseData.status);
+        console.log(responseData.message);
         if (!response.ok) {
-            throw new Error("Failed to login.");
+            this.publish(Events.LoginFailure,  { message: responseData.message || "Invalid credentials." });
         }
-        this.publish(Events.LoginSuccess);
+        else {
+            this.publish(Events.LoginSuccess);
+        }
         return responseData;
     }
 
@@ -45,9 +50,11 @@ export class RegisterRemoteService extends Service {
         });
         const responseData = await response.json();
         if (!response.ok) {
-            throw new Error("Failed to login.");
+            this.publish(Events.SignupFailure, { message: responseData.message || "Signup failed." });
         }
-        this.publish(Events.SignupSuccess);
+        else {
+            this.publish(Events.SignupSuccess);
+        }
         return responseData;
     }
 

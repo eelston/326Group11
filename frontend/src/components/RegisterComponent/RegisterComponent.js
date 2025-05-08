@@ -1,14 +1,17 @@
 import { BaseComponent } from "../BaseComponent/BaseComponent.js";
 import { EventHub } from "../../eventhub/EventHub.js";
 import { Events } from "../../eventhub/Events.js";
+import { RegisterRemoteService } from "../../services/RegisterRemoteService.js";
 
 export class RegisterComponent extends BaseComponent { 
     #container = null;
     #isLoginMode = true;
+    #service = null;
 
     constructor() {
         super();
         this.loadCSS("RegisterComponent");
+        this.#service = new RegisterRemoteService();
     }
 
     render() {
@@ -83,6 +86,40 @@ export class RegisterComponent extends BaseComponent {
             this.#attachUserIdListener();
         }
         this.#attachFormSubmitListener();
+        
+        this.#service.subscribe(Events.LoginSuccess, (responseData) => {
+            this.#hideFailureMessage();
+            window.location.href = "/pages/PostBrowsing/index.html"
+        });
+
+        this.#service.subscribe(Events.SignupSuccess, (responseData) => {
+            this.#hideFailureMessage();
+            window.location.href = "/pages/PostBrowsing/index.html"
+        });
+
+        this.#service.subscribe(Events.LoginFailure, (responseData) => {
+            this.#handleFailure(responseData);
+        });
+
+        this.#service.subscribe(Events.SignupFailure, (responseData) => {
+            this.#handleFailure(responseData);
+        });
+    }
+
+    #handleFailure(responseData) {
+        const errorMessageElement = this.#container.querySelector(".enter-error-message");
+        if (errorMessageElement) {
+            errorMessageElement.style.display = "block";
+            errorMessageElement.textContent = responseData?.message || "Login or Signup failed.";
+        }
+    }
+
+    #hideFailureMessage() {
+        const errorMessageElement = this.#container.querySelector(".enter-error-message");
+        if (errorMessageElement) {
+            errorMessageElement.style.display = "none";
+            errorMessageElement.textContent = "";
+        }
     }
 
     #attachToggleFormListener() {
@@ -163,9 +200,14 @@ export class RegisterComponent extends BaseComponent {
             payload.userId = userIdInput.value.trim();
         }
 
+        if (this.#isLoginMode){
+            this.#clearInputs(emailInput, passwordInput, userIdInput, true);
+        }
+        else {
+            this.#clearInputs(emailInput, passwordInput, userIdInput, false);
+        }
+
         this.#register(payload);
-        this.#clearInputs(emailInput, passwordInput, userIdInput);
-        window.location.href = "/pages/PostBrowsing/index.html"
     }
 
     #register(payload) {
@@ -178,9 +220,11 @@ export class RegisterComponent extends BaseComponent {
         }
     }
 
-    #clearInputs(email, password, id){
+    #clearInputs(email, password, id, isLogin){
         email.value = '';
         password.value = '';
-        id.value = '';
+        if (!isLogin){
+            id.value = '';
+        }
     }
 }

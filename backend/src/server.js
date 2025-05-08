@@ -12,9 +12,6 @@ import LocationRoutes from "../locations/routes.js"
 import PostRoutes from "./routes/PostRoutes.js";
 import UserRoutes from "./routes/UserRoutes.js";
 import settingsRouter from './routes/settings.js';
-import session from "express-session";
-import passport from "./auth/passport.js";
-import env from "./auth/env.js";
 
 const app = express();
 const PORT = 3000;
@@ -28,19 +25,6 @@ app.use(express.static(url));
 console.log(`Serving static files from ${url}`);
 
 app.use(express.json());
-
-//session management
-app.use(
-    session({
-      secret: env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-    })
-  );
-
-//passport and authentication state
-app.use(passport.initialize());
-app.use(passport.session());
 
 // set up routes by using imported ReportRoutes
 app.use("/", ReportRoutes); // mount on app

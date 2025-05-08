@@ -1,5 +1,5 @@
-import { hashEmailHMAC } from "../auth/hmac.js";
 import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
 import ModelFactory from "../model/ModelFactory.js";
 
 dotenv.config();
@@ -20,13 +20,12 @@ class RegisterController {
                 return res.status(400).json({ status: 400, message: "All fields are required." });
             }
 
-            const existingUserById = await this.model.findOne({ where: { userId } });
+            const existingUserById = await this.model.read({ userId });
             if (existingUserById) {
                 return res.status(400).json({ status: 400, message: "Username already taken." });
             }
 
-            const hashedEmail = hashEmailHMAC(email);
-            const existingUserByEmail = await this.model.findOne({ where: { email: hashedEmail } });
+            const existingUserByEmail = await this.model.read({ email });
             if (existingUserByEmail) {
                 return res.status(400).json({ status: 400, message: "Account with email already exists." });
             }
@@ -35,7 +34,7 @@ class RegisterController {
 
             const newUser = await this.model.create({
                 userId: userId,
-                email: hashedEmail,
+                email: email,
                 password: hashedPassword
             });
 
@@ -58,13 +57,17 @@ class RegisterController {
                 return res.status(400).json({ status: 400, message: "Email and password are required." });
             }
 
-            const hashedEmail = hashEmailHMAC(email);
-            const user = await this.model.findOne({ where: { email: hashedEmail } });
+            const user = await this.model.read({email});
 
-            if (!user || !(await bcrypt.compare(password, user.password))) {
+            if (!user) {
                 return res.status(401).json({ status: 401, message: "Invalid credentials." });
             }
 
+            const hashedPassword = await bcrypt.compare(password, user.password);
+
+            if (!hashedPassword) {
+                return res.status(401).json({ status: 401, message: "Invalid credentials." });
+            }
             return res.status(200).json({ status: 200, message: "Login successful" });
         } catch (error) {
             console.error("Login error:", error);
