@@ -439,6 +439,7 @@ export class ProfileSettingsComponent extends BaseComponent {
                 });
 
                 const profileData = {
+                    userId: this.settingsService.userId,
                     displayName: this.#container.querySelector('input[placeholder="Current display name"]').value,
                     pronouns: this.#container.querySelector('input[placeholder="Current pronouns"]').value,
                     major: this.#container.querySelector('input[placeholder="Current major"]').value,
@@ -446,6 +447,8 @@ export class ProfileSettingsComponent extends BaseComponent {
                         about: facts
                     }
                 };
+
+                console.log('Saving profile data:', profileData);
 
                 await this.settingsService.updateProfile(profileData);
                 this.dispatchEvent(new CustomEvent('settings-success', {

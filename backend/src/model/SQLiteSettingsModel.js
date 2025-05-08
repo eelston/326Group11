@@ -2,7 +2,7 @@ import { Sequelize, DataTypes } from "sequelize";
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
-    storage: "src/data/settings.sqlite"
+    storage: "database.sqlite"
 });
 
 const Preferences = sequelize.define("Preferences", {

@@ -124,6 +124,16 @@ export class AccountSettingsComponent extends BaseComponent {
         this.settingsService = service;
     }
 
+    setAccount(account) {
+        if (!account) return;
+        
+        const emailInput = this.#container.querySelector('input[type="email"]');
+        const userIdInput = this.#container.querySelector('input[type="user_id"]');
+        
+        if (emailInput) emailInput.value = account.email;
+        if (userIdInput) userIdInput.value = account.userId;
+    }
+
     setupEventListeners() {
         const editButtons = this.#container.querySelectorAll('.edit-btn');
         const showPasswordCheckbox = this.#container.querySelector('#show-password-checkbox');

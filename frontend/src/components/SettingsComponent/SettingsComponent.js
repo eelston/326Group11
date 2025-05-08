@@ -192,6 +192,7 @@ export class SettingsComponent extends BaseComponent {
             console.log('Settings loaded:', settings);
             
             if (settings) {
+                this.#accountComponent.setAccount(settings.account);
                 this.#profileComponent.setProfile(settings.profile);
                 this.#profileComponent.renderClasses(settings.classes);
                 this.#preferencesComponent.setPreferences(settings.preferences);

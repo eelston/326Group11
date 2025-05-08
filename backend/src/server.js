@@ -15,7 +15,6 @@ import SettingsRoutes from './routes/SettingsRoutes.js';
 
 const app = express();
 const PORT = 3000;
-const settingsRouter = new SettingsRoutes().getRouter();
 
 const __filename = fileURLToPath(import.meta.url); // get current file path
 const __dirname = path.dirname(__filename); // get current file folder
@@ -34,7 +33,7 @@ app.use("/", ReportRoutes); // mount on app
 app.use("/locations", LocationRoutes); // mount on app
 
 // set up routes for imported settings router
-app.use('/api', settingsRouter);
+app.use('/api/settings', SettingsRoutes);
 
 app.get('/pages/:page', (req, res) => {
     res.sendFile(path.join(url, 'pages', req.params.page, 'index.html'));

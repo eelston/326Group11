@@ -3,7 +3,7 @@ import SQLiteSettingsModel from '../model/SQLiteSettingsModel.js';
 export class SettingsController {
     constructor() {
         this.model = SQLiteSettingsModel;
-        this.model.init().catch(err => {
+        this.model.init(true).catch(err => {
             console.error('Failed to initialize settings database:', err);
         });
     }
@@ -59,17 +59,24 @@ export class SettingsController {
                 return res.status(400).json({ error: 'Profile data is required' });
             }
 
+            console.log('Updating profile with data:', profile);
             const result = await this.model.updateProfile(profile);
+            console.log('Profile updated successfully:', result);
+            
             res.status(200).json({ 
                 message: 'Profile updated successfully', 
                 data: result 
             });
         } catch (error) {
+            console.error('Error in updateProfile controller:', error);
             if (error.message.includes('must be') || 
                 error.message.includes('is required')) {
                 res.status(400).json({ error: error.message });
             } else {
-                res.status(500).json({ error: 'Internal server error' });
+                res.status(500).json({ 
+                    error: 'Internal server error',
+                    details: process.env.NODE_ENV === 'development' ? error.message : undefined
+                });
             }
         }
     }
