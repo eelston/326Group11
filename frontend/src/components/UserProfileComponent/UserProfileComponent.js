@@ -150,8 +150,18 @@ export class UserProfileComponent extends BaseComponent {
 
         // current courses
         const courseSection = document.getElementById('courses');
-        courseSection.innerText = this.#userData.profileContent.courses;
-        // TODO: swap this over to a list if we implement a course database
+        courseSection.innerHTML = '';
+        
+        const courseList = document.createElement('ul');
+        courseList.className = 'course-list';
+        
+        this.#userData.profileContent.courses.forEach(course => {
+            const li = document.createElement('li');
+            li.innerHTML = `${course.course_subject} ${course.course_number}`;
+            courseList.appendChild(li);
+        });
+        
+        courseSection.appendChild(courseList);
 
         // recent posts
         const recentPostSection = document.getElementById('post-embed-container');

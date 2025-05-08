@@ -1,0 +1,101 @@
+import Service from "./Service.js";
+import { Events } from "../eventhub/Events.js";
+
+export class UserRepositoryRemoteService extends Service {
+    constructor() {
+        super();
+    }
+
+    addSubscriptions() {
+        this.subscribe(Events.StorePost, (data) => {
+            this.storePost(data);
+        });
+        this.subscribe(Events.UnStorePosts, () => {
+            this.clearPosts();
+        });
+        this.subscribe(Events.UnStorePost, (postId) => {
+            this.deletePost(postId);
+        });
+        this.subscribe(Events.LoadPost, (postId) => {
+            this.loadPost(postId);
+        });
+        this.subscribe(Events.loadAllPosts, () => {
+            this.loadAllPosts();
+        });
+        this.subscribe(Events.updatePost, (data) => {
+            this.updatePost(data)
+        });
+        // Filtering would clutter ? Ask prof
+    }
+    
+    async getUser(userId) {
+        const response = await fetch("http://localhost:3000/users/user", {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
+        })
+    }
+
+    async loadPost(postId) {
+        const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postId)}`);
+        console.log("Response status: " + response.status);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch post with postId ${postId}`);
+        }
+        const data = await response.json();
+        return data; 
+    }
+
+    async updatePost(postData) {
+        const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postData.postId)}`, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(postData)
+        });
+        if (!response.ok) {
+            throw new Error(`Failed to update post with postId ${postData.postId}`)
+        }
+        const updatedPost = await response.json();
+        return updatedPost;
+    }
+
+    async deletePost(postId) {
+        const response = await fetch(`http://localhost:3000/v1/post?id=${encodeURIComponent(postId)}`, {
+            method: "DELETE"
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`Failed to update post with postId ${postId}`);
+        }
+        this.publish(Events.UnStorePostSuccess);
+        return data;
+
+    }
+
+    async storePost(postData) {
+        const response = await fetch("http://localhost:3000/v1/post", {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify(postData)
+        });
+        if (!response.ok) {
+            throw new Error("Failed to store post.");
+        }
+        const data = await response.json();
+        return data;
+    }
+
+    async clearPosts() {
+        const response = await fetch("http://localhost:3000/v1/posts", {
+            method: "DELETE",
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error("Failed to clear posts.");
+        }
+        // Notify subscribers that posts have been cleared from server.
+        // This is likely needed to update the UI.
+        this.publish(Events.UnStorePostsSuccess);
+        return data;
+    }
+
+}

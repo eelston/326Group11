@@ -2,7 +2,8 @@ import { Sequelize, DataTypes } from "sequelize";
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
-    storage: "database.sqlite"
+    storage: "database.sqlite",
+    logging: console.log
 });
 
 const Fact = sequelize.define("Fact", {
@@ -44,7 +45,7 @@ const User = sequelize.define("User", {
     pronouns: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: "",
+        defaultValue: "No Assigned Pronouns",
     },
     iconContent: {
         type: DataTypes.STRING,
@@ -57,7 +58,7 @@ const User = sequelize.define("User", {
             iconColor: "#5ad8cc",
             displayPronouns: false,
             displayMajor: false,
-            recieveEmailNotifications: false,
+            receiveEmailNotifications: false,
         },
     },
     profileContent: {
@@ -92,6 +93,33 @@ class _SQLiteUserModel {
         await sequelize.sync({ force: true});
         if(fresh){
             await this.delete();
+
+            await this.create({
+                userId: "User1",
+                password: "12345678Ab",
+                email: "example1@gmail.com",
+                name: "Dana",
+                pronouns: "she/her",
+                iconContent: ":D"
+            });
+
+            await this.create({
+                userId: "User2",
+                password: "12345678Ab",
+                email: "example2@gmail.com",
+                name: "Sarah",
+                pronouns: "she/her",
+                iconContent: ":S"
+            });
+
+            await this.create({
+                userId: "User3",
+                password: "12345678Ab",
+                email: "example3@gmail.com",
+                name: "Eliya",
+                pronouns: "he/him",
+                iconContent: ":E"
+            });
         }
     }
 
@@ -100,7 +128,7 @@ class _SQLiteUserModel {
             userId: user.userId,
             email: user.email,
             password: user.password,
-            name: user.userId,
+            name: user.name || user.userId,
         };
         const newUser = await User.create(userc);
         return await this.read({ userId: newUser.userId });

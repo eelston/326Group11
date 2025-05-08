@@ -10,10 +10,12 @@ import { fileURLToPath } from "url";
 import ReportRoutes from "../reports/routes.js"
 import LocationRoutes from "../locations/routes.js"
 import PostRoutes from "./routes/PostRoutes.js";
-import settingsRouter from './routes/settings.js';
+import UserRoutes from "./routes/UserRoutes.js";
+import SettingsRoutes from './routes/SettingsRoutes.js';
 
 const app = express();
 const PORT = 3000;
+const settingsRouter = new SettingsRoutes().getRouter();
 
 const __filename = fileURLToPath(import.meta.url); // get current file path
 const __dirname = path.dirname(__filename); // get current file folder
@@ -35,7 +37,7 @@ app.use("/locations", LocationRoutes); // mount on app
 app.use('/api', settingsRouter);
 
 app.get('/pages/:page', (req, res) => {
-    res.sendFile(path.join(frontendDir, 'pages', req.params.page, 'index.html'));
+    res.sendFile(path.join(url, 'pages', req.params.page, 'index.html'));
 });
 
 app.use((err, req, res, next) => {
@@ -45,6 +47,8 @@ app.use((err, req, res, next) => {
 
 // set up routes for imported PostRoutes
 app.use("/v1", PostRoutes);
+
+app.use("/users", UserRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

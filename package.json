@@ -31,6 +31,11 @@
     "express": "^5.1.0",
     "http-server": "^14.1.1",
     "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "bcryptjs": "^2.4.3",
+    "express-session": "^1.18.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "dotenv": "^16.4.5"
   }
 }
