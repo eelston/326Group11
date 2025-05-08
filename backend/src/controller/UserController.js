@@ -1,7 +1,7 @@
 import ModelFactory from "../model/ModelFactory.js";
 
 class UserController {
-    constructor(l){
+    constructor(){
         ModelFactory.getModel("sqlite-fresh").then((model) => {
             this.model = model;
         });
@@ -90,6 +90,5 @@ class UserController {
         }
     }
 }
-
 
 export default new UserController();

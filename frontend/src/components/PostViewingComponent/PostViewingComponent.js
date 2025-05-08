@@ -1,34 +1,38 @@
-import { BaseComponent } from "../BaseComponent/BaseComponent.js"
- 
+import { BaseComponent } from "../BaseComponent/BaseComponent.js";
+import { EventHub } from "../../eventhub/EventHub.js";
+import { Events } from "../../eventhub/Events.js";
+
 export class PostViewingComponent extends BaseComponent { 
     #container = null;
     #comments = null;
-    #service;
     #post;
 
-    constructor(service) {
+    constructor() {
         super();
-        this.#service = service;
         this.loadCSS("PostViewingComponent");
     }
-
+ 
     async render(postId) {
         console.log("loading a post with id: " + postId)
-        this.#post = await this.#service.loadPost(postId);
-        console.log(this.#post);
-        document.title = `${this.#post.title} | Study on Campus`;
+        const hub = EventHub.getInstance();
+        hub.subscribe(Events.LoadPostSuccess, async (post) => {
+            this.#post = post;
+            document.title = `${this.#post.title} | Study on Campus`;
+            console.log(this.#post);
 
-        this.#container = document.createElement('div');
-        this.#container.setAttribute('class', 'post-container');
-        document.querySelector('main').appendChild(this.#container);
-        this.#renderPost(); 
-        this.#comments = document.createElement('div');
-        this.#comments.setAttribute('class', 'comment-container');
-        document.querySelector('main').appendChild(this.#comments);
-        this.#renderComments();
-        this.#goBackListener();
-        this.#postSettingsDropdownListener();
-        this.#deleteButtonListener();
+            this.#container = document.createElement('div');
+            this.#container.setAttribute('class', 'post-container');
+            document.querySelector('main').appendChild(this.#container);
+            await this.#renderPost(); 
+            this.#comments = document.createElement('div');
+            this.#comments.setAttribute('class', 'comment-container');
+            document.querySelector('main').appendChild(this.#comments);
+            this.#renderComments();
+            this.#goBackListener();
+            this.#postSettingsDropdownListener();
+            this.#deleteButtonListener();
+        });
+        hub.publish(Events.LoadPost, postId);
     }
 
     #goBackListener() {
@@ -41,8 +45,11 @@ export class PostViewingComponent extends BaseComponent {
         const deleteButton = document.getElementById('deleteButton');
         deleteButton.addEventListener('click', async () => {
             if (confirm("Are you sure you want to delete your post? This action CANNOT be undone.")) {
-                await this.#service.deletePost(this.#post.postId);
-                window.location.href = "/pages/PostBrowsing/index.html";
+                const hub = EventHub.getInstance();
+                hub.subscribe(Events.UnStorePostSuccess, () => {
+                    window.location.href = "/pages/PostBrowsing/index.html";
+                })
+                hub.publish(Events.UnStorePost, this.#post.postId);
             }
             const settingsMenu = document.getElementsByClassName('settings-dropdown')[0];
             settingsMenu.style.display = 'none';
@@ -66,14 +73,16 @@ export class PostViewingComponent extends BaseComponent {
         })
     }
 
-    #renderPost() { 
-        const posted = this.#createTimeObj(this.#post.timeStamp);
-        const tmrw = this.#isEventTmrw(this.#post.startTime);
+    async #renderPost() { 
+        const posted = this.#createTimeObj(this.#post.createdAt);
+        const start = this.#createTimeObj(this.#post.startTime);
+        const tmrw = this.#isEventTmrw(start);
+        const userData = await this.#getUserData(this.#post.userId);
         this.#container.innerHTML = `
     <div class="user-post-info">
         <div class="info-subgroup user">
-            <span class="post-user can-click"><b>${this.#post.name}</b></span>
-            <p>(${this.#post.pronouns})</p>
+            <span class="post-user can-click"><b>${userData.user.name}</b></span>
+            <p>(${userData.user.pronouns})</p>
         </div>
         <div class="info-subgroup date">
             <p>${posted.time}</p>
@@ -90,7 +99,7 @@ export class PostViewingComponent extends BaseComponent {
     <div class="post-content">
         <h1 class="title"><b>${this.#post.title}</b></h1>
         <div class="tag-container"></div>
-        <span class="time data"><b>Starts At: </b>${this.#post.startTime.time}, ${tmrw}</span>
+        <span class="time data"><b>Starts At: </b>${start.time}, ${tmrw}</span>
         <span class="location data"><b>Location: </b>${this.#post.location}</span>
         <p class="post-desc">${this.#post.description}</p>
     </div>
@@ -107,7 +116,7 @@ export class PostViewingComponent extends BaseComponent {
 
     #renderComments() {
         this.#comments.innerHTML = '';
-        this.#post.postComments.forEach(comment => {
+        this.#post.postComments.forEach(async comment => {
             const c = document.createElement("div");
             c.classList.add("comment");
             this.#comments.appendChild(c);
@@ -116,9 +125,13 @@ export class PostViewingComponent extends BaseComponent {
             c.appendChild(cInfo);
             const cIcon = document.createElement("div");
             cIcon.classList.add("commenter-icon");
+            cIcon.style.backgroundColor = comment.color;
             cInfo.appendChild(cIcon);
             const iconContent = document.createElement("span");
-            iconContent.textContent = comment.iconContent;
+            const userData = await this.#getUserData(comment.userId);
+            console.log("Post user's data below")
+            console.log(userData);
+            iconContent.textContent = userData.user.iconContent;
             cIcon.appendChild(iconContent);
             const cData = document.createElement('div');
             cInfo.appendChild(cData);
@@ -130,11 +143,11 @@ export class PostViewingComponent extends BaseComponent {
             cInfo.appendChild(pro);
             cInfo.appendChild(timeCommented);
             user.classList.add("comment-user", "can-click");
-            user.textContent = `${comment.name}`;
+            user.textContent = `${userData.user.name}`;
             pro.style.color = "#745faa";
             timeCommented.style.color = "#745faa";
-            pro.textContent = `(${comment.pronouns})`;
-            const timeFormat = this.#createTimeObj(comment.timeStamp);
+            pro.textContent = `(${userData.user.pronouns})`;
+            const timeFormat = this.#createTimeObj(comment.createdAt);
             timeCommented.textContent = `${timeFormat.time}, ${timeFormat.date}`;
 
             const settings = document.createElement("div");
@@ -197,21 +210,20 @@ export class PostViewingComponent extends BaseComponent {
         commentBox.appendChild(submitC);
         submitC.addEventListener("click", () => {
             if (box.value.length > 0) {
-                const currentTime = Date.now();
                 const newComment = {
-                    commentId: (this.#post.postComments.length + 1).toString(),
-                    userId: "1111111",
-                    name: "You",
+                    postId: this.#post.postId,
+                    userId: "User3", // AUTH NEEDED IN THE FUTURE - julia
                     message: box.value,
-                    timeStamp: currentTime,
-                    iconContent: ":Y",
-                    iconBgColor: "#5ad8cc",
-                    pronouns: "they/them"
+                    color: this.#randomColor(),
                 }
                 this.#post.postComments.push(newComment);
-                this.#service.updatePost(this.#post);
-                this.#renderComments();
-                box.textContent = '';
+                const hub = EventHub.getInstance();
+                hub.subscribe(Events.UpdatePostSuccess, (postUpdated) => {
+                    this.#post = postUpdated;
+                    this.#renderComments();
+                    box.textContent = '';
+                });
+                hub.publish(Events.UpdatePost, this.#post);
             }
         })
     }
@@ -222,14 +234,21 @@ export class PostViewingComponent extends BaseComponent {
         const month = time.getMonth();
         const day = time.getDate();
         const year = time.getFullYear();
-        return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+        if (year < new Date().getFullYear()) {
+            return {time: `${hours}:${mins}`, date:`TBD`};
+        } else {
+            return {time: `${hours}:${mins}`, date:`${month}/${day}/${year}`};
+        }
     }
 
     #isEventTmrw(timeObj) {
-        const [month, day, year] = timeObj.date.split("/");
+        if (timeObj.date === "TBD") {
+            return "TBD"
+        }
+        const [month, day, year] = timeObj.date.split("/").map(num => parseInt(num));
         const userTime = new Date(Date.now());
         const currTime = [userTime.getMonth(), userTime.getDate(), userTime.getFullYear()];
-        if (year !== currTime[2] && month !== currTime[0] && (currTime[1] - day === 1)) {
+        if (year === currTime[2] && month === currTime[0] && (day - currTime[1] === 1)) {
             return "Tomorrow"
         }
         return timeObj.date;
@@ -237,19 +256,42 @@ export class PostViewingComponent extends BaseComponent {
 
     #deleteCommentListener(commentId) {
         const deleteButton = document.getElementById(`commentId${commentId}`)
-        console.log(commentId);
-        console.log(deleteButton);
             deleteButton.addEventListener('click', async () => {
                 if (confirm("Are you sure you want to delete your comment? This action CANNOT be undone.")) {
                     const index = this.#post.postComments.findIndex(c => c.commentId === commentId);
                     this.#post.postComments.splice(index, 1);
-                    await this.#service.updatePost(this.#post);
-                    const comment = document.getElementById(`commentId${commentId}`);
-                    if (comment) { 
-                        comment.remove(); 
-                        this.#renderComments();
-                    }
+                    const hub = EventHub.getInstance();
+                    hub.subscribe(Events.UpdatePostSuccess, (updatedPost) => {
+                        this.#post = updatedPost;
+                        const comment = document.getElementById(`commentId${commentId}`);
+                        if (comment) { 
+                            comment.remove(); 
+                            this.#renderComments();
+                        }
+                    });
+                    hub.publish(Events.UpdatePost, this.#post);
                 }
             })
+    }
+
+    #getUserData(userId) {
+        const hub = EventHub.getInstance();
+        return new Promise((resolve, reject) => {
+            const returnData = (user) => {
+                resolve(user);
+            }
+            const failure = (error) => {
+                reject(new Error("Failed to fetch user data"));
+            }
+            hub.subscribe(Events.LoadUserDataSuccess, returnData);
+            hub.subscribe(Events.LoadUserDataFailure, failure)
+            hub.publish(Events.LoadUserData, userId);
+        })
+    }
+
+    #randomColor() { // Function for random colors 
+        const colors = ["#5ad8cc", "#62e366", "#f0ed69", "#ffb963", "#ff8175", "#e6e6e6"];
+        const index = Math.floor(Math.random() * colors.length);
+        return colors[index];
     }
 }
