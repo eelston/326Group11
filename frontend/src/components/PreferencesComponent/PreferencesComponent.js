@@ -1,18 +1,72 @@
 import { BaseComponent } from '../BaseComponent/BaseComponent.js';
 
-export class PreferencesComponent extends HTMLElement {
-    #base;
+export class PreferencesComponent extends BaseComponent {
+    #container = null;
+
+    #eventTarget = new EventTarget();
     
     constructor() {
         super();
-        this.#base = new BaseComponent();
+        Object.defineProperties(this, {
+            addEventListener: {
+                value: this.#eventTarget.addEventListener.bind(this.#eventTarget)
+            },
+            removeEventListener: {
+                value: this.#eventTarget.removeEventListener.bind(this.#eventTarget)
+            },
+            dispatchEvent: {
+                value: this.#eventTarget.dispatchEvent.bind(this.#eventTarget)
+            }
+        });
         this.settingsService = null;
+        this.loadCSS('PreferencesComponent');
     }
 
-    connectedCallback() {
-        this.#base.loadCSS('PreferencesComponent');
-        this.innerHTML = this.render();
+    render() {
+        if (this.#container) {
+            return this.#container;
+        }
+
+        this.#container = document.createElement('section');
+        this.#container.classList.add('preferences-section');
+
+        const majorGroup = this.#createPreferenceGroup('Display Major');
+        this.#container.appendChild(majorGroup);
+
+        const pronounsGroup = this.#createPreferenceGroup('Display Pronouns');
+        this.#container.appendChild(pronounsGroup);
+
+        const emailGroup = this.#createPreferenceGroup('Email Notifications');
+        this.#container.appendChild(emailGroup);
+
+        const saveButton = document.createElement('button');
+        saveButton.classList.add('save-btn');
+        saveButton.textContent = 'Save changes';
+        this.#container.appendChild(saveButton);
+
         this.setupEventListeners();
+        return this.#container;
+    }
+
+    #createPreferenceGroup(label) {
+        const group = document.createElement('div');
+        group.classList.add('input-group');
+
+        const checkboxGroup = document.createElement('div');
+        checkboxGroup.classList.add('checkbox-group');
+
+        const labelElement = document.createElement('label');
+        labelElement.classList.add('field-label');
+        labelElement.textContent = label;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+
+        checkboxGroup.appendChild(labelElement);
+        checkboxGroup.appendChild(checkbox);
+        group.appendChild(checkboxGroup);
+
+        return group;
     }
 
     setSettingsService(service) {
@@ -20,31 +74,20 @@ export class PreferencesComponent extends HTMLElement {
     }
 
     setPreferences(preferences = {}) {
-        const checkboxes = this.querySelectorAll('input[type="checkbox"]');
+        const checkboxes = this.#container.querySelectorAll('input[type="checkbox"]');
         if (checkboxes[0]) checkboxes[0].checked = preferences.displayMajor || false;
         if (checkboxes[1]) checkboxes[1].checked = preferences.displayPronouns || false;
         if (checkboxes[2]) checkboxes[2].checked = preferences.emailNotifications || false;
     }
 
-    render() {
-        return `
-            <section class="preferences-section">
-                <label>Display major on posts <input type="checkbox" /></label>
-                <label>Display pronouns on posts <input type="checkbox" /></label>
-                <label>Receive email notifications <input type="checkbox" /></label>
-                <button class="save-btn">Save changes</button>
-            </section>
-        `;
-    }
-
     setupEventListeners() {
-        const saveButton = this.querySelector('.save-btn');
+        const saveButton = this.#container.querySelector('.save-btn');
         
         saveButton?.addEventListener('click', async () => {
             if (!this.settingsService) return;
 
             try {
-                const checkboxes = this.querySelectorAll('input[type="checkbox"]');
+                const checkboxes = this.#container.querySelectorAll('input[type="checkbox"]');
                 const preferences = {
                     displayMajor: checkboxes[0].checked,
                     displayPronouns: checkboxes[1].checked,
@@ -65,5 +108,3 @@ export class PreferencesComponent extends HTMLElement {
         });
     }
 }
-
-customElements.define('preferences-component', PreferencesComponent);

@@ -1,58 +1,114 @@
 .profile-section {
     background-color: #f0f0f0;
-    padding: 15px;
+    padding: 20px;
     border-radius: 8px;
     margin-bottom: 15px;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-}
-
-.profile-section label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.profile-section input[type="text"] {
-    margin-left: 10px;
-    width: 72%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.profile-section textarea[id="bio"] {
-    width: 100%;
-    height: 80px;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    gap: 20px;
     box-sizing: border-box;
-    resize: vertical;
-    min-height: 80px;
-    max-height: 200px;
-    margin-bottom: 20px;
+    width: 100%;
 }
 
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.facts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.fact-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.fact-prompt {
+    flex: 0 0 35%;
+}
+
+.fact-answer {
+    flex: 1;
+}
+
+.remove-fact-btn {
+    background-color: transparent;
+    color: #666;
+    border: none;
+    font-size: 1.2em;
+    padding: 8px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.remove-fact-btn:hover {
+    color: #d32f2f;
+}
+
+.add-fact-btn {
+    background-color: #b388eb;
+    color: white;
+    font-size: 16px;
+    border-radius: 6px;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    align-self: flex-start;
+    margin-bottom: 10px;
+}
+
+.add-fact-btn:hover {
+    background-color: #6b2c94;
+}
+
+.field-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+}
+
+input, textarea, select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Current Classes Section */
 .current-classes {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .class-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 8px 12px;
-    border-radius: 4px;
+    border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     opacity: 1;
     transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
 }
 
 .class-item:hover {
@@ -68,17 +124,17 @@
     border: none;
     font-size: 1.2em;
     transition: color 0.2s ease;
+    flex-shrink: 0;
 }
 
 .class-item button:hover {
     color: #d32f2f;
 }
 
-/* Add class button styles */
+/* Add Class Button and Dropdown */
 .add-btn-container {
     position: relative;
     display: inline-block;
-    z-index: 1000;
 }
 
 .add-btn {
@@ -91,23 +147,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
     padding: 0;
     line-height: 1;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
 }
 
 .add-btn:hover {
     background-color: #6b2c94;
 }
 
-.add-btn:active {
-    transform: scale(0.95);
-}
-
-/* Dropdown menu styles */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -117,49 +168,37 @@
     background-color: #f2f2f2;
     padding: 15px;
     border-radius: 8px;
-    width: 250px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 1100;
-    opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
-}
-
-.dropdown-menu::before {
-    content: '';
-    position: absolute;
-    inset: -5px;
-    background: rgba(242, 242, 242, 0.7);
-    backdrop-filter: blur(2px);
-    border-radius: 10px;
-    z-index: -1;
+    width: 300px;
+    max-width: calc(100vw - 40px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    box-sizing: border-box;
 }
 
 .dropdown-menu[style*="display: block"] {
-    opacity: 1;
     animation: float-up 0.2s ease-out forwards;
 }
 
 .dropdown-group {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 .dropdown-group label {
     display: block;
     margin-bottom: 5px;
+    color: #666;
+    font-size: 0.9rem;
 }
 
 .dropdown-group select {
     width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    box-sizing: border-box;
 }
 
-select:disabled {
-    background-color: #e9e9e9;
-    cursor: not-allowed;
+.dropdown-actions {
+    margin-top: 15px;
+    width: 100%;
 }
 
 .dropdown-add-btn {
@@ -170,16 +209,13 @@ select:disabled {
     width: 100%;
     padding: 10px;
     border-radius: 6px;
+    font-size: 1rem;
     transition: background-color 0.2s ease;
+    box-sizing: border-box;
 }
 
 .dropdown-add-btn:hover {
     background-color: #6b2c94;
-}
-
-.dropdown-add-btn:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
 }
 
 .save-btn {
@@ -187,12 +223,14 @@ select:disabled {
     color: white;
     border: none;
     cursor: pointer;
-    padding: 10px;
+    padding: 12px 20px;
     border-radius: 6px;
-    margin-top: 20px;
-    align-self: flex-end;
-    width: fit-content;
+    font-size: 1rem;
     transition: background-color 0.2s ease, transform 0.1s ease;
+    display: block;
+    margin-left: auto;
+    margin-top: 8px;
+    box-sizing: border-box;
 }
 
 .save-btn:hover {
@@ -211,33 +249,5 @@ select:disabled {
     to {
         transform: translate(-50%, 0);
         opacity: 1;
-    }
-}
-
-@media (max-width: 768px) {
-    textarea[id="bio"] {
-        max-height: 150px;
-    }
-
-    .dropdown-menu {
-        position: fixed;
-        bottom: auto;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: calc(100% - 40px);
-        max-width: 300px;
-        max-height: 80vh;
-    }
-
-    @keyframes float-up {
-        from {
-            transform: translate(-50%, -45%);
-            opacity: 0;
-        }
-        to {
-            transform: translate(-50%, -50%);
-            opacity: 1;
-        }
     }
 }

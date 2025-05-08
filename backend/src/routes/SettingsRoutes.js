@@ -37,8 +37,7 @@ class SettingsRoutes {
 };
 
     initializeMiddleware() {
-        // Apply error handler middleware
-        this.router.use(this.errorHandler.bind(this));
+        // Middleware will be initialized after routes
     }
 
     initializeRoutes() {
@@ -78,6 +77,8 @@ class SettingsRoutes {
     }
 
     getRouter() {
+        // Apply error handler middleware after all routes
+        this.router.use(this.errorHandler.bind(this));
         return this.router;
     }
 }

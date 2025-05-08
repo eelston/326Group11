@@ -1,46 +1,136 @@
 import { BaseComponent } from '../BaseComponent/BaseComponent.js';
 
-export class AccountSettingsComponent extends HTMLElement {
-    #base;
+export class AccountSettingsComponent extends BaseComponent {
+    #container = null;
+
+    #eventTarget = new EventTarget();
     
     constructor() {
         super();
-        this.#base = new BaseComponent();
+        Object.defineProperties(this, {
+            addEventListener: {
+                value: this.#eventTarget.addEventListener.bind(this.#eventTarget)
+            },
+            removeEventListener: {
+                value: this.#eventTarget.removeEventListener.bind(this.#eventTarget)
+            },
+            dispatchEvent: {
+                value: this.#eventTarget.dispatchEvent.bind(this.#eventTarget)
+            }
+        });
         this.settingsService = null;
+        this.loadCSS('AccountSettingsComponent');
     }
 
-    connectedCallback() {
-        this.#base.loadCSS('AccountSettingsComponent');
-        this.innerHTML = this.render();
+    render() {
+        if (this.#container) {
+            return this.#container;
+        }
+
+        this.#container = document.createElement('section');
+        this.#container.classList.add('account-section');
+
+        const userIdGroup = document.createElement('div');
+        userIdGroup.classList.add('input-group');
+        
+        const userIdLabel = document.createElement('label');
+        userIdLabel.classList.add('field-label');
+        userIdLabel.textContent = 'User ID';
+
+        const userIdInput = document.createElement('input');
+        userIdInput.type = 'user_id';
+        userIdInput.placeholder = 'user_id';
+        userIdInput.disabled = true;
+
+        userIdGroup.appendChild(userIdLabel);
+        userIdGroup.appendChild(userIdInput);
+        this.#container.appendChild(userIdGroup);
+
+        const emailGroup = document.createElement('div');
+        emailGroup.classList.add('input-group');
+
+        const emailLabel = document.createElement('label');
+        emailLabel.classList.add('field-label');
+        emailLabel.textContent = 'Email';
+
+        const emailContainer = document.createElement('div');
+        emailContainer.classList.add('input-with-button');
+
+        const emailInput = document.createElement('input');
+        emailInput.type = 'email';
+        emailInput.placeholder = 'email address';
+        emailInput.disabled = true;
+
+        const emailEditBtn = document.createElement('button');
+        emailEditBtn.classList.add('edit-btn');
+        emailEditBtn.textContent = 'Edit';
+
+        emailContainer.appendChild(emailInput);
+        emailContainer.appendChild(emailEditBtn);
+        emailGroup.appendChild(emailLabel);
+        emailGroup.appendChild(emailContainer);
+        this.#container.appendChild(emailGroup);
+
+        const passwordGroup = document.createElement('div');
+        passwordGroup.classList.add('input-group');
+
+        const passwordLabel = document.createElement('label');
+        passwordLabel.classList.add('field-label');
+        passwordLabel.textContent = 'Password';
+
+        const passwordContainer = document.createElement('div');
+        passwordContainer.classList.add('input-with-button');
+
+        const passwordInput = document.createElement('input');
+        passwordInput.type = 'password';
+        passwordInput.id = 'password-input';
+        passwordInput.value = '123456789';
+        passwordInput.disabled = true;
+
+        const passwordEditBtn = document.createElement('button');
+        passwordEditBtn.classList.add('edit-btn');
+        passwordEditBtn.textContent = 'Edit';
+
+        const showPasswordContainer = document.createElement('div');
+        showPasswordContainer.classList.add('show-password-container');
+
+        const showPasswordCheckbox = document.createElement('input');
+        showPasswordCheckbox.type = 'checkbox';
+        showPasswordCheckbox.id = 'show-password-checkbox';
+
+        const showPasswordLabel = document.createElement('small');
+        showPasswordLabel.textContent = 'Show Password';
+
+        showPasswordContainer.appendChild(showPasswordCheckbox);
+        showPasswordContainer.appendChild(showPasswordLabel);
+
+        passwordContainer.appendChild(passwordInput);
+        passwordContainer.appendChild(passwordEditBtn);
+        passwordGroup.appendChild(passwordLabel);
+        passwordGroup.appendChild(passwordContainer);
+        passwordGroup.appendChild(showPasswordContainer);
+        this.#container.appendChild(passwordGroup);
+
+        const saveButton = document.createElement('button');
+        saveButton.classList.add('save-btn');
+        saveButton.textContent = 'Save changes';
+        this.#container.appendChild(saveButton);
+
         this.setupEventListeners();
+        return this.#container;
     }
 
     setSettingsService(service) {
         this.settingsService = service;
     }
 
-    render() {
-        return `
-            <section class="account-section">
-                <label>User ID <input type="user_id" placeholder="user_id" disabled /></label>
-                <label>Email <input type="email" placeholder="email address" disabled /><button class="edit-btn">Edit</button></label>
-                <label>Password <input type="password" id="password-input" value="123456789" disabled /><button class="edit-btn">Edit</button></label>
-                <div class="show-password-container">
-                    <input type="checkbox" id="show-password-checkbox">
-                    <small>Show Password</small>
-                </div>
-                <button class="save-btn">Save changes</button>
-            </section>
-        `;
-    }
-
     setupEventListeners() {
-        const editButtons = this.querySelectorAll('.edit-btn');
-        const showPasswordCheckbox = this.querySelector('#show-password-checkbox');
-        const passwordInput = this.querySelector('#password-input');
-        const saveButton = this.querySelector('.save-btn');
-        const emailInput = this.querySelector('input[type="email"]');
-        const userIdInput = this.querySelector('input[type="user_id"]');
+        const editButtons = this.#container.querySelectorAll('.edit-btn');
+        const showPasswordCheckbox = this.#container.querySelector('#show-password-checkbox');
+        const passwordInput = this.#container.querySelector('#password-input');
+        const saveButton = this.#container.querySelector('.save-btn');
+        const emailInput = this.#container.querySelector('input[type="email"]');
+        const userIdInput = this.#container.querySelector('input[type="user_id"]');
 
         if (this.settingsService) {
             userIdInput.value = this.settingsService.userId;
@@ -83,5 +173,3 @@ export class AccountSettingsComponent extends HTMLElement {
         });
     }
 }
-
-customElements.define('account-settings-component', AccountSettingsComponent);

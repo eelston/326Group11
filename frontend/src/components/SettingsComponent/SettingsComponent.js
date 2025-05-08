@@ -7,124 +7,203 @@ import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/SettingsEvents.js';
 import { SettingsService } from '../../services/SettingsRepositoryService.js';
 
-export class SettingsComponent extends HTMLElement {
-    #base;
+export class SettingsComponent extends BaseComponent {
+    #container = null;
+    #accountComponent = null;
+    #profileComponent = null;
+    #preferencesComponent = null;
+    #accountEl = null;
+    #profileEl = null;
+    #preferencesEl = null;
+    
+    #eventTarget = new EventTarget();
 
     constructor() {
         super();
-        this.#base = new BaseComponent();
+        Object.defineProperties(this, {
+            addEventListener: {
+                value: this.#eventTarget.addEventListener.bind(this.#eventTarget)
+            },
+            removeEventListener: {
+                value: this.#eventTarget.removeEventListener.bind(this.#eventTarget)
+            },
+            dispatchEvent: {
+                value: this.#eventTarget.dispatchEvent.bind(this.#eventTarget)
+            }
+        });
         this.settingsService = new SettingsService();
         this.eventHub = EventHub.getInstance();
-        this.currentView = 'account'; // Default view
-    }
+        this.currentView = localStorage.getItem('settingsTab') || 'account'; // Get saved tab or default to account
+        this.loadCSS('SettingsComponent');
 
-    connectedCallback() {
-        this.#base.loadCSS('SettingsComponent');
-        this.innerHTML = this.render();
-        this.setupComponents();
-        this.setupEventListeners();
-        this.loadSettings();
+        this.#accountComponent = new AccountSettingsComponent();
+        this.#profileComponent = new ProfileSettingsComponent();
+        this.#preferencesComponent = new PreferencesComponent();
     }
 
     render() {
-        return `
-            <div id="settings-messages">
-                <div id="settings-error" class="error-message" style="display: none"></div>
-                <div id="settings-success" class="success-message" style="display: none"></div>
-            </div>
+        if (this.#container) {
+            return this.#container;
+        }
 
-            <div class="settings-container">
-                <nav class="settings-nav">
-                    <button class="nav-btn active" data-view="account">Account</button>
-                    <button class="nav-btn" data-view="profile">Profile</button>
-                    <button class="nav-btn" data-view="preferences">Preferences</button>
-                </nav>
-                
-                <div class="settings-content">
-                    <account-settings-component style="display: block;"></account-settings-component>
-                    <profile-settings-component style="display: none;"></profile-settings-component>
-                    <preferences-component style="display: none;"></preferences-component>
-                </div>
-            </div>
-        `;
+        this.#container = document.createElement('div');
+        this.#container.setAttribute('id', 'settings-container');
+        
+        document.getElementsByTagName('main')[0].appendChild(this.#container);
+
+        this.#setupMessages();
+        this.#setupContent();
+        this.setupComponents();
+        this.setupEventListeners();
+        this.loadSettings();
+
+        return this.#container;
+    }
+
+    #setupMessages() {
+        const messagesDiv = document.createElement('div');
+        messagesDiv.setAttribute('id', 'settings-messages');
+
+        const errorDiv = document.createElement('div');
+        errorDiv.setAttribute('id', 'settings-error');
+        errorDiv.classList.add('error-message');
+        errorDiv.style.display = 'none';
+
+        const successDiv = document.createElement('div');
+        successDiv.setAttribute('id', 'settings-success');
+        successDiv.classList.add('success-message');
+        successDiv.style.display = 'none';
+
+        messagesDiv.appendChild(errorDiv);
+        messagesDiv.appendChild(successDiv);
+        this.#container.appendChild(messagesDiv);
+    }
+
+    #setupContent() {
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('settings-container');
+
+        const nav = document.createElement('nav');
+        nav.classList.add('settings-nav');
+
+        const views = ['account', 'profile', 'preferences'];
+        views.forEach(view => {
+            const button = document.createElement('button');
+            button.classList.add('nav-btn');
+            if (view === this.currentView) button.classList.add('active');
+            button.dataset.view = view;
+            button.textContent = view.charAt(0).toUpperCase() + view.slice(1);
+            nav.appendChild(button);
+        });
+
+        contentDiv.appendChild(nav);
+
+        const settingsContent = document.createElement('div');
+        settingsContent.classList.add('settings-content');
+
+        this.#accountEl = this.#accountComponent.render();
+        this.#accountEl.style.display = this.currentView === 'account' ? 'block' : 'none';
+
+        this.#profileEl = this.#profileComponent.render();
+        this.#profileEl.style.display = this.currentView === 'profile' ? 'block' : 'none';
+
+        this.#preferencesEl = this.#preferencesComponent.render();
+        this.#preferencesEl.style.display = this.currentView === 'preferences' ? 'block' : 'none';
+
+        settingsContent.appendChild(this.#accountEl);
+        settingsContent.appendChild(this.#profileEl);
+        settingsContent.appendChild(this.#preferencesEl);
+
+        contentDiv.appendChild(settingsContent);
+        this.#container.appendChild(contentDiv);
     }
 
     setupComponents() {
-        // Initialize all child components
-        const accountComponent = this.querySelector('account-settings-component');
-        const profileComponent = this.querySelector('profile-settings-component');
-        const preferencesComponent = this.querySelector('preferences-component');
-
-        // Set the settings service for each component
-        accountComponent.setSettingsService(this.settingsService);
-        profileComponent.setSettingsService(this.settingsService);
-        preferencesComponent.setSettingsService(this.settingsService);
-
-        // Set up event listeners for the child components
-        [accountComponent, profileComponent, preferencesComponent].forEach(component => {
+        [
+            this.#accountComponent,
+            this.#profileComponent,
+            this.#preferencesComponent
+        ].forEach(component => {
+            component.setSettingsService(this.settingsService);
             component.addEventListener('settings-updated', () => this.loadSettings());
-            component.addEventListener('settings-error', (e) => this.showMessage(this.querySelector('#settings-error'), e.detail));
-            component.addEventListener('settings-success', (e) => this.showMessage(this.querySelector('#settings-success'), e.detail));
+            component.addEventListener('settings-error', (e) => this.showMessage(this.#container.querySelector('#settings-error'), e.detail));
+            component.addEventListener('settings-success', (e) => this.showMessage(this.#container.querySelector('#settings-success'), e.detail));
         });
     }
 
     setupEventListeners() {
-        // Set up navigation buttons
-        const navButtons = this.querySelectorAll('.nav-btn');
+        console.log('Setting up event listeners');
+        const navButtons = this.#container.querySelectorAll('.nav-btn');
+        console.log('Found nav buttons:', navButtons.length);
+        
         navButtons.forEach(button => {
-            button.addEventListener('click', () => {
+            console.log('Setting up click listener for:', button.dataset.view);
+            button.addEventListener('click', (e) => {
+                console.log('Button clicked:', button.dataset.view);
                 this.switchView(button.dataset.view);
             });
         });
 
-        // Set up event hub subscriptions
         this.eventHub.subscribe(Events.SETTINGS_SUCCESS, (message) => {
-            this.showMessage(this.querySelector('#settings-success'), message);
+            this.showMessage(this.#container.querySelector('#settings-success'), message);
         });
 
         this.eventHub.subscribe(Events.SETTINGS_ERROR, (error) => {
-            this.showMessage(this.querySelector('#settings-error'), error);
+            this.showMessage(this.#container.querySelector('#settings-error'), error);
         });
     }
 
     switchView(view) {
-        if (view === this.currentView) return;
+        console.log('Switching view to:', view);
+        if (view === this.currentView) {
+            console.log('Already on this view');
+            return;
+        }
 
-        // Update navigation buttons
-        this.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.view === view);
+        this.#container.querySelectorAll('.nav-btn').forEach(btn => {
+            const isActive = btn.dataset.view === view;
+            btn.classList.toggle('active', isActive);
+            console.log('Button:', btn.dataset.view, 'Active:', isActive);
         });
 
-        // Update component visibility
-        const components = {
-            account: this.querySelector('account-settings-component'),
-            profile: this.querySelector('profile-settings-component'),
-            preferences: this.querySelector('preferences-component')
+        // Save current view to localStorage
+        localStorage.setItem('settingsTab', view);
+
+        const elements = {
+            account: this.#accountEl,
+            profile: this.#profileEl,
+            preferences: this.#preferencesEl
         };
 
-        Object.entries(components).forEach(([key, component]) => {
-            component.style.display = key === view ? 'block' : 'none';
+        Object.entries(elements).forEach(([key, element]) => {
+            const shouldShow = key === view;
+            element.style.display = shouldShow ? 'block' : 'none';
+            console.log('Element:', key, 'Show:', shouldShow);
         });
 
         this.currentView = view;
+        console.log('Current view updated to:', this.currentView);
     }
 
     async loadSettings() {
         try {
+            console.log('Loading settings...');
             const settings = await this.settingsService.getSettings();
+            console.log('Settings loaded:', settings);
+            
             if (settings) {
-                // Update profile component
-                const profileComponent = this.querySelector('profile-settings-component');
-                profileComponent.setProfile(settings.profile);
-                profileComponent.renderClasses(settings.classes);
-
-                // Update preferences component
-                const preferencesComponent = this.querySelector('preferences-component');
-                preferencesComponent.setPreferences(settings.preferences);
+                this.#profileComponent.setProfile(settings.profile);
+                this.#profileComponent.renderClasses(settings.classes);
+                this.#preferencesComponent.setPreferences(settings.preferences);
+            } else {
+                throw new Error('No settings data received');
             }
         } catch (error) {
-            this.showMessage(this.querySelector('#settings-error'), 
-                'Unable to load settings. Please ensure the server is running.');
+            console.error('Error loading settings:', error);
+            this.showMessage(
+                this.#container.querySelector('#settings-error'), 
+                error.message || 'Unable to load settings. Please ensure the server is running.'
+            );
         }
     }
 
@@ -140,5 +219,3 @@ export class SettingsComponent extends HTMLElement {
         }
     }
 }
-
-customElements.define('settings-component', SettingsComponent);

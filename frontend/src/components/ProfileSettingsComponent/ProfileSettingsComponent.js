@@ -1,20 +1,202 @@
 import { BaseComponent } from '../BaseComponent/BaseComponent.js';
 import { MockCourses } from '../../lib/data/MockCourses.js';
 
-export class ProfileSettingsComponent extends HTMLElement {
-    #base;
+export class ProfileSettingsComponent extends BaseComponent {
+    #container = null;
+
+    #eventTarget = new EventTarget();
     
     constructor() {
         super();
-        this.#base = new BaseComponent();
+        Object.defineProperties(this, {
+            addEventListener: {
+                value: this.#eventTarget.addEventListener.bind(this.#eventTarget)
+            },
+            removeEventListener: {
+                value: this.#eventTarget.removeEventListener.bind(this.#eventTarget)
+            },
+            dispatchEvent: {
+                value: this.#eventTarget.dispatchEvent.bind(this.#eventTarget)
+            }
+        });
         this.settingsService = null;
+        this.loadCSS('ProfileSettingsComponent');
     }
 
-    connectedCallback() {
-        this.#base.loadCSS('ProfileSettingsComponent');
-        this.innerHTML = this.render();
+    render() {
+        if (this.#container) {
+            return this.#container;
+        }
+
+        this.#container = document.createElement('section');
+        this.#container.classList.add('profile-section');
+
+        const displayNameGroup = this.#createInputGroup('Display Name', 'text', 'Current display name');
+        this.#container.appendChild(displayNameGroup);
+
+        const pronounsGroup = this.#createInputGroup('Pronouns', 'text', 'Current pronouns');
+        this.#container.appendChild(pronounsGroup);
+
+        const majorGroup = this.#createInputGroup('Major', 'text', 'Current major');
+        this.#container.appendChild(majorGroup);
+
+        const factsGroup = this.#createFactsGroup();
+        this.#container.appendChild(factsGroup);
+
+        const classesGroup = this.#createClassesGroup();
+        this.#container.appendChild(classesGroup);
+
+        const saveButton = document.createElement('button');
+        saveButton.classList.add('save-btn');
+        saveButton.textContent = 'Save changes';
+        this.#container.appendChild(saveButton);
+
         this.setupEventListeners();
         this.initializeSubjectSelect();
+        return this.#container;
+    }
+
+    #createInputGroup(label, type, placeholder) {
+        const group = document.createElement('div');
+        group.classList.add('input-group');
+
+        const labelElement = document.createElement('label');
+        labelElement.classList.add('field-label');
+        labelElement.textContent = label;
+
+        const input = document.createElement('input');
+        input.type = type;
+        input.placeholder = placeholder;
+
+        group.appendChild(labelElement);
+        group.appendChild(input);
+        return group;
+    }
+
+    #createFactsGroup() {
+        const group = document.createElement('div');
+        group.classList.add('input-group');
+
+        const label = document.createElement('label');
+        label.classList.add('field-label');
+        label.textContent = 'About Me';
+
+        const factsContainer = document.createElement('div');
+        factsContainer.classList.add('facts-container');
+        
+        const addFactBtn = document.createElement('button');
+        addFactBtn.classList.add('add-fact-btn');
+        addFactBtn.textContent = 'Add Fact';
+        addFactBtn.addEventListener('click', () => this.#addNewFactInput());
+
+        group.appendChild(label);
+        group.appendChild(factsContainer);
+        group.appendChild(addFactBtn);
+        return group;
+    }
+
+    #addNewFactInput() {
+        const factsContainer = this.#container.querySelector('.facts-container');
+        const factGroup = document.createElement('div');
+        factGroup.classList.add('fact-input-group');
+
+        const promptInput = document.createElement('input');
+        promptInput.classList.add('fact-prompt');
+        promptInput.type = 'text';
+        promptInput.placeholder = 'Prompt';
+
+        const answerInput = document.createElement('input');
+        answerInput.classList.add('fact-answer');
+        answerInput.type = 'text';
+        answerInput.placeholder = 'Write something here!';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.classList.add('remove-fact-btn');
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => factGroup.remove());
+
+        factGroup.appendChild(promptInput);
+        factGroup.appendChild(answerInput);
+        factGroup.appendChild(removeBtn);
+
+        factsContainer.appendChild(factGroup);
+    }
+
+    #createClassesGroup() {
+        const group = document.createElement('div');
+        group.classList.add('input-group');
+
+        const label = document.createElement('label');
+        label.classList.add('field-label');
+        label.textContent = 'Current Classes';
+
+        const classesContainer = document.createElement('div');
+        classesContainer.classList.add('current-classes');
+
+        const addBtnContainer = document.createElement('div');
+        addBtnContainer.classList.add('add-btn-container');
+
+        const addBtn = document.createElement('button');
+        addBtn.classList.add('add-btn');
+        addBtn.textContent = '+';
+
+        const dropdownMenu = document.createElement('div');
+        dropdownMenu.classList.add('dropdown-menu');
+
+        const subjectGroup = document.createElement('div');
+        subjectGroup.classList.add('dropdown-group');
+
+        const subjectLabel = document.createElement('label');
+        subjectLabel.setAttribute('for', 'subject-select');
+        subjectLabel.textContent = 'Subject:';
+
+        const subjectSelect = document.createElement('select');
+        subjectSelect.id = 'subject-select';
+        const defaultSubjectOption = document.createElement('option');
+        defaultSubjectOption.value = '';
+        defaultSubjectOption.textContent = '-- Select a subject --';
+        subjectSelect.appendChild(defaultSubjectOption);
+
+        subjectGroup.appendChild(subjectLabel);
+        subjectGroup.appendChild(subjectSelect);
+
+        const numberGroup = document.createElement('div');
+        numberGroup.classList.add('dropdown-group');
+
+        const numberLabel = document.createElement('label');
+        numberLabel.setAttribute('for', 'course-number-select');
+        numberLabel.textContent = 'Number:';
+
+        const numberSelect = document.createElement('select');
+        numberSelect.id = 'course-number-select';
+        const defaultNumberOption = document.createElement('option');
+        defaultNumberOption.value = '';
+        defaultNumberOption.textContent = '-- Select a number --';
+        numberSelect.appendChild(defaultNumberOption);
+
+        numberGroup.appendChild(numberLabel);
+        numberGroup.appendChild(numberSelect);
+
+        const dropdownActions = document.createElement('div');
+        dropdownActions.classList.add('dropdown-actions');
+
+        const dropdownAddBtn = document.createElement('button');
+        dropdownAddBtn.classList.add('dropdown-add-btn');
+        dropdownAddBtn.textContent = 'Add Class';
+
+        dropdownActions.appendChild(dropdownAddBtn);
+
+        dropdownMenu.appendChild(subjectGroup);
+        dropdownMenu.appendChild(numberGroup);
+        dropdownMenu.appendChild(dropdownActions);
+
+        addBtnContainer.appendChild(addBtn);
+        addBtnContainer.appendChild(dropdownMenu);
+        classesContainer.appendChild(addBtnContainer);
+
+        group.appendChild(label);
+        group.appendChild(classesContainer);
+        return group;
     }
 
     setSettingsService(service) {
@@ -22,52 +204,54 @@ export class ProfileSettingsComponent extends HTMLElement {
     }
 
     setProfile(profile = {}) {
-        const displayNameInput = this.querySelector('input[placeholder="Current display name"]');
-        const pronounsInput = this.querySelector('input[placeholder="Current pronouns"]');
-        const majorInput = this.querySelector('input[placeholder="Current major"]');
-        const bioInput = this.querySelector('#bio');
+        const displayNameInput = this.#container.querySelector('input[placeholder="Current display name"]');
+        const pronounsInput = this.#container.querySelector('input[placeholder="Current pronouns"]');
+        const majorInput = this.#container.querySelector('input[placeholder="Current major"]');
         
         if (displayNameInput) displayNameInput.value = profile.displayName || '';
         if (pronounsInput) pronounsInput.value = profile.pronouns || '';
         if (majorInput) majorInput.value = profile.major || '';
-        if (bioInput) bioInput.value = profile.bio || '';
-    }
 
-    render() {
-        return `
-            <section class="profile-section">
-                <label>Display name <input type="text" placeholder="Current display name" /></label>
-                <label>Pronouns <input type="text" placeholder="Current pronouns" /></label>
-                <label>Major <input type="text" placeholder="Current major" /></label>
-                <label for="bio">Bio</label>
-                <textarea id="bio" placeholder="Current biography"></textarea>
-                <h4>Current classes</h4>
-                <div class="current-classes">
-                    <div class="add-btn-container">
-                        <button class="add-btn">+</button>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-group">
-                                <label for="subject-select">Subject:</label>
-                                <select id="subject-select">
-                                    <option value="">-- Select a subject --</option>
-                                </select>
-                            </div>
-                            <div class="dropdown-group">
-                                <label for="course-number-select">Number:</label>
-                                <select id="course-number-select">
-                                    <option value="">-- Select a number --</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="save-btn">Save changes</button>
-            </section>
-        `;
+        // Clear existing facts
+        const factsContainer = this.#container.querySelector('.facts-container');
+        if (factsContainer) {
+            factsContainer.innerHTML = '';
+            
+            // Add existing facts
+            if (profile.profileContent?.about && Array.isArray(profile.profileContent.about)) {
+                profile.profileContent.about.forEach(fact => {
+                    const factGroup = document.createElement('div');
+                    factGroup.classList.add('fact-input-group');
+
+                    const promptInput = document.createElement('input');
+                    promptInput.classList.add('fact-prompt');
+                    promptInput.type = 'text';
+                    promptInput.placeholder = 'Prompt';
+                    promptInput.value = fact.factName || '';
+
+                    const answerInput = document.createElement('input');
+                    answerInput.classList.add('fact-answer');
+                    answerInput.type = 'text';
+                    answerInput.placeholder = 'Write something here!';
+                    answerInput.value = fact.factAnswer || '';
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.classList.add('remove-fact-btn');
+                    removeBtn.textContent = '×';
+                    removeBtn.addEventListener('click', () => factGroup.remove());
+
+                    factGroup.appendChild(promptInput);
+                    factGroup.appendChild(answerInput);
+                    factGroup.appendChild(removeBtn);
+
+                    factsContainer.appendChild(factGroup);
+                });
+            }
+        }
     }
 
     initializeSubjectSelect() {
-        const subjectSelect = this.querySelector('#subject-select');
+        const subjectSelect = this.#container.querySelector('#subject-select');
         const subjects = [...new Set(MockCourses.map(course => course.course_subject))];
         subjects.forEach(subject => {
             const option = document.createElement('option');
@@ -78,7 +262,7 @@ export class ProfileSettingsComponent extends HTMLElement {
     }
 
     async updateCourseNumbers(subject) {
-        const courseNumberSelect = this.querySelector('#course-number-select');
+        const courseNumberSelect = this.#container.querySelector('#course-number-select');
         courseNumberSelect.innerHTML = '';
         
         const defaultOption = document.createElement('option');
@@ -108,10 +292,9 @@ export class ProfileSettingsComponent extends HTMLElement {
     }
 
     renderClasses(classes = []) {
-        const classesContainer = this.querySelector('.current-classes');
+        const classesContainer = this.#container.querySelector('.current-classes');
         const addBtnContainer = classesContainer.querySelector('.add-btn-container');
         
-        // Clear existing classes but keep the add button container
         classesContainer.innerHTML = '';
         classesContainer.appendChild(addBtnContainer);
         
@@ -119,10 +302,14 @@ export class ProfileSettingsComponent extends HTMLElement {
             classes.forEach(cls => {
                 const classElement = document.createElement('div');
                 classElement.className = 'class-item';
-                classElement.innerHTML = `
-                    <span>${cls.subject} ${cls.number}</span>
-                    <button class="remove-class-btn" data-id="${cls.id}">×</button>
-                `;
+                const span = document.createElement('span');
+                span.textContent = `${cls.subject} ${cls.number}`;
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-class-btn';
+                removeBtn.setAttribute('data-id', cls.id);
+                removeBtn.textContent = '×';
+                classElement.appendChild(span);
+                classElement.appendChild(removeBtn);
                 classesContainer.insertBefore(classElement, addBtnContainer);
             });
             
@@ -137,10 +324,10 @@ export class ProfileSettingsComponent extends HTMLElement {
     }
 
     setupAddClassFunctionality() {
-        const addBtn = this.querySelector('.add-btn');
-        const dropdownMenu = this.querySelector('.dropdown-menu');
+        const addBtn = this.#container.querySelector('.add-btn');
+        const dropdownMenu = this.#container.querySelector('.dropdown-menu');
         
-        let dropdownAddBtn = this.querySelector('.dropdown-add-btn');
+        let dropdownAddBtn = this.#container.querySelector('.dropdown-add-btn');
         if (!dropdownAddBtn) {
             dropdownAddBtn = document.createElement('button');
             dropdownAddBtn.className = 'dropdown-add-btn';
@@ -149,8 +336,8 @@ export class ProfileSettingsComponent extends HTMLElement {
         }
 
         const resetDropdowns = () => {
-            const subjectSelect = this.querySelector('#subject-select');
-            const courseNumberSelect = this.querySelector('#course-number-select');
+            const subjectSelect = this.#container.querySelector('#subject-select');
+            const courseNumberSelect = this.#container.querySelector('#course-number-select');
             subjectSelect.value = '';
             courseNumberSelect.innerHTML = '';
             const defaultOption = document.createElement('option');
@@ -178,8 +365,8 @@ export class ProfileSettingsComponent extends HTMLElement {
         dropdownAddBtn?.addEventListener('click', async () => {
             if (!this.settingsService) return;
 
-            const subject = this.querySelector('#subject-select').value;
-            const number = this.querySelector('#course-number-select').value;
+            const subject = this.#container.querySelector('#subject-select').value;
+            const number = this.#container.querySelector('#course-number-select').value;
             
             if (!subject || !number) {
                 this.dispatchEvent(new CustomEvent('settings-error', {
@@ -209,7 +396,7 @@ export class ProfileSettingsComponent extends HTMLElement {
     }
 
     setupClassRemovalListeners() {
-        this.querySelectorAll('.remove-class-btn').forEach(btn => {
+        this.#container.querySelectorAll('.remove-class-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
                 if (!this.settingsService) return;
 
@@ -232,17 +419,32 @@ export class ProfileSettingsComponent extends HTMLElement {
     }
 
     setupSaveButtonListener() {
-        const saveButton = this.querySelector('.save-btn');
+        const saveButton = this.#container.querySelector('.save-btn');
         
         saveButton?.addEventListener('click', async () => {
             if (!this.settingsService) return;
 
             try {
+                // Collect all facts
+                const facts = [];
+                this.#container.querySelectorAll('.fact-input-group').forEach(group => {
+                    const promptInput = group.querySelector('.fact-prompt');
+                    const answerInput = group.querySelector('.fact-answer');
+                    if (promptInput && answerInput && promptInput.value.trim() && answerInput.value.trim()) {
+                        facts.push({
+                            factName: promptInput.value.trim(),
+                            factAnswer: answerInput.value.trim()
+                        });
+                    }
+                });
+
                 const profileData = {
-                    displayName: this.querySelector('input[placeholder="Current display name"]').value,
-                    pronouns: this.querySelector('input[placeholder="Current pronouns"]').value,
-                    major: this.querySelector('input[placeholder="Current major"]').value,
-                    bio: this.querySelector('#bio').value
+                    displayName: this.#container.querySelector('input[placeholder="Current display name"]').value,
+                    pronouns: this.#container.querySelector('input[placeholder="Current pronouns"]').value,
+                    major: this.#container.querySelector('input[placeholder="Current major"]').value,
+                    profileContent: {
+                        about: facts
+                    }
                 };
 
                 await this.settingsService.updateProfile(profileData);
@@ -259,11 +461,9 @@ export class ProfileSettingsComponent extends HTMLElement {
     }
 
     setupSubjectSelectListener() {
-        const subjectSelect = this.querySelector('#subject-select');
+        const subjectSelect = this.#container.querySelector('#subject-select');
         subjectSelect?.addEventListener('change', () => {
             this.updateCourseNumbers(subjectSelect.value);
         });
     }
 }
-
-customElements.define('profile-settings-component', ProfileSettingsComponent);

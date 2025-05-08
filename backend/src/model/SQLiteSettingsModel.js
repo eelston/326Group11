@@ -5,7 +5,6 @@ const sequelize = new Sequelize({
     storage: "src/data/settings.sqlite"
 });
 
-// Preferences model for user settings preferences
 const Preferences = sequelize.define("Preferences", {
     userId: {
         type: DataTypes.STRING,
@@ -29,7 +28,6 @@ const Preferences = sequelize.define("Preferences", {
     }
 });
 
-// Profile model for user profile settings
 const Profile = sequelize.define("Profile", {
     userId: {
         type: DataTypes.STRING,
@@ -48,13 +46,19 @@ const Profile = sequelize.define("Profile", {
         type: DataTypes.STRING,
         allowNull: true
     },
-    bio: {
+    facts: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: true,
+        get() {
+            const rawValue = this.getDataValue('facts');
+            return rawValue ? JSON.parse(rawValue) : [];
+        },
+        set(value) {
+            this.setDataValue('facts', JSON.stringify(value));
+        }
     }
 });
 
-// Class model for user's classes
 const Class = sequelize.define("Class", {
     id: {
         type: DataTypes.STRING,
@@ -75,7 +79,6 @@ const Class = sequelize.define("Class", {
     }
 });
 
-// Account model for user account settings
 const Account = sequelize.define("Account", {
     userId: {
         type: DataTypes.STRING,
@@ -93,7 +96,6 @@ const Account = sequelize.define("Account", {
     }
 });
 
-// Set up associations
 Preferences.belongsTo(Account, { foreignKey: 'userId' });
 Profile.belongsTo(Account, { foreignKey: 'userId' });
 Class.belongsTo(Account, { foreignKey: 'userId' });
@@ -106,17 +108,35 @@ class _SQLiteSettingsModel {
             await sequelize.authenticate();
             console.log('Database connection established successfully');
             
-            const forceSync = fresh || process.env.NODE_ENV === 'development';
-            await sequelize.sync({ force: forceSync });
+            const tables = await sequelize.query("SELECT name FROM sqlite_master WHERE type='table'");
+            const needsInit = tables[0].length === 0;
             
-            // Create default data for testing
-            if (forceSync) {
-                console.log('Creating test user account');
-                await Account.create({
+            await sequelize.sync({ force: fresh });
+            
+            if (fresh || needsInit) {
+                console.log('Creating initial test user account');
+                const testUser = await Account.create({
                     userId: '123',
                     email: '123@example.com',
                     password: null
                 });
+
+                // Create initial settings for test user
+                await Promise.all([
+                    Preferences.create({
+                        userId: '123',
+                        displayMajor: false,
+                        displayPronouns: false,
+                        emailNotifications: false
+                    }),
+                    Profile.create({
+                        userId: '123',
+                        displayName: '123',
+                        facts: []
+                    })
+                ]);
+                
+                console.log('Test user and settings created successfully');
             }
             
             console.log('Database initialization complete');
@@ -131,11 +151,15 @@ class _SQLiteSettingsModel {
 
         try {
             console.log('Getting settings for userId:', userId);
+            console.log('Looking up Account...');
             
-            // First ensure account exists
-            let account = await Account.findByPk(userId);
+            let account = await Account.findByPk(userId).catch(err => {
+                console.error('Error finding account:', err);
+                throw err;
+            });
+
             if (!account) {
-                console.log('Creating new account for userId:', userId);
+                console.log('Account not found, creating new account for userId:', userId);
                 account = await Account.create({
                     userId,
                     email: `${userId}@example.com`,
@@ -143,24 +167,49 @@ class _SQLiteSettingsModel {
                 });
             }
 
-            // Get or create preferences and profile
+            console.log('Fetching related data...');
             const [preferences, profile, classes] = await Promise.all([
-                Preferences.findByPk(userId) || Preferences.create({ 
-                    userId,
-                    displayMajor: false,
-                    displayPronouns: false,
-                    emailNotifications: false
-                }),
-                Profile.findByPk(userId) || Profile.create({ 
-                    userId, 
-                    displayName: userId 
-                }),
+                Preferences.findByPk(userId)
+                    .then(pref => pref || Preferences.create({ 
+                        userId,
+                        displayMajor: false,
+                        displayPronouns: false,
+                        emailNotifications: false
+                    }))
+                    .catch(err => {
+                        console.error('Error with preferences:', err);
+                        throw err;
+                    }),
+                Profile.findByPk(userId)
+                    .then(prof => prof || Profile.create({ 
+                        userId, 
+                        displayName: userId 
+                    }))
+                    .catch(err => {
+                        console.error('Error with profile:', err);
+                        throw err;
+                    }),
                 Class.findAll({ where: { userId } })
+                    .catch(err => {
+                        console.error('Error fetching classes:', err);
+                        throw err;
+                    })
             ]);
+            console.log('All data fetched successfully');
+
+            // Structure the response to match the User interface
+            const profileData = {
+                ...profile.get(),
+                profileContent: {
+                    about: profile.facts || [],
+                    blurb: '',
+                    courses: ''  // This can be populated from classes if needed
+                }
+            };
 
             return {
                 preferences,
-                profile,
+                profile: profileData,
                 classes,
                 account
             };
@@ -195,7 +244,7 @@ class _SQLiteSettingsModel {
             displayName: profile.displayName,
             pronouns: profile.pronouns,
             major: profile.major,
-            bio: profile.bio
+            facts: profile.profileContent?.about || []
         });
 
         return this.getSettings(profile.userId);

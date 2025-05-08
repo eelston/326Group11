@@ -1,74 +1,98 @@
 .account-section {
     background-color: #f0f0f0;
-    padding: 15px;
+    padding: 20px;
     border-radius: 8px;
     margin-bottom: 15px;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    gap: 40px;
+    box-sizing: border-box;
 }
 
-.account-section label {
-    display: grid;
-    grid-template-columns: 150px 1fr auto auto;
-    align-items: center;
-    gap: 10px;
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     width: 100%;
-    margin-bottom: 12px;
+    box-sizing: border-box;
 }
 
-.account-section input {
-    width: auto;
-    min-width: 100px;
+.field-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+}
+
+.input-with-button {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-with-button input {
+    flex: 1;
+    min-width: 0; /* Prevents input from overflowing */
+    margin-bottom: 0; /* Override the general input margin for inputs within buttons */
+}
+
+input {
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
-.account-section input:disabled {
+input:disabled {
     background-color: #e0e0e0;
     cursor: not-allowed;
     border-color: #ddd;
     color: #666;
 }
 
-.account-section button {
-    margin-left: 10px;
-    align-self: flex-end;
-    order: 1;
-}
-
-.account-section .edit-btn {
-    margin-left: auto;
-    width: fit-content;
+.edit-btn {
     background-color: #d6b3ff;
     color: white;
     border: none;
     cursor: pointer;
-    padding: 10px;
+    padding: 10px 16px;
     border-radius: 6px;
+    font-size: 0.9rem;
     transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevents button from shrinking */
 }
 
-.account-section .edit-btn:hover {
+.edit-btn:hover {
     background-color: #b388eb;
 }
 
-.account-section .edit-btn:active {
+.edit-btn:active {
     transform: scale(0.95);
 }
 
 .show-password-container {
-    display: inline-flex;
-    justify-content: flex-end;
+    display: flex;
     align-items: center;
-    width: 100%;
+    gap: 8px;
+    margin-top: 4px;
 }
 
 .show-password-container input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.show-password-container small {
+    color: #666;
+    font-size: 0.9rem;
 }
 
 .save-btn {
@@ -76,11 +100,12 @@
     color: white;
     border: none;
     cursor: pointer;
-    padding: 10px;
+    padding: 12px 20px;
     border-radius: 6px;
-    margin-top: 20px;
-    align-self: flex-end;
+    font-size: 1rem;
     transition: background-color 0.2s ease, transform 0.1s ease;
+    align-self: flex-end;
+    margin-top: 8px;
 }
 
 .save-btn:hover {

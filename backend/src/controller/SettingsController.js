@@ -10,12 +10,16 @@ export class SettingsController {
 
     async getSettings(req, res) {
         try {
+            console.log('getSettings called with params:', req.params);
             const { userId } = req.params;
             if (!userId) {
+                console.log('No userId provided');
                 return res.status(400).json({ error: 'User ID is required' });
             }
 
+            console.log('Fetching settings for userId:', userId);
             const settings = await this.model.getSettings(userId);
+            console.log('Settings retrieved:', settings);
             res.status(200).json(settings);
         } catch (error) {
             if (error.message === 'User ID is required') {
