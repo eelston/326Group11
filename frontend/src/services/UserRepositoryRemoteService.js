@@ -12,6 +12,7 @@ export class UserRepositoryRemoteService extends Service {
             this.loadUser(userId);
         });
     }
+  
     async #initUsers() { 
         const response = await fetch("http://localhost:3000/users/users");
         if (!response.ok) {

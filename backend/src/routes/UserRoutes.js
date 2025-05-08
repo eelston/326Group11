@@ -1,5 +1,6 @@
 import express from "express";
-import UserController from "../controller/UserController.js"
+import UserController from "../controller/UserController.js";
+import RegisterController from "../controller/RegisterController.js";
 
 class UserRoutes {
     constructor() {
@@ -9,8 +10,12 @@ class UserRoutes {
 
     initializeRoutes() {
 
-        this.router.get("/login", async (req, res) => {
-            await UserController.getUserLogin(req, res);
+        this.router.post("/login", async (req, res) => {
+            await RegisterController.login(req, res);
+        })
+
+        this.router.post("/signup", async (req, res) => {
+            await RegisterController.signup(req, res);
         })
 
         this.router.get("/users", async (req, res) => {

@@ -1,8 +1,11 @@
-import { SettingsModel } from '../models/settings.js';
+import SQLiteSettingsModel from '../model/SQLiteSettingsModel.js';
 
 export class SettingsController {
     constructor() {
-        this.model = new SettingsModel();
+        this.model = SQLiteSettingsModel;
+        this.model.init().catch(err => {
+            console.error('Failed to initialize settings database:', err);
+        });
     }
 
     async getSettings(req, res) {
@@ -92,22 +95,33 @@ export class SettingsController {
 
     async addClass(req, res) {
         try {
+            console.log('Received add class request with body:', req.body);
             const classData = req.body;
             if (!classData || Object.keys(classData).length === 0) {
                 return res.status(400).json({ error: 'Class data is required' });
             }
 
-            await this.model.validateClassData(classData);
+            console.log('Calling model.addClass with:', classData);
             const result = await this.model.addClass(classData);
+            console.log('Add class result:', result);
             res.status(201).json({ 
                 message: 'Class added successfully', 
                 data: result 
             });
         } catch (error) {
+            console.error('Error adding class - Full error:', error);
+            console.error('Error stack:', error.stack);
+            
             if (error.message.includes('is required')) {
                 res.status(400).json({ error: error.message });
+            } else if (error.name === 'SequelizeValidationError') {
+                res.status(400).json({ error: error.message });
             } else {
-                res.status(500).json({ error: 'Internal server error' });
+                res.status(500).json({ 
+                    error: 'Internal server error',
+                    details: error.message,
+                    stack: error.stack
+                });
             }
         }
     }
