@@ -51,5 +51,18 @@ export const Events = {
     AddReportSuccess: 'AddReportSuccess', // for UI updates
     DeleteReport: 'DeleteReport', // trigger html delete method for deletion of singular report
     DeleteReportSuccess: 'DeleteReportSuccess', // for UI updates
+
+    //Register Events
+    Signup: 'Signup',
+    SignupSuccess: 'SignupSuccess',
+    SignupFailure: 'SignupFailure',
+
+    Login: 'Login',
+    LoginSuccess: 'LoginSuccess',
+    LoginFailure: 'LoginFailure',
+    
+    Logout: 'Logout',
+    LogoutSuccess: 'LogoutSuccess',
+    LogoutFailure: 'LogoutFailure',
 }
   

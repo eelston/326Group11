@@ -1,5 +1,6 @@
 import { Post } from "./Post.ts"
 import { Fact } from "./Fact.ts"
+import { Course } from "./Course.ts";
 
 export interface User {
     userId: string // user_id, unique to account, public
@@ -20,7 +21,7 @@ export interface User {
     profileContent: {
         about: Fact[]; // user-input facts (e.g., *Favorite Study Spot:* SEL)
         blurb: string; 
-        courses: string;
+        courses: Course[];
     }
 
     authoredPosts: Post[];

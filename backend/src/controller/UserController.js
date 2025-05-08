@@ -1,8 +1,8 @@
 import ModelFactory from "../model/ModelFactory.js";
 
 class UserController {
-    constructor(){
-        ModelFactory.getModel().then((model) => {
+    constructor(l){
+        ModelFactory.getModel("sqlite-fresh").then((model) => {
             this.model = model;
         });
     }
@@ -19,9 +19,9 @@ class UserController {
         }
     }
 
-    async getUserLogin(req, res) {
+    async login(req, res) {
         try {
-            if (!req.body || !req.body.email){
+            if (!req.params || !req.params.email){
                 return res.status(400).json({error: "Email required to get account."});
             }
             const user = await this.model.read(req.body);
@@ -39,14 +39,15 @@ class UserController {
 
     async getUser(req, res) {
         try {
-            if (!req.body || !req.body.userId){
+            if (!req.params){
                 return res.status(400).json({error: "User ID required to get account."});
             }
-            const user = await this.model.read(req.body);
+            const userId = req.params.userId;
+            const user = await this.model.read({userId});
             if (!user) {
                 return res.status(400).json({ error: "User not found."})
             }
-            res.json({ user });
+            res.status(200).json({ user });
         } catch (error) {
             console.error("Error getting user:", error);
             return res
@@ -55,11 +56,12 @@ class UserController {
         }
     }
 
-    async addUser(req, res) {
+    async addUser(req, res) { //NEED AN UPDATE
         try {
-            if (!req.body || !req.body.email || !req.body.password) {
-                return res.status(400).json({ error: "Email and password required to make account."})
+            if (!req.params) {
+                return res.status(400).json({ error: "Email, password, and User ID required to make account."})
             }
+            
             const user = await this.model.create(req.body);
             return res.status(201).json({ user });
         } catch (error) {
@@ -70,7 +72,7 @@ class UserController {
         }
     }
 
-    async updateUser(req, res) {
+    async updateUser(req, res) { // NEED UPDATE IN FUTURE after course
         try {
             if (!req.body || !req.body.userId) {
                 return res.status(400).json({ error: "User ID required to update account."})
@@ -88,3 +90,6 @@ class UserController {
         }
     }
 }
+
+
+export default new UserController();
