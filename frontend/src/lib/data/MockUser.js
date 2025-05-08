@@ -21,8 +21,19 @@ export const MockUser = {
             { factName: "Another Fact", factAnswer: "Another Answer" }
         ],
         blurb: "I am writing this as a test. I hope this works.", 
-        courses: "ECE 311, CS 326",
+        courses: [
+            {
+                course_name: "Intermediate Electronics",
+                course_subject: "ECE",
+                course_number: "311"
+            },
+            {
+                course_name: "Web Programming",
+                course_subject: "CS",
+                course_number: "326"
+            }
+        ],
     },
 
     authoredPosts: [],
-} 
+}
