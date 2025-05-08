@@ -126,7 +126,11 @@
     box-shadow: var(--grey-400) 0 1px 3px;
 
     z-index: 1000; /* bring to top (higher than expanded card, if overlap occurs) */
-    position: absolute;
+    position: fixed;
+
+    top: 5%;
+    left: 78%;
+    transform: translate(-50%, 0);
 
     height: fit-content;
     padding: 1em;

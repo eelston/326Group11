@@ -18,15 +18,17 @@ class LocationRoutes {
     this.initializeRoutes();
   }
 
+  // Mounted from /locations
+
   // Define the routes and connect them to controller methods
   initializeRoutes() {
     // define route for getting location data 
-    this.router.get("/", async (req, res) => {
+    this.router.get("/", async (req, res) => { // '/locations'
       await LocationController.getLocations(req, res);
     });
 
     // define route for updating location data
-    this.router.put("/update", async (req, res) => {
+    this.router.put("/update", async (req, res) => { // '/locations/update'
       await LocationController.updateLocations(req, res);
     });
   }

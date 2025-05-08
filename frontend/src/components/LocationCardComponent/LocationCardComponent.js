@@ -2,6 +2,7 @@ import { BaseComponent } from '../BaseComponent/BaseComponent.js'
 import { CrowdingHints } from './CrowdingHints.js'
 import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/Events.js';
+import { calculateAverageCrowdingScore } from '../../utility/reportUtils.js';
 
 export class LocationCardComponent extends BaseComponent {
     #container = null; // private variable to store location card container element
@@ -24,9 +25,9 @@ export class LocationCardComponent extends BaseComponent {
 
         // call render method corresponding to building type
         if (this.#locationData.type === "Single-Floor") {
-            this.#renderSingleFloor();
+            await this.#renderSingleFloor();
         } else if (this.#locationData.type === "Multi-Floor") {
-            this.#renderMultiFloor();
+            await this.#renderMultiFloor();
         }
 
         await this.#renderCrowdingScore();
@@ -49,9 +50,7 @@ export class LocationCardComponent extends BaseComponent {
     async #renderSingleFloor() {
         const locationReports = await this.#locationData.reports; // get crowding score reports
 
-        const lastUpdatedTimestamp = locationReports.length > 0 ? locationReports[0].timestamp : null; // get timestamp for most recent report (or assign null, if no reports)
-        
-        // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace with hyphen for styling tag
+        const lastUpdatedTimestamp = await this.#getLastUpdatedTimestamp(locationReports);
 
         this.#container.innerHTML = `
                 <span class="exit-expanded show-on-expand">Minimize</span>
@@ -69,7 +68,7 @@ export class LocationCardComponent extends BaseComponent {
     }
 
     // render card for location with multiple floors
-    #renderMultiFloor() {
+    async #renderMultiFloor() {
         // add location name and minimize "button"
         this.#container.innerHTML = `
             <div class="location-name">${this.#locationData.name}</div>
@@ -78,11 +77,12 @@ export class LocationCardComponent extends BaseComponent {
         // TODO: fix minimize button appearing below location title when expanded
 
         // render information for each floor under location
-        this.#locationData.floors.forEach(floor => { 
+        for (let floor of this.#locationData.floors) { // forEach results in floors rendering out of order (async) :(
             const floorInfo = document.createElement('div'); // create new div for floor information
             floorInfo.classList.add("floor-info"); // add tag for styling
 
-            const lastUpdatedTimestamp = floor.reports.length > 0 ? floor.reports[0].timestamp : null; // get timestamp for most recent report (or null, if no reports)
+            const reports = floor.reports; // get crowding score reports
+            const lastUpdatedTimestamp = await this.#getLastUpdatedTimestamp(reports);
 
             floorInfo.innerHTML = `
                 <div class="location-info">
@@ -98,15 +98,13 @@ export class LocationCardComponent extends BaseComponent {
             `
 
             this.#container.appendChild(floorInfo);
-        });
+        }
     }
 
     // gets crowding score and updates crowding score bar and hint text
     async #renderCrowdingScore() {
-        // const nameTag = this.#locationData.name.replaceAll(" ", "-"); // replace whitespace in location name with hyphen for styling tag
-
         if (this.#locationData.type === "Single-Floor") {
-            const averageCrowdingScore = await this.#calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
+            const averageCrowdingScore = await calculateAverageCrowdingScore(this.#locationData.reports); // average crowding score
             const level = averageCrowdingScore !== null ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
             const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-hint`); // get hint div
@@ -123,7 +121,7 @@ export class LocationCardComponent extends BaseComponent {
         
         } else if (this.#locationData.type === "Multi-Floor") {
             this.#locationData.floors.forEach(async floor => { 
-                const averageCrowdingScore = await this.#calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
+                const averageCrowdingScore = await calculateAverageCrowdingScore(floor.reports); // average crowding score for floor
                 const level = averageCrowdingScore ? Math.round(averageCrowdingScore) : null; // level for crowding score bar, or null if no reports
 
                 const crowdingScoreHint = this.#container.querySelector(`#${this.#nameTag}-${floor.name}-hint`); // get hint div
@@ -139,7 +137,6 @@ export class LocationCardComponent extends BaseComponent {
                 }
             });
         }
-
     }
 
     // adds address to bottom of card
@@ -153,24 +150,26 @@ export class LocationCardComponent extends BaseComponent {
         this.#container.appendChild(address);
     }
 
-    // calculate average crowding score from given array of report ids
-    async #calculateAverageCrowdingScore(reportIds) {
-        const crowdingScores = await Promise.all(reportIds.map(async id => { // get array of scores
-            const GETurl = '/report?' + new URLSearchParams({"id": id}).toString(); // e.g., /report?id=1
-            const response = await fetch(GETurl); // GET report by id
-            const report = await response.json(); // { body: (report), ok: boolean }
-            return report.body.score; // crowding score
-        }));
+    async #getLastUpdatedTimestamp(reports) {
+        const lastUpdatedReportId = reports[0]; // get most recent report id
 
-        const average = crowdingScores.length > 0 && crowdingScores.every(x => typeof x === "number") ? crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length : null; // calculate average, or null if no reports
-        return average;
+        if (lastUpdatedReportId) { // TODO: error handling...
+            const GETurl = "/report?" + new URLSearchParams({"id": lastUpdatedReportId}).toString();
+            const response = await fetch(GETurl);
+            const json = await response.json();
+            const lastUpdatedReport = json.body;
+
+            return lastUpdatedReport.createdAt; // get timestamp for most recent report (or assign null, if no reports)        
+        } else {
+            return null
+        }
     }
 
-    // convert number to string
+    // convert number to string for location card
     #timestampToString(timestamp) {
-        if (timestamp === null) {return "N/A"}; // TODO: determine if this is acceptable, visually/understanding-wise
+        if (!timestamp) {return "N/A"};
 
-        const date = new Date(timestamp); // convert to Date object
+        const date = new Date(Date.parse(timestamp)); // convert to Date object
         // TODO: consider moving this to src/lib for use with post timestamps
         const options = { // timestamp format options (ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString#examples)
             hourCycle: "h24", // TODO: add user setting for 24hr vs 12hr time once server sessions are implemented
@@ -211,7 +210,7 @@ export class LocationCardComponent extends BaseComponent {
         
         cardContainer.classList.remove("expanded"); // remove expanded card styling tag
         
-        if (document.querySelectorAll(".expanded").length === 0) {console.log(`card minimized`);} // printing for confirmation
+        // if (document.querySelectorAll(".expanded").length === 0) {console.log(`card minimized`);} // printing for confirmation
     }
 
     #attachEventListeners() {
