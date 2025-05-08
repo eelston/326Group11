@@ -1,8 +1,5 @@
-import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import ModelFactory from "../model/ModelFactory.js";
-
-dotenv.config();
 
 class RegisterController {
 
