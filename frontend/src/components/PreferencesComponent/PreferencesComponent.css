@@ -1,0 +1,73 @@
+.preferences-section {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+}
+
+.checkbox-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 0;
+    margin-bottom: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+    border: 2px solid #b388eb;
+    border-radius: 4px;
+    accent-color: #b388eb;
+    flex-shrink: 0;
+}
+
+.checkbox-group input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.save-btn {
+    background-color: #b388eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    align-self: flex-end;
+    margin-top: 8px;
+    box-sizing: border-box;
+}
+
+.save-btn:hover {
+    background-color: #6b2c94;
+}
+
+.save-btn:active {
+    transform: scale(0.95);
+}

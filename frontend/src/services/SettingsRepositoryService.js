@@ -6,9 +6,10 @@ export class SettingsService extends Service {
     constructor() {
         super();
         this.eventHub = EventHub.getInstance();
-        this.baseUrl = '/api';
+        this.baseUrl = '/api/settings';  // Changed to match backend route
         // Get userId from local storage or session
         this.userId = localStorage.getItem('userId') || '123';
+        console.log('SettingsService initialized with userId:', this.userId);
         this.addSubscriptions();
     }
 
@@ -34,13 +35,15 @@ export class SettingsService extends Service {
 
     async getSettings() {
         try {
-            const response = await fetch(`${this.baseUrl}/settings/${this.userId}`, {
+            console.log('Fetching settings for userId:', this.userId);
+            const response = await fetch(`${this.baseUrl}/${this.userId}`, {
                 headers: {
                     'Accept': 'application/json'
                 }
             });
             
             const data = await this.handleResponse(response);
+            console.log('Settings data received:', data);
             return data;
         } catch (error) {
             const message = error.status === 404 ? 'Settings not found' : error.message;
@@ -53,7 +56,7 @@ export class SettingsService extends Service {
         try {
             preferences.userId = this.userId;
             
-            const response = await fetch(`${this.baseUrl}/settings/preferences`, {
+            const response = await fetch(`${this.baseUrl}/preferences`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +78,7 @@ export class SettingsService extends Service {
         try {
             profile.userId = this.userId;
             
-            const response = await fetch(`${this.baseUrl}/settings/profile`, {
+            const response = await fetch(`${this.baseUrl}/profile`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +100,7 @@ export class SettingsService extends Service {
         try {
             accountData.userId = this.userId;
             
-            const response = await fetch(`${this.baseUrl}/settings/account`, {
+            const response = await fetch(`${this.baseUrl}/account`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,7 +122,7 @@ export class SettingsService extends Service {
         try {
             classData.userId = this.userId;
             
-            const response = await fetch(`${this.baseUrl}/settings/classes`, {
+            const response = await fetch(`${this.baseUrl}/classes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -140,7 +143,7 @@ export class SettingsService extends Service {
     async removeClass(classId) {
         try {
             const response = await fetch(
-                `${this.baseUrl}/settings/classes/${this.userId}/${classId}`, {
+                `${this.baseUrl}/classes/${this.userId}/${classId}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json'

@@ -1,0 +1,117 @@
+.account-section {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    box-sizing: border-box;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+}
+
+.input-with-button {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-with-button input {
+    flex: 1;
+    min-width: 0; /* Prevents input from overflowing */
+    margin-bottom: 0; /* Override the general input margin for inputs within buttons */
+}
+
+input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+input:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+    border-color: #ddd;
+    color: #666;
+}
+
+.edit-btn {
+    background-color: #d6b3ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevents button from shrinking */
+}
+
+.edit-btn:hover {
+    background-color: #b388eb;
+}
+
+.edit-btn:active {
+    transform: scale(0.95);
+}
+
+.show-password-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.show-password-container input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.show-password-container small {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.save-btn {
+    background-color: #b388eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    align-self: flex-end;
+    margin-top: 8px;
+}
+
+.save-btn:hover {
+    background-color: #6b2c94;
+}
+
+.save-btn:active {
+    transform: scale(0.95);
+}

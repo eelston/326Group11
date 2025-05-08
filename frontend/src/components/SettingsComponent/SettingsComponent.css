@@ -1,0 +1,122 @@
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+    flex-grow: 1;
+    padding: 0 20px;
+}
+
+.settings-container {
+    display: flex;
+    gap: 32px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Left column navigation */
+.settings-nav {
+    flex: 0 0 300px;
+    border-right: 1px solid #e0e0e0;
+    padding-right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.nav-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.nav-btn.active {
+    background-color: #d6b3ff;
+    color: white;
+}
+
+/* Right column content */
+.settings-content {
+    flex: 1;
+    min-width: 0;
+    padding-left: 20px;
+}
+
+/* Messages */
+#settings-messages {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 100%;
+    max-width: 600px;
+    pointer-events: none;
+}
+
+.error-message,
+.success-message {
+    margin: 0 20px;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transform: translateY(-20px);
+}
+
+.error-message[style*="display: block"],
+.success-message[style*="display: block"] {
+    transform: translateY(0);
+}
+
+.error-message {
+    background-color: #ffebee;
+    border: 1px solid #ffcdd2;
+    color: #c62828;
+}
+
+.success-message {
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    color: #2e7d32;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .settings-container {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .settings-nav {
+        flex: none;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding-right: 0;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .settings-content {
+        padding-left: 0;
+    }
+}
