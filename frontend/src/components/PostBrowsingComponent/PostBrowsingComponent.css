@@ -127,28 +127,6 @@
 
 /** MEDIA CSS FOR MOBILE **/
 @media (max-width: 625px) {
-    #app-logo {
-        font-size: 1.5rem;
-    }
-    .user-icon{
-        width: 30px;
-        height: 30px;
-        font-size: 15px;
-        font-weight: 475;
-    }
-
-    .nav-button {
-        text-align: center;
-        font-size: 1.4rem;
-        margin: 0.1rem;
-    }
-
-    header {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
     .posts-container {
         max-width: 100%;
     }

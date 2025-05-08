@@ -5,11 +5,21 @@
 export const Events = {
     // Post Creation 
     NewPost: 'NewPost',
+    NewUser: 'NewUser',
+
+    // Post Browsing
+    FilterPosts: 'FilterPosts',
+    FilterPostsSuccess: 'FilterPostsSuccess',
+    FilterPostsFailure: 'FilterPostsFailure',
 
     // Post Browsing 
     LoadPosts: 'LoadPosts',
     LoadPostsSuccess: 'LoadPostsSuccess',
     LoadPostsFailure: 'LoadPostsFailure',
+
+    LoadUserData: "LoadUserData",
+    LoadUserDataSuccess: "LoadUserDataSuccess",
+    LoadUserDataFailure: "LoadUserDataFailure",
 
     // Post Viewing
     LoadPost: 'LoadPost',
@@ -36,10 +46,6 @@ export const Events = {
     UnStorePostSuccess: 'UnStoreFullPostSuccess',
     UnStorePostFailure: 'UnStoreFullPostFailure',
 
-    // View Switching Events
-    SwitchToPostBrowsingView: 'SwitchToPostBrowsingView',
-    SwitchToPostViewingView: 'SwitchToPostViewingView',
-
     // Location Browsing
     ExpandLocationCard: 'ExpandLocationCard',
     MinimizeLocationCard: 'MinimizeLocationCard',
@@ -51,5 +57,18 @@ export const Events = {
     AddReportSuccess: 'AddReportSuccess', // for UI updates
     DeleteReport: 'DeleteReport', // trigger html delete method for deletion of singular report
     DeleteReportSuccess: 'DeleteReportSuccess', // for UI updates
+
+    //Register Events
+    Signup: 'Signup',
+    SignupSuccess: 'SignupSuccess',
+    SignupFailure: 'SignupFailure',
+
+    Login: 'Login',
+    LoginSuccess: 'LoginSuccess',
+    LoginFailure: 'LoginFailure',
+    
+    Logout: 'Logout',
+    LogoutSuccess: 'LogoutSuccess',
+    LogoutFailure: 'LogoutFailure',
 }
   

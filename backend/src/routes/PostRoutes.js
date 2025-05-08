@@ -38,12 +38,12 @@ class PostRoutes {
             await PostController.getAllPosts(req, res);
         });
 
-        this.router.get("/post", async (req, res) => {
+        this.router.get("/posts/:id", async (req, res) => {
             await PostController.getPost(req, res);
         } )
 
         // Add a new post
-        this.router.post("/post", async (req, res) => {
+        this.router.post("/posts", async (req, res) => {
             await PostController.addPost(req, res);
         });
 
@@ -53,12 +53,12 @@ class PostRoutes {
         })
 
         // Deleting a post 
-        this.router.delete("/post", async (req, res) => {
+        this.router.delete("/posts/:id", async (req, res) => {
             await PostController.deletePost(req, res);
         })
 
         // Updating a post (comments, and potentially editing a post in the future)
-        this.router.patch("/post", async (req, res) => {
+        this.router.patch("/posts/:id", async (req, res) => {
             await PostController.updatePost(req, res);
         });
     }
