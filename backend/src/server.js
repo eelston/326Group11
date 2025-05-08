@@ -47,7 +47,6 @@ app.use((err, req, res, next) => {
 
 // set up routes for imported PostRoutes
 app.use("/v1", PostRoutes);
-
 app.use("/users", UserRoutes);
 
 app.listen(PORT, () => {

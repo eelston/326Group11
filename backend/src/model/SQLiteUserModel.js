@@ -3,7 +3,7 @@ import { Sequelize, DataTypes } from "sequelize";
 const sequelize = new Sequelize({
     dialect: "sqlite",
     storage: "database.sqlite",
-    logging: console.log
+    logging: false
 });
 
 const Fact = sequelize.define("Fact", {
