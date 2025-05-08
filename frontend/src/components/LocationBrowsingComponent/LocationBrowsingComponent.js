@@ -3,8 +3,7 @@ import { LocationCardComponent } from '../LocationCardComponent/LocationCardComp
 import { CrowdingHints } from '../LocationCardComponent/CrowdingHints.js'
 import { EventHub } from '../../eventhub/EventHub.js';
 import { Events } from '../../eventhub/Events.js';
-// import { fetch } from "../../utility/fetchLocations.js"
-import { ReportRepositoryRemoteService } from '../../services/ReportRepositoryRemoteService.js';
+import { calculateAverageCrowdingScore } from '../../utility/reportUtils.js';
 
 export class LocationBrowsingComponent extends BaseComponent {
     #container = null; // private variable to store the container element
@@ -30,15 +29,12 @@ export class LocationBrowsingComponent extends BaseComponent {
         await this.#renderCards(); // render a card element for every location
         this.#dimmerElement = this.#createDimmerElement(); // element to dim screen when a card is expanded
         this.#reportModal = this.#createReportModal(); // element to report crowding score for expanded card
-        this.#attachEventListeners(); // attach relevant event listeners   
-        // add container to main component
-        document.getElementsByTagName('main')[0].appendChild(this.#container);
+        this.#attachEventListeners(); // attach relevant event listeners  
+        document.getElementsByTagName('main')[0].appendChild(this.#container); // add container to main component
     }
 
     #renderSearchOptions() {
-        // create div for search bar
-        // TODO: condense a bit, and also fix some redundancy with the html & css, because search button no longer exists
-        // also TODO: maybe just do this with innerHTML lol
+        // create div for search option elements (search bar, card order/sorting dropdown)
         const searchOptionContainer = document.createElement('div');
         searchOptionContainer.setAttribute('id', 'search-option-container');
 
@@ -65,24 +61,23 @@ export class LocationBrowsingComponent extends BaseComponent {
     }
 
     // render each location card
-    async #renderCards(locations = this.#locationsData, sortOption = "Recently Updated") { // render method defaults to rendering locations data from server (currently JSON) and by recently updated
+    async #renderCards(locations = this.#locationsData, sortOption = null) { // render method defaults to rendering locations data from server (currently JSON) and by recently updated
         const locationBrowsingContainer = this.#container;
         locationBrowsingContainer.innerHTML = ""; // clear any pre-existing HTML
 
         // determine order for location rendering
-        let toBeRendered = this.#locationsData;
-        switch (sortOption) {
-            case "Recently Updated":
-                toBeRendered = [...locations].sort((a, b) => (this.#getMostRecentTimestamp(b)-this.#getMostRecentTimestamp(a))); // sort by timestamps in descending order
-                break;
-            case "Ascending Crowd Score":
-                // calculate average crowding score from given array of reports
-                // TODO: consider implementing location as a class if not stored as JSON to keep location get methods to one place
-                toBeRendered = [...locations].sort((a, b) => (this.#getAverageCrowdingScore(a)-this.#getAverageCrowdingScore(b))); // sort by avg score (ascending)
-                break;
-            case "Descending Crowd Score":
-                toBeRendered = [...locations].sort((a, b) => (this.#getAverageCrowdingScore(b)-this.#getAverageCrowdingScore(a))); // sort by avg score (descending)
-                break;
+        // TODO: potentially add additional sorting as query to controller getLocations? 
+        // TODO: search bar and sorting dropdown still don't work together (unimplemented)
+        // note for later: this solution is a bit unsatisfactory in terms of. cleanliness? but it works for the most part
+        let toBeRendered = locations;
+        for (let location of toBeRendered) {
+            location.average = await this.#getAverageCrowdingScore(location);
+        }
+
+        if (sortOption === "Ascending Crowd Score") {
+            toBeRendered.sort((a, b) =>  a.average-b.average); // sort by avg score (ascending)
+        } else if (sortOption === "Descending Crowd Score") {
+            toBeRendered.sort((a, b) => b.average-a.average); // sort by avg score (descending)
         }
 
         for (let location of toBeRendered) { // render each location in given order
@@ -102,43 +97,24 @@ export class LocationBrowsingComponent extends BaseComponent {
 
             const locationCard = new LocationCardComponent(locationObject); // create new component for each location
             locationBrowsingContainer.appendChild(await locationCard.render()); // add location card to location browsing container
-
-        }
-    }
-
-    // returns the most recent report timestamp from given location
-    #getMostRecentTimestamp(location) {
-        if (location.type === "Single-Floor") {
-            // check if there are reports
-            const reports = JSON.parse(location.reports);
-            if (reports.length === 0) {return null}; // no reports stored for location (null ~= 0)
-
-            return reports[0].timestamp; // return most recent timestamp
-        } else if (location.type === "Multi-Floor") {
-            const floors = JSON.parse(location.floors);
-            const allReports = floors.map(floor => floor.reports); // get array of report arrays
-            if (allReports.length === 0) {return null}; // no reports stored for location
-
-            const allTimestamps = allReports.map(reports => reports.map(report => report.timestamp)); // get array of all timestamps
-            allTimestamps.sort((a,b) => b-a); // sort in descending order
-            return allTimestamps[0]; // return largest (=== most recent) timestamp (Date timestamp is in ms since epoch)
         }
     }
 
     // returns the average crowding score for an entire location
-    #getAverageCrowdingScore(location) {
+    // TODO: does this need to be handled by service or controller? for now it won't.
+    async #getAverageCrowdingScore(location) {
+        let average = null;
         if (location.type === "Single-Floor") {
-            const reports = JSON.parse(location.reports);
-            const crowdingScores = reports.map(report => report.score) // get array of scores
-            return crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length // calculate average crowding score
+            const reportIds = JSON.parse(location.reports);
+            average =  await calculateAverageCrowdingScore(reportIds); // calculate average crowding score
 
         } else if (location.type === "Multi-Floor") {
-            // TODO: determine if average across entire building is ideal
-            const floors = JSON.parse(location.floors);
-            const allReports = floors.map(floor => floor.reports); // get array of report arrays
-            const crowdingScores = allReports.map(reports => reports.map(report => report.score)); // get array of all scores
-            return crowdingScores.reduce((sum, curr) => sum+curr, 0) / crowdingScores.length // calculate average crowding score
+            const floors = JSON.parse(location.floors); // array of floor objects
+            const reportIds = floors.map(floor => floor.reports) // get array of array of reportIds
+                .flat(); // flatten to one array
+            average = await calculateAverageCrowdingScore(reportIds); // calculate average crowding score
         }
+        return average;
     }
 
     // fetch location data to render
@@ -168,7 +144,6 @@ export class LocationBrowsingComponent extends BaseComponent {
     #filterLocationCardsByQuery(query) {
         const key = query.toLowerCase(); // convert search query to lowercase
 
-        // TODO: determine if filter may benefit from extra keyword matches (other than just title)
         const matches = this.#locationsData.filter(location => { // filter locations by title match
             return location.name.toLowerCase().includes(key);
         })
@@ -176,9 +151,7 @@ export class LocationBrowsingComponent extends BaseComponent {
         this.#renderCards(matches); // render filtered cards only
     }
 
-    // TODO: account for filter by query AND sort option -> may need to rework both functions a bit
     #sortLocationCards(sortOption) {
-        console.log(sortOption);
         this.#renderCards(this.#locationsData, sortOption);
     }
 
@@ -319,7 +292,7 @@ export class LocationBrowsingComponent extends BaseComponent {
 
         // attach event listener for 'Sort by' dropdown/select
         const sortByElement = document.getElementById("sort-by-select");
-        sortByElement.addEventListener("change", (event) => this.#sortLocationCards(event.target.value)); // update on changed selection
+        sortByElement.addEventListener("change", (event) => this.#sortLocationCards(event.target.value)); // render with changed dropdown selection
 
         // subscribe event listener for opening report modal
         hub.subscribe(Events.OpenReportModal, (data) => { // data is { name: string, floor: null || string } (depends on single or multi-floor) 
@@ -339,7 +312,6 @@ export class LocationBrowsingComponent extends BaseComponent {
             if (this.#reportModal.style.display !== "none" && !this.#reportModal.contains(event.target)) {
                 // ref for .contains() usage: https://johnsonkow.medium.com/event-listener-for-outside-click-75226f5c8ce0
                 this.#minimizeReportModal();
-                console.log("clicked outside")
             }
         });
 
