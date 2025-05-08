@@ -62,8 +62,8 @@ body {
 /* user icon, appears in top right */
 .user-icon {
     background: var(--bright-blue);
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.5em;
+    height: 2.5em;
     border-radius: 50%;
     box-sizing: border-box; 
 
@@ -80,4 +80,16 @@ body {
 .icon-content {
     height: fit-content;
     font-size: 1.5rem;
+}
+
+@media (max-width: 480px) {
+
+    .user-icon {
+        width: 2.2em;
+        height: 2em;
+    }
+
+    .icon-content {
+        font-size: 1.0rem;
+    }
 }

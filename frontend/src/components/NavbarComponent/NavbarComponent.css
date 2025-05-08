@@ -130,3 +130,52 @@ nav a:hover {
     cursor: pointer;
     text-decoration: underline;
 }
+
+/* Media Queries for Phone Screens */
+
+@media (max-width: 768px) {
+    
+    nav a, .nav-button {
+        font-size: 0.9rem;
+    }
+
+    #app-logo {
+        font-size: 1.2rem;
+    }
+
+}
+
+@media (max-width: 625px) {
+    
+    nav a, .nav-button {
+        font-size: 0.7rem;
+    }
+
+    #app-logo {
+        font-size: 1.0rem;
+    }
+
+}
+
+@media (max-width: 480px) {
+    header {
+        gap: 1rem;
+    }
+
+    nav {
+        gap: 0.25rem;
+    }
+
+    nav a, .nav-button {
+        font-size: 0.75rem;
+        text-align: center;
+    }
+
+    .nav-button {
+        padding: 0.2rem;
+    }
+
+    #app-logo {
+        font-size: 0.9rem;
+    }
+}
