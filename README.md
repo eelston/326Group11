@@ -27,3 +27,12 @@ Working with a study partner or group can provide increased understanding, accou
 ### Ashley Kang
 - **Role:** Quality Control
 - **Assigned issues:** Team Role: Quality Control ([#16](https://github.com/eelston/326Group11/issues/16)), Settings Screen ([#18](https://github.com/eelston/326Group11/issues/18)), Course Catalog Data Structure ([#20](https://github.com/eelston/326Group11/issues/20))
+
+## Getting Started
+1. Clone the repository to your local machine.
+2. Launch the Express server.
+
+```
+npm run start
+````
+3. Load `http://localhost:3000/pages/Register/` in a browser to enter the web app.
